@@ -80,6 +80,20 @@
     </section>
   </main>
 
+  <!-- Pinned Sidebar (right) -->
+  <nav class="pinned-sidebar" id="pinned-sidebar">
+    <div class="pinned-sidebar-trigger" id="pinned-sidebar-trigger" title="Pinned bookmarks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><polyline points="12 2 19 9 12 16 5 9 12 2"/></svg>
+    </div>
+    <div class="pinned-sidebar-panel">
+      <div class="pinned-sidebar-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><polyline points="12 2 19 9 12 16 5 9 12 2"/></svg>
+        <span>Pinned</span>
+      </div>
+      <div class="pinned-sidebar-list" id="pinned-sidebar-list"></div>
+    </div>
+  </nav>
+
   <!-- Folder Sidebar -->
   <nav class="folder-sidebar" id="folder-sidebar">
     <div class="folder-sidebar-trigger" id="folder-sidebar-trigger" title="Folders">
@@ -160,6 +174,19 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
               List
             </button>
+          </div>
+        </div>
+
+        <!-- Pinned Display -->
+        <div class="sp-group">
+          <label class="sp-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><polyline points="12 2 19 9 12 16 5 9 12 2"/></svg>
+            Pinned Display
+          </label>
+          <p class="sp-desc">Where to show your pinned bookmarks</p>
+          <div class="sp-toggle-group">
+            <button type="button" class="sp-toggle" data-setting="pinnedDisplay" data-value="top">Top</button>
+            <button type="button" class="sp-toggle" data-setting="pinnedDisplay" data-value="popup">Right popup</button>
           </div>
         </div>
 
