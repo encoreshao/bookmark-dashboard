@@ -1708,16 +1708,19 @@ body.has-bg-image.theme-light .folder-sidebar-panel {
   border-right-color: rgba(255, 255, 255, 0.08);
 }
 
-body.has-bg-image.theme-light .folder-sidebar-item-name {
+body.has-bg-image.theme-light .folder-sidebar-item .folder-sidebar-item-name {
   color: rgba(241, 245, 249, 0.8);
 }
 
-body.has-bg-image.theme-light .folder-sidebar-item:hover .folder-sidebar-item-name {
-  color: #F1F5F9;
+body.has-bg-image.theme-light .folder-sidebar-item:hover .folder-sidebar-item-name,
+body.has-bg-image.theme-light .folder-sidebar-item.active .folder-sidebar-item-name,
+body.has-bg-image.theme-light .folder-sidebar-item:hover .folder-sidebar-item-count,
+body.has-bg-image.theme-light .folder-sidebar-item.active .folder-sidebar-item-count {
+  color: #1a1b1c;
 }
 
 body.has-bg-image.theme-light .folder-sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(241, 245, 249, 0.6);
 }
 
 body.has-bg-image.theme-light .folder-sidebar-header span {
