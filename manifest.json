@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Bookmark Dashboard",
   "short_name": "Bookmarks",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "A beautiful dashboard for your Chrome bookmarks. Replace your new tab with an organized, searchable bookmark hub.",
   "author": "Encore Shao",
   "icons": {

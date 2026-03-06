@@ -96,8 +96,11 @@
 
   <!-- Folder Sidebar -->
   <nav class="folder-sidebar" id="folder-sidebar">
-    <div class="folder-sidebar-trigger" id="folder-sidebar-trigger" title="Folders">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+    <div class="folder-sidebar-trigger" id="folder-sidebar-trigger" title="Toggle folders">
+      <!-- Icon shown when sidebar is closed -->
+      <svg class="trigger-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+      <!-- Icon shown when sidebar is open -->
+      <svg class="trigger-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
     </div>
     <div class="folder-sidebar-panel">
       <div class="folder-sidebar-header">
@@ -177,6 +180,25 @@
           </div>
         </div>
 
+        <!-- Folder Sidebar Mode -->
+        <div class="sp-group">
+          <label class="sp-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+            Folder Sidebar
+          </label>
+          <p class="sp-desc">Pinned stays open and pushes content; Float overlays on click</p>
+          <div class="sp-toggle-group">
+            <button type="button" class="sp-toggle" data-setting="folderSidebarMode" data-value="float">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M9 3v18"/></svg>
+              Float
+            </button>
+            <button type="button" class="sp-toggle" data-setting="folderSidebarMode" data-value="pinned">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2" fill="none"/><rect x="2" y="3" width="7" height="18" rx="1"/></svg>
+              Pinned
+            </button>
+          </div>
+        </div>
+
         <!-- Pinned Display -->
         <div class="sp-group">
           <label class="sp-label">
@@ -245,7 +267,7 @@
       <div class="kbd-row"><span class="kbd-desc">Toggle theme</span><kbd>T</kbd></div>
       <div class="kbd-row"><span class="kbd-desc">Toggle view (grid/list)</span><kbd>V</kbd></div>
       <div class="kbd-row"><span class="kbd-desc">Open settings</span><kbd>S</kbd></div>
-      <div class="kbd-row"><span class="kbd-desc">Toggle folder sidebar</span><kbd>F</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Open folder sidebar</span><kbd>F</kbd></div>
       <div class="kbd-row"><span class="kbd-desc">Back to top</span><kbd>Home</kbd></div>
       <div class="kbd-row"><span class="kbd-desc">Close / Clear</span><kbd>Esc</kbd></div>
       <div class="kbd-row"><span class="kbd-desc">Show shortcuts</span><kbd>?</kbd></div>

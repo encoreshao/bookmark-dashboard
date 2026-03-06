@@ -13,7 +13,8 @@
     userName: 'Guest',
     backgroundImage: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80',
     pinnedIds: [],
-    pinnedDisplay: 'top'
+    pinnedDisplay: 'top',
+    folderSidebarMode: 'float'
   };
 
   const STORAGE_KEYS = {
@@ -22,7 +23,9 @@
     userName: 'bd_userName',
     backgroundImage: 'bd_backgroundImage',
     pinnedIds: 'bd_pinnedIds',
-    pinnedDisplay: 'bd_pinnedDisplay'
+    pinnedDisplay: 'bd_pinnedDisplay',
+    folderSidebarOpen: 'bd_folderSidebarOpen',
+    folderSidebarMode: 'bd_folderSidebarMode'
   };
 
   /* ---------- DOM Refs ---------- */
@@ -210,6 +213,7 @@
 
         if (items.length > 0) {
           folders.push({
+            id: node.id,
             title: node.title || 'Bookmarks',
             items,
             depth
@@ -222,6 +226,45 @@
     }
 
     return folders;
+  }
+
+  // Chrome's built-in root container IDs and titles to skip/flatten.
+  const CHROME_ROOT_IDS = new Set(['0', '1', '2', '3']);
+  const CHROME_ROOT_TITLES = new Set([
+    'Bookmarks bar', 'Bookmarks Bar',
+    'Other bookmarks', 'Other Bookmarks',
+    'Mobile bookmarks', 'Mobile Bookmarks',
+    'Bookmarks'
+  ]);
+
+  // Build sidebar tree directly from the raw Chrome bookmarks tree so that
+  // container-only parent folders (no direct items) are still shown.
+  // Chrome root containers are flattened — their children appear at the top level.
+  function buildSidebarTree(nodes, flatFolderMap, depth = 0) {
+    const tree = [];
+    for (const node of nodes) {
+      if (!node.children) continue;
+
+      // Flatten Chrome's built-in root containers
+      if (CHROME_ROOT_IDS.has(String(node.id)) || CHROME_ROOT_TITLES.has(node.title)) {
+        tree.push(...buildSidebarTree(node.children, flatFolderMap, depth));
+        continue;
+      }
+
+      const subfolders = node.children.filter(c => c.children);
+      const children = buildSidebarTree(subfolders, flatFolderMap, depth + 1);
+      const flatIndex = flatFolderMap.get(node.id);
+      const hasContent = flatIndex !== undefined || children.length > 0;
+      if (!hasContent) continue;
+      tree.push({
+        title: node.title || 'Bookmarks',
+        flatIndex,
+        itemCount: flatIndex !== undefined ? sidebarFolders[flatIndex].items.length : null,
+        depth,
+        children
+      });
+    }
+    return tree;
   }
 
   function filterBookmarks(folders, keyword) {
@@ -301,7 +344,9 @@
 
     if (isGrid) {
       a.innerHTML = `
-        <img class="bookmark-favicon" src="${faviconUrl}" alt="" loading="lazy" onerror="this.style.display='none'">
+        <div class="bookmark-favicon-wrap">
+          <img class="bookmark-favicon" src="${faviconUrl}" alt="" loading="lazy" onerror="this.style.display='none'">
+        </div>
         <span class="bookmark-title">${escapeHTML(bookmark.title)}</span>
       `;
     } else {
@@ -642,6 +687,7 @@
         applyTheme();
         applyBackgroundImage();
         applyDisplayMode();
+        applyFolderSidebarMode();
         updateGreeting();
         initClock();
         renderBookmarks(searchInput.value.trim());
@@ -702,13 +748,66 @@
 
   /* ---------- Folder Sidebar ---------- */
   let sidebarFolders = [];
+  let sidebarFolderTree = [];
   let sidebarHasPinned = false;
 
   function buildFolderSidebar(folders, hasPinned = false) {
     sidebarFolders = folders;
+    const flatFolderMap = new Map();
+    folders.forEach((f, i) => { if (f.id) flatFolderMap.set(f.id, i); });
+    sidebarFolderTree = buildSidebarTree(allBookmarks, flatFolderMap, 0);
     sidebarHasPinned = hasPinned;
     folderSidebarSearch.value = '';
     renderSidebarList('');
+  }
+
+  function folderTreeNodeMatches(node, regex) {
+    if (!regex) return true;
+    if (regex.test(node.title)) return true;
+    return node.children?.some(child => folderTreeNodeMatches(child, regex));
+  }
+
+  const INDENT_BASE = 14;
+  const INDENT_STEP = 14;
+
+  function renderSidebarTreeNode(node, regex) {
+    if (regex && !folderTreeNodeMatches(node, regex)) return null;
+    const isHeader = node.flatIndex === undefined;
+    const li = document.createElement('li');
+    li.className = 'folder-sidebar-item folder-tree-item' + (isHeader ? ' folder-header-only' : '');
+    if (!isHeader) li.dataset.target = `folder-${node.flatIndex}`;
+    li.style.paddingLeft = `${INDENT_BASE + node.depth * INDENT_STEP}px`;
+
+    const countHtml = !isHeader
+      ? `<span class="folder-sidebar-item-count">${node.itemCount}</span>`
+      : '';
+    li.innerHTML = `
+      <svg class="folder-sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+      <span class="folder-sidebar-item-name">${escapeHTML(node.title)}</span>
+      ${countHtml}
+    `;
+    if (!isHeader) {
+      li.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const target = document.getElementById(`folder-${node.flatIndex}`);
+        if (target) {
+          const topbarHeight = 56;
+          const y = target.getBoundingClientRect().top + window.scrollY - topbarHeight - 12;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      });
+    }
+    return li;
+  }
+
+  function appendTreeToSidebar(container, tree, regex) {
+    for (const node of tree) {
+      const li = renderSidebarTreeNode(node, regex);
+      if (li) container.appendChild(li);
+      if (node.children && node.children.length > 0) {
+        appendTreeToSidebar(container, node.children, regex);
+      }
+    }
   }
 
   function renderSidebarList(keyword) {
@@ -724,7 +823,9 @@
       const li = document.createElement('li');
       li.className = 'folder-sidebar-item';
       li.dataset.target = 'folder-pinned';
+      li.style.paddingLeft = `${INDENT_BASE}px`;
       li.innerHTML = `
+        <svg class="folder-sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><polyline points="12 2 19 9 12 16 5 9 12 2"/></svg>
         <span class="folder-sidebar-item-name">Pinned</span>
       `;
       li.addEventListener('click', () => {
@@ -736,31 +837,21 @@
         }
       });
       folderSidebarList.appendChild(li);
+
+      // Divider after Pinned
+      const divider = document.createElement('li');
+      divider.className = 'folder-sidebar-divider';
+      folderSidebarList.appendChild(divider);
     }
 
-    sidebarFolders.forEach((folder, i) => {
-      if (regex && !regex.test(folder.title)) return;
-      hasMatch = true;
-
-      const li = document.createElement('li');
-      li.className = 'folder-sidebar-item';
-      li.dataset.target = `folder-${i}`;
-      li.innerHTML = `
-        <span class="folder-sidebar-item-name">${escapeHTML(folder.title)}</span>
-        <span class="folder-sidebar-item-count">${folder.items.length}</span>
-      `;
-
-      li.addEventListener('click', () => {
-        const target = document.getElementById(`folder-${i}`);
-        if (target) {
-          const topbarHeight = 56;
-          const y = target.getBoundingClientRect().top + window.scrollY - topbarHeight - 12;
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        }
-      });
-
-      folderSidebarList.appendChild(li);
-    });
+    for (const node of sidebarFolderTree) {
+      const li = renderSidebarTreeNode(node, regex);
+      if (li) {
+        hasMatch = true;
+        folderSidebarList.appendChild(li);
+        if (node.children?.length) appendTreeToSidebar(folderSidebarList, node.children, regex);
+      }
+    }
 
     if (!hasMatch) {
       const empty = document.createElement('li');
@@ -789,15 +880,55 @@
     items[activeIndex].classList.add('active');
   }
 
+  function saveFolderSidebarOpen(open) {
+    chrome.storage.local.set({ [STORAGE_KEYS.folderSidebarOpen]: open ? 'true' : 'false' });
+  }
+
+  function applyFolderSidebarMode() {
+    const isDocked = (settings.folderSidebarMode || 'float') === 'pinned';
+    body.classList.toggle('sidebar-mode-pinned', isDocked);
+
+    if (isDocked) {
+      // In docked mode: always open, clicking outside does nothing
+      folderSidebar.classList.add('pinned');
+      body.classList.add('folder-panel-open');
+      saveFolderSidebarOpen(true);
+    } else {
+      // In float mode: restore persisted open state
+      const wasOpen = settings.folderSidebarOpen === 'true';
+      folderSidebar.classList.toggle('pinned', wasOpen);
+      body.classList.toggle('folder-panel-open', wasOpen);
+    }
+  }
+
+  function setFolderPanelOpen(open) {
+    folderSidebar.classList.toggle('pinned', open);
+    body.classList.toggle('folder-panel-open', open);
+    saveFolderSidebarOpen(open);
+  }
+
   function initFolderSidebar() {
+    applyFolderSidebarMode();
+
     folderSidebarTrigger.addEventListener('click', (e) => {
       e.stopPropagation();
-      folderSidebar.classList.toggle('pinned');
+      const isDocked = (settings.folderSidebarMode || 'float') === 'pinned';
+      if (isDocked) {
+        // In docked mode the trigger switches the whole mode to float
+        settings.folderSidebarMode = 'float';
+        chrome.storage.local.set({ [STORAGE_KEYS.folderSidebarMode]: 'float' });
+        applyFolderSidebarMode();
+      } else {
+        const isOpen = folderSidebar.classList.toggle('pinned');
+        body.classList.toggle('folder-panel-open', isOpen);
+        saveFolderSidebarOpen(isOpen);
+      }
     });
 
     document.addEventListener('click', (e) => {
-      if (folderSidebar.classList.contains('pinned') && !folderSidebar.contains(e.target)) {
-        folderSidebar.classList.remove('pinned');
+      const isDocked = (settings.folderSidebarMode || 'float') === 'pinned';
+      if (!isDocked && folderSidebar.classList.contains('pinned') && !folderSidebar.contains(e.target)) {
+        setFolderPanelOpen(false);
       }
     });
 
@@ -863,8 +994,8 @@
           closeSettings();
           return;
         }
-        if (folderSidebar.classList.contains('pinned')) {
-          folderSidebar.classList.remove('pinned');
+        if (folderSidebar.classList.contains('pinned') && (settings.folderSidebarMode || 'float') === 'float') {
+          setFolderPanelOpen(false);
           return;
         }
         if (pinnedSidebar && pinnedSidebar.classList.contains('pinned')) {
@@ -913,7 +1044,8 @@
           settingsPanel.classList.contains('open') ? closeSettings() : openSettings();
           break;
         case 'f':
-          folderSidebar.classList.toggle('pinned');
+          folderSidebar.classList.add('pinned');
+          saveFolderSidebarOpen(true);
           break;
         case 'home':
           e.preventDefault();
@@ -931,19 +1063,17 @@
       applyDisplayMode();
       updateGreeting();
       initClock();
+      initFolderSidebar();   // must run after settings are loaded
       initPinnedSidebar();
       loadBookmarks();
     });
 
-    // Event listeners
+    // Event listeners (no settings dependency)
     btnTheme.addEventListener('click', toggleTheme);
     btnView.addEventListener('click', toggleDisplayMode);
     searchInput.addEventListener('input', handleSearch);
     window.addEventListener('scroll', handleScroll, { passive: true });
     backToTopBtn.addEventListener('click', scrollToTop);
-
-    // Folder sidebar
-    initFolderSidebar();
 
     // Pinned sidebar (visibility set in loadBookmarks after settings load)
     if (pinnedSidebar && pinnedSidebarTrigger) {

@@ -53,8 +53,13 @@
 .theme-light .bookmark-folder {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.theme-light .folder-header {
+  background: #F8FAFC;
+  border-left-color: #2563EB;
 }
 
 .theme-light .folder-header:hover {
@@ -62,7 +67,18 @@
 }
 
 .theme-light .view-grid .bookmark-item {
-  box-shadow: var(--card-shadow);
+  background: #F8FAFC;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.theme-light .view-grid .bookmark-item:hover {
+  background: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.12), 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.theme-light .view-grid .bookmark-favicon-wrap {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
 }
 
 .theme-light .folder-count {
@@ -204,19 +220,24 @@ body.has-bg-image .search-count {
 }
 
 body.has-bg-image .bookmark-folder {
-  background: rgba(30, 41, 59, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(15, 26, 46, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.has-bg-image .folder-header {
+  background: rgba(255, 255, 255, 0.06);
+  border-left-color: var(--accent);
 }
 
 body.has-bg-image .folder-name {
-  color: rgba(241, 245, 249, 0.9);
+  color: rgba(241, 245, 249, 0.92);
 }
 
 body.has-bg-image .folder-count {
-  color: rgba(241, 245, 249, 0.6);
-  background: rgba(255, 255, 255, 0.1);
+  color: rgba(241, 245, 249, 0.85);
+  background: rgba(59, 130, 246, 0.25);
 }
 
 body.has-bg-image .bookmark-item {
@@ -224,13 +245,18 @@ body.has-bg-image .bookmark-item {
 }
 
 body.has-bg-image .view-grid .bookmark-item {
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(15, 26, 46, 0.4);
   border-color: rgba(255, 255, 255, 0.08);
 }
 
 body.has-bg-image .view-grid .bookmark-item:hover {
-  background: rgba(30, 41, 59, 0.6);
+  background: rgba(15, 26, 46, 0.65);
   border-color: var(--accent);
+}
+
+body.has-bg-image .view-grid .bookmark-favicon-wrap {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 body.has-bg-image .view-list .bookmark-item:hover {
@@ -245,13 +271,12 @@ body.has-bg-image .bookmark-url {
   color: rgba(241, 245, 249, 0.5);
 }
 
-body.has-bg-image .view-grid .bookmark-favicon,
 body.has-bg-image .view-list .bookmark-favicon {
   background: rgba(255, 255, 255, 0.1);
 }
 
 body.has-bg-image .folder-header:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 body.has-bg-image .empty-state {
@@ -370,6 +395,32 @@ button {
 .main-content {
   padding-top: 56px;
   min-height: 100vh;
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Pinned sidebar mode: panel is always visible and content shifts right */
+body.sidebar-mode-pinned .folder-sidebar {
+  pointer-events: auto;
+}
+
+body.sidebar-mode-pinned .folder-sidebar-panel {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Hide the overlay trigger button — sidebar is always open in pinned mode */
+body.sidebar-mode-pinned .folder-sidebar-trigger {
+  display: none;
+}
+
+/* Shift content right to make room for docked panel (260px panel width) */
+body.sidebar-mode-pinned .main-content {
+  margin-left: 260px;
+}
+
+body.sidebar-mode-pinned .topbar {
+  padding-left: calc(260px + 16px);
 }
 
 /* ---------- Hero / Greeting ---------- */
@@ -489,28 +540,34 @@ body.has-bg-image .search-section {
 
 /* --- Folder --- */
 .bookmark-folder {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
 }
 
 .folder-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  margin-bottom: 8px;
-  border-radius: 8px;
+  gap: 10px;
+  padding: 12px 16px;
   cursor: pointer;
   user-select: none;
   transition: background-color 0.15s ease;
+  border-left: 3px solid var(--accent);
+  background: var(--bg-secondary);
+  position: relative;
 }
 
 .folder-header:hover {
-  background-color: var(--bg-tertiary);
+  background-color: var(--accent-light);
 }
 
 .folder-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   color: var(--accent);
   flex-shrink: 0;
   transition: transform 0.2s ease;
@@ -522,25 +579,28 @@ body.has-bg-image .search-section {
 
 .folder-name {
   font-family: var(--font-heading);
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 700;
   color: var(--folder-text);
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  flex: 1;
 }
 
 .folder-count {
   font-size: 0.6875rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  background: var(--bg-tertiary);
-  padding: 1px 8px;
-  border-radius: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 2px 9px;
+  border-radius: 20px;
+  letter-spacing: 0.01em;
 }
 
 .folder-children {
   overflow: hidden;
   transition: max-height 0.3s ease;
+  background: var(--card-bg);
 }
 
 .folder-children.collapsed {
@@ -642,9 +702,9 @@ body.has-bg-image .bookmark-remove {
 /* --- Grid View --- */
 .view-grid .folder-items {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 8px;
-  padding: 0 4px;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 12px;
+  padding: 16px;
 }
 
 .view-grid .bookmark-item-wrapper {
@@ -655,22 +715,42 @@ body.has-bg-image .bookmark-remove {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 16px 8px 12px 16px;
-  border-radius: 10px;
-  background: var(--card-bg);
+  gap: 10px;
+  padding: 20px 10px 16px;
+  border-radius: 12px;
+  background: var(--bg-primary);
   border: 1px solid var(--border);
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.18s ease, background-color 0.15s ease;
   text-decoration: none;
   color: inherit;
+  height: 100%;
 }
 
 .view-grid .bookmark-item:hover {
   background: var(--card-hover);
   border-color: var(--accent);
-  box-shadow: var(--card-shadow-hover);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.13), 0 2px 6px rgba(0,0,0,0.06);
+  transform: translateY(-3px);
+}
+
+/* Favicon container */
+.view-grid .bookmark-favicon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: box-shadow 0.18s ease;
+}
+
+.view-grid .bookmark-item:hover .bookmark-favicon-wrap {
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.18);
 }
 
 .view-grid .bookmark-favicon {
@@ -678,21 +758,24 @@ body.has-bg-image .bookmark-remove {
   height: 28px;
   border-radius: 6px;
   object-fit: contain;
-  flex-shrink: 0;
-  background: var(--bg-tertiary);
 }
 
 .view-grid .bookmark-title {
-  font-size: 0.75rem;
+  font-size: 0.775rem;
   font-weight: 500;
-  color: var(--text-primary);
-  line-height: 1.3;
-  max-height: 2.6em;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  max-height: 2.8em;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   word-break: break-word;
+  transition: color 0.15s ease;
+}
+
+.view-grid .bookmark-item:hover .bookmark-title {
+  color: var(--text-primary);
 }
 
 /* --- List View --- */
@@ -700,7 +783,7 @@ body.has-bg-image .bookmark-remove {
   display: flex;
   flex-direction: column;
   gap: 1px;
-  padding: 0 4px;
+  padding: 6px 8px 10px;
 }
 
 .view-list .bookmark-item-wrapper {
@@ -1527,6 +1610,13 @@ kbd {
   transition: color 0.2s ease;
 }
 
+/* Swap icons based on open/closed state */
+.folder-sidebar-trigger .trigger-icon-close { display: none; }
+.folder-sidebar-trigger .trigger-icon-open  { display: block; }
+
+.folder-sidebar.pinned .folder-sidebar-trigger .trigger-icon-open  { display: none; }
+.folder-sidebar.pinned .folder-sidebar-trigger .trigger-icon-close { display: block; }
+
 body.has-bg-image .folder-sidebar-trigger {
   background: rgba(30, 30, 30, 0.55);
   backdrop-filter: blur(12px);
@@ -1549,7 +1639,7 @@ body.has-bg-image .folder-sidebar-trigger:hover svg {
 }
 
 .folder-sidebar-panel {
-  width: 220px;
+  width: 260px;
   height: 100%;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border);
@@ -1568,6 +1658,11 @@ body.has-bg-image .folder-sidebar-trigger:hover svg {
   transform: translateX(0);
   opacity: 1;
   pointer-events: auto;
+}
+
+/* In pinned mode the sidebar has no z-index overlay — it sits beside content */
+body.sidebar-mode-pinned .folder-sidebar {
+  z-index: 80;
 }
 
 
@@ -1639,14 +1734,46 @@ body.has-bg-image .folder-sidebar-trigger:hover svg {
   color: var(--text-muted);
 }
 
+.folder-sidebar-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 12px;
+  list-style: none;
+}
+
+.folder-header-only {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.folder-header-only:hover {
+  background: transparent;
+}
+
+.folder-header-only .folder-sidebar-item-icon {
+  color: var(--text-muted);
+}
+
 .folder-sidebar-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 7px 16px;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 16px 7px 12px;
   cursor: pointer;
   transition: background-color 0.12s ease, color 0.12s ease;
   user-select: none;
+}
+
+.folder-sidebar-item-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+.folder-tree-item {
+  padding-left: 12px;
 }
 
 .folder-sidebar-item:hover {
@@ -1661,11 +1788,12 @@ body.has-bg-image .folder-sidebar-trigger:hover svg {
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
   flex: 1;
   min-width: 0;
+  line-height: 1.35;
 }
 
 .folder-sidebar-item:hover .folder-sidebar-item-name {
@@ -1685,7 +1813,7 @@ body.has-bg-image .folder-sidebar-trigger:hover svg {
   padding: 1px 7px;
   border-radius: 8px;
   flex-shrink: 0;
-  margin-left: 8px;
+  align-self: center;
 }
 
 .folder-sidebar-item.active .folder-sidebar-item-count {
