@@ -97,9 +97,9 @@ Open settings with the **⚙** icon or press `S`.
 
 | Tab | Options |
 |---|---|
-| General | Display name, Language, Display mode, Nav display, Google Apps visibility, Folder sidebar mode, Pinned bookmarks display |
-| Appearance | Theme (dark / light / system), Background image, Google account |
-| AI | Provider (OpenAI / Gemini / Claude), Model, API key |
+| General | Display name, Language, Display mode, Nav display, Theme (dark / light / system), Background image, Folder sidebar mode, Pinned bookmarks display |
+| Personalization | Custom instructions, Google account |
+| AI & Apps | Provider (OpenAI / Gemini / Claude), Model, API key, Google Apps visibility |
 
 ## Release
 
