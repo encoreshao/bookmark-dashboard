@@ -1,4 +1,4 @@
-# Bookmark Dashboard
+# Bookmark Dashboard - AI Powered
 
 A powerful, AI-enhanced Chrome extension that replaces your new tab with a fully-featured bookmark dashboard — built with **React + TypeScript + Vite**.
 
@@ -73,82 +73,22 @@ Open a new tab to see the dashboard.
 npm run dev   # rebuilds dist/ automatically on every source change
 ```
 
-After each rebuild, click **↺ Update** in `chrome://extensions` (or enable auto-reload with an extension like [Extensions Reloader](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid)).
+After each rebuild, click **↺ Update** in `chrome://extensions` (or enable auto-reload with an extension like [Extensions](https://chromewebstore.google.com/detail/bookmark-dashboard/imknfkidkilkomeomcidnnjojiilaofb)).
 
 ## Project Structure
 
 ```
-bookmark-dashboard/
-├── package.json               # npm scripts + dependencies
-├── vite.config.ts             # Vite build config (root = src/)
-├── tsconfig.json              # TypeScript config
-│
-├── src/                       # ← Everything lives here
-│   ├── manifest.json          # Chrome extension manifest (v3)
-│   ├── icons/                 # Extension icons (16 / 48 / 128 px)
-│   │
-│   ├── index.html             # Vite HTML entry (new-tab page)
-│   ├── main.tsx               # React entry point
-│   ├── App.tsx                # Root component + global keyboard shortcuts
-│   │
-│   ├── components/            # React UI components
-│   │   ├── Topbar.tsx         # Header navigation + Google Apps menu
-│   │   ├── Hero.tsx           # Greeting + live clock
-│   │   ├── SearchSection.tsx  # Search input
-│   │   ├── BookmarkView.tsx   # Bookmark list / grid with folder sections
-│   │   ├── BookmarkItem.tsx   # Single bookmark card (pin, delete, drag)
-│   │   ├── FolderSidebar.tsx  # Left folder tree (pinned or floating)
-│   │   ├── PinnedSidebar.tsx  # Right pinned-bookmarks sidebar
-│   │   ├── DomainView.tsx     # Domain graph dashboard
-│   │   ├── DomainModal.tsx    # Domain detail popup
-│   │   ├── RecentView.tsx     # Recently added view
-│   │   ├── AIInsightsView.tsx # AI analysis dashboard (4 scan modes)
-│   │   ├── SettingsPanel.tsx  # Settings panel (3 tabs)
-│   │   ├── Footer.tsx         # Fixed bottom footer with gradient accent
-│   │   ├── KeyboardShortcuts.tsx
-│   │   ├── ConfirmDialog.tsx
-│   │   └── Toast.tsx
-│   │
-│   ├── context/               # React Context providers
-│   │   ├── SettingsContext.tsx # Settings state ↔ chrome.storage.local
-│   │   ├── BookmarkContext.tsx # Bookmark tree via chrome.bookmarks API
-│   │   └── UIContext.tsx      # Active view, modals, toasts
-│   │
-│   ├── types/
-│   │   └── index.ts           # Shared TypeScript interfaces
-│   │
-│   ├── utils/
-│   │   ├── ai.ts              # AI providers, prompts, local scanners
-│   │   ├── bookmarks.ts       # Tree traversal, folder & domain helpers
-│   │   ├── googleApps.tsx     # App catalogue + inline SVG icons
-│   │   ├── i18n.ts            # Translations (EN / 中文 / 日本語)
-│   │   └── time.ts            # Clock formatting & relative-time
-│   │
-│   ├── styles/
-│   │   ├── main.css           # New-tab dashboard styles
-│   │   └── options.css        # Options page styles
-│   │
-│   ├── js/
-│   │   ├── service-worker.js  # Chrome MV3 background service worker
-│   │   ├── options.js         # Options page logic (vanilla JS)
-│   │   └── manifest-info.js   # Injects manifest version into pages
-│   │
-│   └── options/
-│       └── index.html         # Options page HTML
-│
-├── dist/                      # ← Built extension — load this folder in Chrome
-│   ├── manifest.json
-│   ├── icons/
-│   ├── index.html
-│   ├── assets/                # Bundled JS + CSS (hashed filenames)
-│   ├── js/
-│   ├── styles/
-│   └── options/
-│
-├── releases/                  # ← Release zips (git-ignored)
-│   └── bookmark-dashboard-v*.zip
-└── scripts/
-    └── release.sh             # Build → zip dist/ → output to releases/
+➜ tree src -d -L 4 -I "node_modules|dist"
+src
+├── components
+├── context
+├── hooks
+├── icons
+├── js
+├── options
+├── styles
+├── types
+└── utils
 ```
 
 ## Settings
