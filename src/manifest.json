@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Bookmark Dashboard",
+  "name": "Bookmark Dashboard - AI Powered",
   "short_name": "Bookmarks",
   "version": "2.0.8",
-  "description": "A beautiful dashboard for your Chrome bookmarks. Replace your new tab with an organized, searchable bookmark hub.",
+  "description": "Replace your new tab with an AI-powered bookmark dashboard. Search, organize and analyze your bookmarks with smart AI insights.",
   "author": "Encore Shao",
   "icons": {
     "16": "icons/icon16.png",
@@ -21,6 +21,11 @@
     "bookmarks",
     "storage",
     "favicon"
+  ],
+  "host_permissions": [
+    "https://api.openai.com/*",
+    "https://generativelanguage.googleapis.com/*",
+    "https://api.anthropic.com/*"
   ],
   "web_accessible_resources": [
     {

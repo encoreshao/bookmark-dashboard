@@ -7,7 +7,8 @@ export type Language = 'en' | 'zh' | 'ja';
 export type NavDisplay = 'full' | 'compact';
 export type PinnedDisplay = 'top' | 'sidebar';
 export type FolderSidebarMode = 'pinned' | 'float';
-export type ActiveView = 'bookmarks' | 'domains' | 'recent';
+export type ActiveView = 'bookmarks' | 'domains' | 'recent' | 'ai';
+export type AIProvider = 'openai' | 'gemini' | 'claude';
 
 export interface AppSettings {
   theme: Theme;
@@ -21,6 +22,10 @@ export interface AppSettings {
   language: Language;
   navDisplay: NavDisplay;
   visibleApps: string[];
+  aiProvider: AIProvider;
+  aiApiKey: string;
+  aiModel: string;
+  aiCustomInstructions: string;
 }
 
 export interface GoogleApp {

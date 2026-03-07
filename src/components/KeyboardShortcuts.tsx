@@ -9,6 +9,7 @@ const SHORTCUTS = [
   { key: 'V', description: 'Toggle view (list/grid)' },
   { key: 'D', description: 'Domain graph' },
   { key: 'R', description: 'Recently added' },
+  { key: 'A', description: 'AI Insights' },
   { key: 'G', description: 'Google Apps menu' },
   { key: 'Shift + G', description: 'Google.com' },
   { key: 'Esc', description: 'Close / go back' },

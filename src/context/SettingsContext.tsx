@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import type { AppSettings, Theme, DisplayMode, Language, NavDisplay, PinnedDisplay, FolderSidebarMode } from '@/types';
+import type { AppSettings, Theme, DisplayMode, Language, NavDisplay, PinnedDisplay, FolderSidebarMode, AIProvider } from '@/types';
 import { ALL_APP_IDS } from '@/utils/googleApps';
 
 const DEFAULTS: AppSettings = {
@@ -14,6 +14,10 @@ const DEFAULTS: AppSettings = {
   language: 'en',
   navDisplay: 'compact',
   visibleApps: ALL_APP_IDS,
+  aiProvider: 'openai',
+  aiApiKey: '',
+  aiModel: 'gpt-4o-mini',
+  aiCustomInstructions: '',
 };
 
 const STORAGE_KEYS: Record<keyof AppSettings, string> = {
@@ -28,6 +32,10 @@ const STORAGE_KEYS: Record<keyof AppSettings, string> = {
   language: 'bd_language',
   navDisplay: 'bd_navDisplay',
   visibleApps: 'bd_visibleApps',
+  aiProvider: 'bd_aiProvider',
+  aiApiKey: 'bd_aiApiKey',
+  aiModel: 'bd_aiModel',
+  aiCustomInstructions: 'bd_aiCustomInstructions',
 };
 
 interface SettingsContextValue {
@@ -126,4 +134,4 @@ export function useSettings(): SettingsContextValue {
 }
 
 export { getEffectiveTheme, DEFAULTS };
-export type { Theme, DisplayMode, Language, NavDisplay, PinnedDisplay, FolderSidebarMode };
+export type { Theme, DisplayMode, Language, NavDisplay, PinnedDisplay, FolderSidebarMode, AIProvider };

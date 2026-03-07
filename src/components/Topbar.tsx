@@ -15,12 +15,14 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
   const { activeView, setActiveView, openSettings, openKbdModal } = useUI();
   const t = createTranslator(settings.language);
   const [version, setVersion] = useState('');
+  const [extName, setExtName] = useState('Bookmark Dashboard');
   const isGrid = settings.displayMode === 'grid';
 
   useEffect(() => {
     try {
       const mf = chrome.runtime.getManifest();
       setVersion(`v${mf.version}`);
+      setExtName(mf.name);
     } catch { /* dev environment */ }
   }, []);
 
@@ -48,16 +50,18 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
   const visibleApps = GOOGLE_APPS.filter(a => (settings.visibleApps ?? []).includes(a.id));
   const compact = settings.navDisplay === 'compact';
 
+  const isPinned = settings.folderSidebarMode === 'pinned';
+
   return (
     <header className="topbar">
-      <div className="topbar-left">
+      <div className="topbar-left" data-tooltip={isPinned ? extName : undefined}>
         <div className="topbar-logo">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
           </svg>
         </div>
-        <span className="topbar-title">Bookmark Dashboard</span>
+        <span className="topbar-title">{extName}</span>
         {version && <span className="topbar-version" id="topbar-version">{version}</span>}
       </div>
 
@@ -87,6 +91,18 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
             <path d="M18 14v4"/><path d="M16 18h4"/>
           </svg>
           {!compact && <span>{t('nav-domains')}</span>}
+        </button>
+
+        <button
+          className={`nav-link${activeView === 'ai' ? ' active' : ''}`}
+          onClick={() => setActiveView(activeView === 'ai' ? 'bookmarks' : 'ai')}
+          data-tooltip={compact ? `${t('nav-ai')} (A)` : undefined}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+               strokeLinecap="round" strokeLinejoin="round">
+            <path d="m12 3-1.9 5.8a2 2 0 0 1-1.287 1.288L3 12l5.8 1.9a2 2 0 0 1 1.288 1.287L12 21l1.9-5.8a2 2 0 0 1 1.287-1.288L21 12l-5.8-1.9a2 2 0 0 1-1.288-1.287Z"/>
+          </svg>
+          {!compact && <span>{t('nav-ai')}</span>}
         </button>
 
         <div className="nav-google-apps" ref={googleAppsMenuRef} style={{ position: 'relative' }}>

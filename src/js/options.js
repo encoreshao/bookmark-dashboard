@@ -10,14 +10,24 @@
     theme: 'bd_theme',
     displayMode: 'bd_displayMode',
     userName: 'bd_userName',
-    backgroundImage: 'bd_backgroundImage'
+    backgroundImage: 'bd_backgroundImage',
+    language: 'bd_language',
+    navDisplay: 'bd_navDisplay',
+    folderSidebarMode: 'bd_folderSidebarMode',
+    aiProvider: 'bd_aiProvider',
+    aiApiKey: 'bd_aiApiKey',
   };
 
   const DEFAULTS = {
     theme: 'dark',
     displayMode: 'list',
     userName: 'Guest',
-    backgroundImage: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80'
+    backgroundImage: '',
+    language: 'en',
+    navDisplay: 'compact',
+    folderSidebarMode: 'pinned',
+    aiProvider: 'openai',
+    aiApiKey: '',
   };
 
   const $ = (sel) => document.querySelector(sel);
@@ -25,6 +35,7 @@
 
   const form = $('#settings-form');
   const nameInput = $('#input-name');
+  const aiKeyInput = $('#input-ai-key');
   const bgImageInput = $('#input-bg-image');
   const bgPreview = $('#bg-preview');
   const bgPreviewImage = $('#bg-preview-image');
@@ -59,6 +70,7 @@
 
   function applyToUI() {
     nameInput.value = settings.userName;
+    if (aiKeyInput) aiKeyInput.value = settings.aiApiKey || '';
     bgImageInput.value = settings.backgroundImage || '';
     updateBgPreview(settings.backgroundImage);
 
@@ -100,6 +112,7 @@
   function handleSubmit(e) {
     e.preventDefault();
     settings.userName = nameInput.value.trim() || DEFAULTS.userName;
+    if (aiKeyInput) settings.aiApiKey = aiKeyInput.value.trim();
     settings.backgroundImage = bgImageInput.value.trim();
     saveSettings();
     updateBgPreview(settings.backgroundImage);

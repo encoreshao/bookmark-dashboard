@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Settings - Bookmark Dashboard</title>
-
+  <title>New Tab: Settings - Bookmark Dashboard - AI Powered</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Encore Shao">
-  <meta name="description" content="A beautiful dashboard for your Chrome bookmarks. Replace your new tab with an organized, searchable bookmark hub.">
-  <meta name="keywords" content="Chrome, bookmarks, dashboard, extension, new tab, organization, search, customization">
-  <meta name="robots" content="index, follow">
+  <meta name="description" content="Configure your Bookmark Dashboard - AI Powered. Choose your AI provider, theme, language, sidebar mode, Google Apps visibility, and more.">
+  <meta name="keywords" content="Chrome extension, bookmarks, dashboard, settings, AI analysis, bookmark organizer, customization, themes, i18n">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,12 +17,11 @@
   <div class="options-container">
     <header class="options-header">
       <svg class="options-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-        <polyline points="10 2 10 10 13 7 16 10 16 2"/>
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
       </svg>
       <div>
         <h1 class="options-title">Settings</h1>
-        <p class="options-subtitle">Customize your Bookmark Dashboard</p>
+        <p class="options-subtitle" id="app-subtitle">Customize your extension</p>
       </div>
     </header>
 
@@ -38,22 +36,30 @@
         <input type="text" id="input-name" class="setting-input" placeholder="Guest" autocomplete="off" spellcheck="false">
       </div>
 
+      <!-- Language -->
+      <div class="setting-group">
+        <label class="setting-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Language
+        </label>
+        <div class="toggle-group">
+          <button type="button" class="toggle-btn" data-setting="language" data-value="en">English</button>
+          <button type="button" class="toggle-btn" data-setting="language" data-value="zh">中文</button>
+          <button type="button" class="toggle-btn" data-setting="language" data-value="ja">日本語</button>
+        </div>
+      </div>
+
       <!-- Theme -->
       <div class="setting-group">
         <label class="setting-label">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
           Theme
         </label>
-        <p class="setting-description">Choose between dark and light appearance</p>
+        <p class="setting-description">Choose between dark, light, or system appearance</p>
         <div class="toggle-group">
-          <button type="button" class="toggle-btn" data-setting="theme" data-value="dark">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-            Dark
-          </button>
-          <button type="button" class="toggle-btn" data-setting="theme" data-value="light">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-            Light
-          </button>
+          <button type="button" class="toggle-btn" data-setting="theme" data-value="dark">Dark</button>
+          <button type="button" class="toggle-btn" data-setting="theme" data-value="light">Light</button>
+          <button type="button" class="toggle-btn" data-setting="theme" data-value="system">System</button>
         </div>
       </div>
 
@@ -65,15 +71,59 @@
         </label>
         <p class="setting-description">How bookmarks are displayed on the dashboard</p>
         <div class="toggle-group">
-          <button type="button" class="toggle-btn" data-setting="displayMode" data-value="grid">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
-            Grid
-          </button>
-          <button type="button" class="toggle-btn" data-setting="displayMode" data-value="list">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
-            List
-          </button>
+          <button type="button" class="toggle-btn" data-setting="displayMode" data-value="list">List</button>
+          <button type="button" class="toggle-btn" data-setting="displayMode" data-value="grid">Grid</button>
         </div>
+      </div>
+
+      <!-- Nav Display -->
+      <div class="setting-group">
+        <label class="setting-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          Nav Display
+        </label>
+        <p class="setting-description">Show icon + label or icon only in the navigation bar</p>
+        <div class="toggle-group">
+          <button type="button" class="toggle-btn" data-setting="navDisplay" data-value="full">Icon & Label</button>
+          <button type="button" class="toggle-btn" data-setting="navDisplay" data-value="compact">Icon Only</button>
+        </div>
+      </div>
+
+      <!-- Folder Sidebar -->
+      <div class="setting-group">
+        <label class="setting-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+          Folder Sidebar
+        </label>
+        <p class="setting-description">Pinned stays open; Float overlays on click</p>
+        <div class="toggle-group">
+          <button type="button" class="toggle-btn" data-setting="folderSidebarMode" data-value="pinned">Pinned</button>
+          <button type="button" class="toggle-btn" data-setting="folderSidebarMode" data-value="float">Float</button>
+        </div>
+      </div>
+
+      <!-- AI Provider -->
+      <div class="setting-group">
+        <label class="setting-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.287 1.288L3 12l5.8 1.9a2 2 0 0 1 1.288 1.287L12 21l1.9-5.8a2 2 0 0 1 1.287-1.288L21 12l-5.8-1.9a2 2 0 0 1-1.288-1.287Z"/></svg>
+          AI Provider
+        </label>
+        <p class="setting-description">Choose your AI service for bookmark analysis</p>
+        <div class="toggle-group">
+          <button type="button" class="toggle-btn" data-setting="aiProvider" data-value="openai">OpenAI</button>
+          <button type="button" class="toggle-btn" data-setting="aiProvider" data-value="gemini">Gemini</button>
+          <button type="button" class="toggle-btn" data-setting="aiProvider" data-value="claude">Claude</button>
+        </div>
+      </div>
+
+      <!-- AI API Key -->
+      <div class="setting-group">
+        <label class="setting-label" for="input-ai-key">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5"/></svg>
+          API Key
+        </label>
+        <p class="setting-description">Your API key is stored locally and never shared</p>
+        <input type="password" id="input-ai-key" class="setting-input" placeholder="sk-..." autocomplete="off">
       </div>
 
       <!-- Background Image -->
@@ -100,7 +150,10 @@
     </form>
 
     <footer class="options-footer">
-      <p><span id="app-version"></span> &middot; Made by <a id="app-author" href="#" target="_blank" rel="noopener"></a></p>
+      <p>
+        <span id="app-version"></span> &middot; Made by <a id="app-author" href="#" target="_blank" rel="noopener"></a>
+        &middot; <a href="https://github.com/encoreshao/bookmark-dashboard/issues" target="_blank" rel="noopener">Feedback & Issues</a>
+      </p>
     </footer>
   </div>
 

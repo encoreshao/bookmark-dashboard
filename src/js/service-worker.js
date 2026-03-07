@@ -1,7 +1,8 @@
-/* Bookmark Dashboard - Service Worker (Manifest V3) */
+/* Service Worker (Manifest V3) */
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    console.log('Bookmark Dashboard installed');
+    const name = chrome.runtime.getManifest().name;
+    console.log(`${name} installed`);
   }
 });

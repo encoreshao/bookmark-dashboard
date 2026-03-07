@@ -14,6 +14,8 @@ export const GOOGLE_APPS: GoogleApp[] = [
   { id: 'gemini',      label: 'Gemini',      url: 'https://gemini.google.com/',            bg: null,      type: 'gemini' },
   { id: 'notebooklm',  label: 'NotebookLM',  url: 'https://notebooklm.google.com/',       bg: '#5F6368', type: 'solid' },
   { id: 'youtube',     label: 'YouTube',     url: 'https://www.youtube.com/',              bg: '#FF0000', type: 'solid' },
+  { id: 'workspace',   label: 'Workspace',   url: 'https://studio.workspace.google.com/',  bg: '#4285F4', type: 'solid' },
+  { id: 'aistudio',    label: 'AI Studio',   url: 'https://aistudio.google.com/app/',      bg: null,      type: 'gemini' },
 ];
 
 export const ALL_APP_IDS = GOOGLE_APPS.map(a => a.id);
@@ -29,6 +31,7 @@ const SOLID_ICONS: Record<string, React.ReactElement> = {
   keep:       <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"/>,
   notebooklm: <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 14H8v-2h8v2zm0-4H8v-2h8v2zm0-4H8V6h8v2z"/>,
   youtube:    <path d="M21.58 7.19c-.23-.86-.9-1.54-1.76-1.77C18.25 5 12 5 12 5s-6.25 0-7.82.42c-.86.23-1.53.91-1.76 1.77C2 8.76 2 12 2 12s0 3.24.42 4.81c.23.86.9 1.54 1.76 1.77C5.75 19 12 19 12 19s6.25 0 7.82-.42c.86-.23 1.53-.91 1.76-1.77C22 15.24 22 12 22 12s0-3.24-.42-4.81zM10 15V9l5.2 3-5.2 3z"/>,
+  workspace:  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2.5c1.38 0 2.5 1.12 2.5 2.5S13.38 11.5 12 11.5 9.5 10.38 9.5 9 10.62 6.5 12 6.5zM17 17H7v-1.5c0-1.67 3.33-2.5 5-2.5s5 .83 5 2.5V17z"/>,
 };
 
 export function AppIcon({ app }: { app: GoogleApp }): React.ReactElement {

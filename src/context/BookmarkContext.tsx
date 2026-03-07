@@ -7,6 +7,10 @@ interface BookmarkContextValue {
   loadBookmarks: () => void;
   removeBookmark: (id: string) => void;
   moveBookmark: (id: string, parentId: string) => void;
+  createFolder: (title: string, parentId?: string) => Promise<BookmarkNode>;
+  renameBookmark: (id: string, title: string) => Promise<void>;
+  removeMultiple: (ids: string[]) => Promise<void>;
+  moveMultiple: (ids: string[], parentId: string) => Promise<void>;
 }
 
 const BookmarkContext = createContext<BookmarkContextValue | null>(null);
@@ -18,7 +22,6 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
   const loadBookmarks = useCallback(() => {
     setIsLoading(true);
     chrome.bookmarks.getTree((tree) => {
-      // Chrome returns an array with a single root node; its children are the actual roots
       const roots = tree[0]?.children ?? [];
       setAllBookmarks(roots);
       setIsLoading(false);
@@ -37,12 +40,64 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
     });
   }, [loadBookmarks]);
 
+  const createFolder = useCallback((title: string, parentId?: string): Promise<BookmarkNode> => {
+    return new Promise((resolve, reject) => {
+      chrome.bookmarks.create(
+        { title, parentId: parentId ?? '1' },
+        (node) => {
+          if (chrome.runtime.lastError) {
+            reject(new Error(chrome.runtime.lastError.message));
+          } else {
+            loadBookmarks();
+            resolve(node);
+          }
+        },
+      );
+    });
+  }, [loadBookmarks]);
+
+  const renameBookmark = useCallback((id: string, title: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      chrome.bookmarks.update(id, { title }, () => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+        } else {
+          loadBookmarks();
+          resolve();
+        }
+      });
+    });
+  }, [loadBookmarks]);
+
+  const removeMultiple = useCallback(async (ids: string[]) => {
+    for (const id of ids) {
+      await new Promise<void>((resolve) => {
+        chrome.bookmarks.remove(id, () => resolve());
+      });
+    }
+    loadBookmarks();
+  }, [loadBookmarks]);
+
+  const moveMultiple = useCallback(async (ids: string[], parentId: string) => {
+    for (const id of ids) {
+      await new Promise<void>((resolve) => {
+        chrome.bookmarks.move(id, { parentId }, () => resolve());
+      });
+    }
+    loadBookmarks();
+  }, [loadBookmarks]);
+
   useEffect(() => {
     loadBookmarks();
   }, [loadBookmarks]);
 
   return (
-    <BookmarkContext.Provider value={{ allBookmarks, isLoading, loadBookmarks, removeBookmark, moveBookmark }}>
+    <BookmarkContext.Provider value={{
+      allBookmarks, isLoading, loadBookmarks,
+      removeBookmark, moveBookmark,
+      createFolder, renameBookmark,
+      removeMultiple, moveMultiple,
+    }}>
       {children}
     </BookmarkContext.Provider>
   );

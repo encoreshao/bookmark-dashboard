@@ -1,22 +1,34 @@
 # Bookmark Dashboard
 
-A clean, modern Chrome extension that replaces your new tab with a fully-featured, searchable bookmark dashboard — built with **React + TypeScript**.
+A powerful, AI-enhanced Chrome extension that replaces your new tab with a fully-featured bookmark dashboard — built with **React + TypeScript + Vite**.
 
 ## Features
 
+### Core
 - Browse all Chrome bookmarks organised by folder
 - Search bookmarks by title or URL (keyboard shortcut: `/`)
 - Grid and list view modes
-- Dark / light / system theme with smooth transitions
-- Pinned bookmarks — pin any bookmark for quick access (top bar or right sidebar)
-- Folder sidebar — pinned or floating, collapsible tree
-- Domain graph — visualise bookmarks grouped by website domain
-- Recently added — instantly see your 50 newest bookmarks
-- Google Apps popup — customisable launcher (choose which apps appear)
 - Drag bookmarks between folders
-- Greeting + live clock
+- Pin any bookmark for quick access (top bar or right sidebar)
+- Folder sidebar — pinned or floating, collapsible tree
+- Greeting + live clock with locale-aware formatting
+
+### AI Insights
+- **Smart Analysis** — AI-powered organisation scoring, category breakdown, and actionable insights
+- **Find Duplicates** — instant local scan for duplicate URLs with one-click cleanup
+- **Dead Link Scanner** — checks all bookmarks for broken URLs and lets you remove them
+- **Smart Reorganise** — AI suggests folder restructuring; apply moves, merges, renames, and deletions with a single click
+- Supports **OpenAI**, **Google Gemini**, and **Anthropic Claude** providers
+
+### Visualisation
+- **Domain Graph** — treemap-inspired dashboard grouping bookmarks by website domain
+- **Recently Added** — instantly see your 50 newest bookmarks
+
+### Customisation
+- Dark / light / system theme with smooth transitions
+- Background image presets or custom URL
+- Customisable Google Apps launcher (choose which apps appear)
 - Full internationalisation: English, 中文, 日本語
-- All settings persist via `chrome.storage.local`
 
 ## Keyboard Shortcuts
 
@@ -29,6 +41,7 @@ A clean, modern Chrome extension that replaces your new tab with a fully-feature
 | `V` | Toggle view (list ↔ grid) |
 | `D` | Domain graph |
 | `R` | Recently added |
+| `A` | AI Insights |
 | `G` | Google Apps popup |
 | `Shift + G` | Open Google.com |
 | `Esc` | Close / go back |
@@ -89,20 +102,23 @@ bookmark-dashboard/
 │   │   ├── DomainView.tsx     # Domain graph dashboard
 │   │   ├── DomainModal.tsx    # Domain detail popup
 │   │   ├── RecentView.tsx     # Recently added view
-│   │   ├── SettingsPanel.tsx  # Settings panel (4 tabs)
+│   │   ├── AIInsightsView.tsx # AI analysis dashboard (4 scan modes)
+│   │   ├── SettingsPanel.tsx  # Settings panel (3 tabs)
+│   │   ├── Footer.tsx         # Fixed bottom footer with gradient accent
 │   │   ├── KeyboardShortcuts.tsx
 │   │   ├── ConfirmDialog.tsx
 │   │   └── Toast.tsx
 │   │
 │   ├── context/               # React Context providers
-│   │   ├── SettingsContext.tsx  # Settings state ↔ chrome.storage.local
-│   │   ├── BookmarkContext.tsx  # Bookmark tree via chrome.bookmarks API
-│   │   └── UIContext.tsx        # Active view, modals, toasts
+│   │   ├── SettingsContext.tsx # Settings state ↔ chrome.storage.local
+│   │   ├── BookmarkContext.tsx # Bookmark tree via chrome.bookmarks API
+│   │   └── UIContext.tsx      # Active view, modals, toasts
 │   │
 │   ├── types/
 │   │   └── index.ts           # Shared TypeScript interfaces
 │   │
 │   ├── utils/
+│   │   ├── ai.ts              # AI providers, prompts, local scanners
 │   │   ├── bookmarks.ts       # Tree traversal, folder & domain helpers
 │   │   ├── googleApps.tsx     # App catalogue + inline SVG icons
 │   │   ├── i18n.ts            # Translations (EN / 中文 / 日本語)
@@ -121,13 +137,13 @@ bookmark-dashboard/
 │       └── index.html         # Options page HTML
 │
 ├── dist/                      # ← Built extension — load this folder in Chrome
-│   ├── manifest.json          # Copied from src/
-│   ├── icons/                 # Copied from src/
-│   ├── index.html             # Compiled new-tab page
+│   ├── manifest.json
+│   ├── icons/
+│   ├── index.html
 │   ├── assets/                # Bundled JS + CSS (hashed filenames)
-│   ├── js/                    # Copied service worker + options scripts
-│   ├── styles/                # Copied options.css
-│   └── options/               # Copied options page HTML
+│   ├── js/
+│   ├── styles/
+│   └── options/
 │
 ├── releases/                  # ← Release zips (git-ignored)
 │   └── bookmark-dashboard-v*.zip
@@ -141,10 +157,9 @@ Open settings with the **⚙** icon or press `S`.
 
 | Tab | Options |
 |---|---|
-| General | Display name, Language, Display mode, Nav display, Google Apps visibility |
-| Appearance | Theme (dark / light / system), Background image |
-| Sidebar | Folder sidebar mode (pinned / float), Pinned bookmarks display |
-| Account | Google account (placeholder for future sync) |
+| General | Display name, Language, Display mode, Nav display, Google Apps visibility, Folder sidebar mode, Pinned bookmarks display |
+| Appearance | Theme (dark / light / system), Background image, Google account |
+| AI | Provider (OpenAI / Gemini / Claude), Model, API key |
 
 ## Release
 
@@ -194,9 +209,14 @@ This directory is git-ignored. Never commit the key to the repository.
 | Build | Vite 5 |
 | Storage | `chrome.storage.local` |
 | Bookmarks | `chrome.bookmarks` API |
+| AI | OpenAI / Google Gemini / Anthropic Claude APIs |
 | Styling | CSS custom properties (no CSS-in-JS) |
 | i18n | Custom lightweight translator |
 
 ## Author
 
 [Encore Shao](https://github.com/encoreshao)
+
+## License
+
+MIT

@@ -3,7 +3,8 @@ import { useSettings, DEFAULTS } from '@/context/SettingsContext';
 import { useUI } from '@/context/UIContext';
 import { createTranslator } from '@/utils/i18n';
 import { GOOGLE_APPS, ALL_APP_IDS, AppIcon } from '@/utils/googleApps';
-import type { AppSettings, Theme, DisplayMode, Language, NavDisplay, PinnedDisplay, FolderSidebarMode } from '@/types';
+import type { AppSettings, Theme, DisplayMode, Language, NavDisplay, PinnedDisplay, FolderSidebarMode, AIProvider } from '@/types';
+import { getModelsForProvider, getDefaultModel } from '@/utils/ai';
 
 const BG_PRESETS = [
   { label: 'None', value: '' },
@@ -69,11 +70,15 @@ function SettingsPanel() {
     set('visibleApps', next);
   };
 
+  const handleProviderChange = (provider: AIProvider) => {
+    set('aiProvider', provider);
+    set('aiModel', getDefaultModel(provider));
+  };
+
   const tabs = [
-    { id: 'general',    label: t('tab-general') },
-    { id: 'appearance', label: t('tab-appearance') },
-    { id: 'sidebar',    label: t('tab-sidebar') },
-    { id: 'account',    label: t('tab-account') },
+    { id: 'general',         label: t('tab-general') },
+    { id: 'personalization', label: t('tab-personalization') },
+    { id: 'ai-apps',         label: t('tab-ai-apps') },
   ];
 
   return (
@@ -112,6 +117,8 @@ function SettingsPanel() {
         </div>
 
         <div className="settings-panel-body">
+
+          {/* ═══════════ GENERAL ═══════════ */}
           {activeSettingsTab === 'general' && (
             <div className="settings-tab-pane active">
               <div className="sp-group">
@@ -164,29 +171,33 @@ function SettingsPanel() {
               </div>
 
               <div className="sp-group">
-                <label className="sp-label">{t('sp-google-apps')}</label>
-                <p className="sp-desc">{t('sp-google-apps-desc')}</p>
-                <div className="sp-apps-grid">
-                  {GOOGLE_APPS.map(app => {
-                    const active = (draft.visibleApps ?? ALL_APP_IDS).includes(app.id);
-                    return (
-                      <label
-                        key={app.id}
-                        className={`sp-app-toggle${active ? ' active' : ''}`}
-                        onClick={() => toggleApp(app.id)}
-                      >
-                        <AppIcon app={app} />
-                        <span>{app.label}</span>
-                      </label>
-                    );
-                  })}
-                </div>
+                <label className="sp-label">{t('sp-folder-sidebar')}</label>
+                <p className="sp-desc">{t('sp-folder-sidebar-desc')}</p>
+                <Toggle<FolderSidebarMode>
+                  value={draft.folderSidebarMode}
+                  onChange={v => set('folderSidebarMode', v)}
+                  options={[
+                    { value: 'pinned', label: 'Pinned' },
+                    { value: 'float', label: 'Float' },
+                  ]}
+                />
               </div>
-            </div>
-          )}
 
-          {activeSettingsTab === 'appearance' && (
-            <div className="settings-tab-pane active">
+              <div className="sp-group">
+                <label className="sp-label">{t('sp-pinned-display')}</label>
+                <p className="sp-desc">{t('sp-pinned-display-desc')}</p>
+                <Toggle<PinnedDisplay>
+                  value={draft.pinnedDisplay}
+                  onChange={v => set('pinnedDisplay', v)}
+                  options={[
+                    { value: 'top', label: 'Top of page' },
+                    { value: 'sidebar', label: 'Right sidebar' },
+                  ]}
+                />
+              </div>
+
+              <div className="sp-divider" />
+
               <div className="sp-group">
                 <label className="sp-label">{t('sp-theme')}</label>
                 <Toggle<Theme>
@@ -236,38 +247,23 @@ function SettingsPanel() {
             </div>
           )}
 
-          {activeSettingsTab === 'sidebar' && (
+          {/* ═══════════ PERSONALIZATION ═══════════ */}
+          {activeSettingsTab === 'personalization' && (
             <div className="settings-tab-pane active">
               <div className="sp-group">
-                <label className="sp-label">{t('sp-folder-sidebar')}</label>
-                <p className="sp-desc">{t('sp-folder-sidebar-desc')}</p>
-                <Toggle<FolderSidebarMode>
-                  value={draft.folderSidebarMode}
-                  onChange={v => set('folderSidebarMode', v)}
-                  options={[
-                    { value: 'pinned', label: 'Pinned' },
-                    { value: 'float', label: 'Float' },
-                  ]}
+                <label className="sp-label">{t('sp-ai-instructions')}</label>
+                <p className="sp-desc">{t('sp-ai-instructions-desc')}</p>
+                <textarea
+                  className="sp-textarea"
+                  rows={5}
+                  placeholder={t('sp-ai-instructions-placeholder')}
+                  value={draft.aiCustomInstructions}
+                  onChange={e => set('aiCustomInstructions', e.target.value)}
                 />
               </div>
 
-              <div className="sp-group">
-                <label className="sp-label">{t('sp-pinned-display')}</label>
-                <p className="sp-desc">{t('sp-pinned-display-desc')}</p>
-                <Toggle<PinnedDisplay>
-                  value={draft.pinnedDisplay}
-                  onChange={v => set('pinnedDisplay', v)}
-                  options={[
-                    { value: 'top', label: 'Top of page' },
-                    { value: 'sidebar', label: 'Right sidebar' },
-                  ]}
-                />
-              </div>
-            </div>
-          )}
+              <div className="sp-divider" />
 
-          {activeSettingsTab === 'account' && (
-            <div className="settings-tab-pane active">
               <div className="sp-group">
                 <label className="sp-label">{t('sp-google-account')}</label>
                 <p className="sp-desc">{t('sp-google-account-desc')}</p>
@@ -280,20 +276,88 @@ function SettingsPanel() {
                   </svg>
                   {t('sign-in-google')}
                 </button>
-              </div>
-
-              <div className="sp-group" style={{ marginTop: 16, padding: '14px 16px', background: 'var(--bg-tertiary)', borderRadius: 10, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                     strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 20, flexShrink: 0, color: 'var(--accent)', marginTop: 2 }}>
-                  <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
-                </svg>
-                <div>
-                  <strong style={{ fontSize: '0.8125rem' }}>{t('sync-title')}</strong>
-                  <p className="sp-desc" style={{ marginTop: 4 }}>{t('sync-desc')}</p>
+                <div className="sp-sync-note">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                       strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                  </svg>
+                  <div>
+                    <strong>{t('sync-title')}</strong>
+                    <p className="sp-desc">{t('sync-desc')}</p>
+                  </div>
                 </div>
               </div>
             </div>
           )}
+
+          {/* ═══════════ AI & APPS ═══════════ */}
+          {activeSettingsTab === 'ai-apps' && (
+            <div className="settings-tab-pane active">
+              <div className="sp-group">
+                <label className="sp-label">{t('sp-ai-provider')}</label>
+                <p className="sp-desc">{t('sp-ai-provider-desc')}</p>
+                <Toggle<AIProvider>
+                  value={draft.aiProvider}
+                  onChange={handleProviderChange}
+                  options={[
+                    { value: 'openai', label: 'OpenAI' },
+                    { value: 'gemini', label: 'Gemini' },
+                    { value: 'claude', label: 'Claude' },
+                  ]}
+                />
+              </div>
+
+              <div className="sp-group">
+                <label className="sp-label">{t('sp-ai-model')}</label>
+                <p className="sp-desc">{t('sp-ai-model-desc')}</p>
+                <select
+                  className="sp-input sp-select"
+                  value={draft.aiModel}
+                  onChange={e => set('aiModel', e.target.value)}
+                >
+                  {getModelsForProvider(draft.aiProvider).map(m => (
+                    <option key={m.value} value={m.value}>{m.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="sp-group">
+                <label className="sp-label">{t('sp-ai-api-key')}</label>
+                <p className="sp-desc">{t('sp-ai-api-key-desc')}</p>
+                <input
+                  type="password"
+                  className="sp-input"
+                  placeholder="sk-..."
+                  value={draft.aiApiKey}
+                  onChange={e => set('aiApiKey', e.target.value)}
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="sp-divider" />
+
+              <div className="sp-group">
+                <label className="sp-label">{t('sp-google-apps')}</label>
+                <p className="sp-desc">{t('sp-google-apps-desc')}</p>
+                <div className="sp-apps-grid">
+                  {GOOGLE_APPS.map(app => {
+                    const active = (draft.visibleApps ?? ALL_APP_IDS).includes(app.id);
+                    return (
+                      <label
+                        key={app.id}
+                        className={`sp-app-toggle${active ? ' active' : ''}`}
+                        onClick={() => toggleApp(app.id)}
+                      >
+                        <AppIcon app={app} />
+                        <span>{app.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
 
         <div className="settings-panel-save">

@@ -15,6 +15,8 @@ import Toast from '@/components/Toast';
 import DomainModal from '@/components/DomainModal';
 import Hero from '@/components/Hero';
 import SearchSection from '@/components/SearchSection';
+import AIInsightsView from '@/components/AIInsightsView';
+import Footer from '@/components/Footer';
 
 function App() {
   const { settings, isLoaded, saveSetting } = useSettings();
@@ -82,6 +84,7 @@ function App() {
       case 's': e.preventDefault(); settingsPanelOpen ? closeSettings() : openSettings(); break;
       case 'd': e.preventDefault(); setActiveView(activeView === 'domains' ? 'bookmarks' : 'domains'); break;
       case 'r': e.preventDefault(); setActiveView(activeView === 'recent' ? 'bookmarks' : 'recent'); break;
+      case 'a': e.preventDefault(); setActiveView(activeView === 'ai' ? 'bookmarks' : 'ai'); break;
     }
   }, [activeView, confirmState, kbdModalOpen, settingsPanelOpen, googleAppsOpen, domainModal,
       settings.theme, settings.displayMode, saveSetting,
@@ -122,7 +125,12 @@ function App() {
         {activeView === 'recent' && (
           <RecentView onBack={() => setActiveView('bookmarks')} />
         )}
+        {activeView === 'ai' && (
+          <AIInsightsView onBack={() => setActiveView('bookmarks')} />
+        )}
       </main>
+
+      <Footer />
 
       <SettingsPanel />
       <KeyboardShortcuts />

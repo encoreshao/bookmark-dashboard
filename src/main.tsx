@@ -6,6 +6,11 @@ import { UIProvider } from '@/context/UIContext';
 import App from '@/App';
 import './styles/main.css';
 
+try {
+  const mf = chrome.runtime.getManifest();
+  document.title = `New Tab - ${mf.name}`;
+} catch { /* dev environment */ }
+
 const root = document.getElementById('root')!;
 createRoot(root).render(
   <React.StrictMode>
