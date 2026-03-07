@@ -7,7 +7,13 @@
 .tags
 *.swp
 .git/*
+.vscode/*
+.cursor/*
+
+node_modules/
 dist/
+releases/
+
 key.pem
 config/credentials/*
 !config/credentials/.gitkeep

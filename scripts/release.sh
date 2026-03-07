@@ -1,30 +1,37 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ─────────────────────────────────────────────
-# Bookmark Dashboard - Release Zip Generator
-# ─────────────────────────────────────────────
+# ──────────────────────────────────────────────
+# Bookmark Dashboard - Release Builder
+# ──────────────────────────────────────────────
 # Usage:
-#   ./scripts/release.sh              # uses version from manifest.json
-#   ./scripts/release.sh 1.2.0        # override version
+#   ./scripts/release.sh              # version from src/manifest.json
+#   ./scripts/release.sh 1.3.0        # override version
 #   ./scripts/release.sh --no-key     # skip PEM key bundling
 #
-# PEM key:
-#   The script looks for config/credentials/key.pem
-#   If found, it temporarily copies it as key.pem into the zip, then removes it.
-#   This ensures the extension ID stays consistent across Chrome Web Store updates.
+# What it does:
+#   1. Runs `npm run build`
+#      → compiles React + TypeScript and copies all extension assets into dist/
+#      → dist/ is a complete, self-contained Chrome extension
+#   2. Zips dist/ into dist/bookmark-dashboard-v{version}.zip
+#      ready for the Chrome Web Store
+#
+# PEM key (optional):
+#   Place at config/credentials/key.pem to maintain a consistent
+#   extension ID across Web Store updates. Never commit this file.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 DIST_DIR="$PROJECT_DIR/dist"
+RELEASES_DIR="$PROJECT_DIR/releases"
 PEM_DIR="$PROJECT_DIR/config/credentials"
 PEM_FILE="$PEM_DIR/key.pem"
-KEY_FILE="$PROJECT_DIR/key.pem"
+KEY_FILE="$DIST_DIR/key.pem"   # temporary copy inside dist/ while zipping
 
 NO_KEY=false
 VERSION=""
 
-# Parse arguments
+# ── Parse arguments ──────────────────────────
 for arg in "$@"; do
   case "$arg" in
     --no-key) NO_KEY=true ;;
@@ -32,85 +39,73 @@ for arg in "$@"; do
   esac
 done
 
-# Read version from manifest.json if not provided
+# ── Read version from src/manifest.json ──────
 if [[ -z "$VERSION" ]]; then
-  VERSION=$(grep -o '"version": *"[^"]*"' "$PROJECT_DIR/manifest.json" | head -1 | sed 's/"version": *"//;s/"//')
+  VERSION=$(grep -o '"version": *"[^"]*"' "$PROJECT_DIR/src/manifest.json" | head -1 | sed 's/"version": *"//;s/"//')
 fi
 
 if [[ -z "$VERSION" ]]; then
-  echo "Error: Could not determine version."
+  echo "Error: Could not determine version from src/manifest.json."
   exit 1
 fi
 
 ZIP_NAME="bookmark-dashboard-v${VERSION}.zip"
+TMP_ZIP="/tmp/$ZIP_NAME"
 
-echo "──────────────────────────────────────"
+echo "──────────────────────────────────────────"
 echo "  Bookmark Dashboard - Release Builder"
-echo "──────────────────────────────────────"
-echo "  Version:  $VERSION"
-echo "  Output:   dist/$ZIP_NAME"
+echo "──────────────────────────────────────────"
+echo "  Version : $VERSION"
+echo "  Output  : releases/$ZIP_NAME"
 
-# Handle PEM key
+# ── PEM key (optional) ───────────────────────
 HAS_KEY=false
 if [[ "$NO_KEY" == false ]] && [[ -f "$PEM_FILE" ]]; then
-  cp "$PEM_FILE" "$KEY_FILE"
   HAS_KEY=true
-  echo "  PEM key:  Bundled from config/credentials/"
+  echo "  PEM key : will bundle from config/credentials/"
 elif [[ "$NO_KEY" == false ]]; then
-  echo "  PEM key:  Not found at config/credentials/key.pem (skipped)"
+  echo "  PEM key : not found at config/credentials/key.pem (skipped)"
 fi
 echo ""
 
-# Cleanup function to always remove key.pem
-cleanup() {
-  if [[ -f "$KEY_FILE" ]]; then
-    rm -f "$KEY_FILE"
-  fi
-}
+# Remove temp key on exit (rm -f never fails even if absent)
+cleanup() { rm -f "$KEY_FILE"; }
 trap cleanup EXIT
 
-# Create dist directory
-mkdir -p "$DIST_DIR"
-
-# Remove old zip if it exists
-rm -f "$DIST_DIR/$ZIP_NAME"
-
-# Build the zip from the project root
+# ── Build ────────────────────────────────────
+echo "  Building…"
 cd "$PROJECT_DIR"
+npm run build
+echo ""
 
-ZIP_CONTENTS=(
-  manifest.json
-  src/
-  css/
-  js/
-  icons/icon16.png
-  icons/icon48.png
-  icons/icon128.png
-)
-
+# ── Bundle PEM key into dist/ temporarily ────
 if [[ "$HAS_KEY" == true ]]; then
-  ZIP_CONTENTS+=(key.pem)
+  cp "$PEM_FILE" "$KEY_FILE"
 fi
 
-zip -r "$DIST_DIR/$ZIP_NAME" \
-  "${ZIP_CONTENTS[@]}" \
+# ── Create zip from dist/ ────────────────────
+# dist/ is the complete extension; zip its entire contents.
+mkdir -p "$RELEASES_DIR"
+rm -f "$TMP_ZIP" "$RELEASES_DIR/$ZIP_NAME"
+
+cd "$DIST_DIR"
+zip -r "$TMP_ZIP" . \
   -x "*.DS_Store" \
   -x "*__MACOSX*"
 
-# Show results
-ZIP_SIZE=$(du -h "$DIST_DIR/$ZIP_NAME" | cut -f1 | xargs)
-FILE_COUNT=$(zipinfo -1 "$DIST_DIR/$ZIP_NAME" | wc -l | xargs)
+mv "$TMP_ZIP" "$RELEASES_DIR/$ZIP_NAME"
 
-echo ""
+# ── Summary ──────────────────────────────────
+ZIP_SIZE=$(du -h "$RELEASES_DIR/$ZIP_NAME" | cut -f1 | xargs)
+FILE_COUNT=$(zipinfo -1 "$RELEASES_DIR/$ZIP_NAME" | wc -l | xargs)
+
 echo "  Done!"
-echo "  File:   dist/$ZIP_NAME"
-echo "  Size:   $ZIP_SIZE"
-echo "  Files:  $FILE_COUNT"
-if [[ "$HAS_KEY" == true ]]; then
-  echo "  Key:    Included (key.pem)"
-fi
+echo "  File  : releases/$ZIP_NAME"
+echo "  Size  : $ZIP_SIZE"
+echo "  Files : $FILE_COUNT"
+[[ "$HAS_KEY" == true ]] && echo "  Key   : included (key.pem)"
 echo ""
 echo "  Next steps:"
-echo "    1. Test: chrome://extensions → Load unpacked"
-echo "    2. Upload: https://chrome.google.com/webstore/developer/dashboard"
-echo "──────────────────────────────────────"
+echo "    1. Test  : chrome://extensions → Load unpacked → select dist/"
+echo "    2. Upload: https://chrome.google.com/webstore/developer/dashboard → releases/$ZIP_NAME"
+echo "──────────────────────────────────────────"

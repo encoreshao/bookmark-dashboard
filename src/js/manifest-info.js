@@ -8,6 +8,10 @@
     el.textContent = `${manifest.name} v${manifest.version}`;
   });
 
+  document.querySelectorAll('#topbar-version').forEach(el => {
+    el.textContent = `v${manifest.version}`;
+  });
+
   document.querySelectorAll('#app-author').forEach(el => {
     el.textContent = manifest.author || '';
     if (el.tagName === 'A') {

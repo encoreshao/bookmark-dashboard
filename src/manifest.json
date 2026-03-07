@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Bookmark Dashboard",
   "short_name": "Bookmarks",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "A beautiful dashboard for your Chrome bookmarks. Replace your new tab with an organized, searchable bookmark hub.",
   "author": "Encore Shao",
   "icons": {
@@ -14,12 +14,18 @@
     "service_worker": "js/service-worker.js"
   },
   "chrome_url_overrides": {
-    "newtab": "src/index.html"
+    "newtab": "index.html"
   },
-  "options_page": "src/options/index.html",
+  "options_page": "options/index.html",
   "permissions": [
     "bookmarks",
     "storage",
     "favicon"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*", "js/*", "styles/*", "icons/*"],
+      "matches": ["<all_urls>"]
+    }
   ]
 }
