@@ -1710,6 +1710,20 @@ body.has-bg-image .bookmark-remove {
   padding: 0 4px 8px;
 }
 
+.gam-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 6px 0;
+  opacity: 0.6;
+}
+
+.gam-title-ai {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #8B5CF6;
+}
+
 .gam-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -3884,6 +3898,20 @@ body.sidebar-mode-pinned .app-footer {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+
+.ai-stat-clickable { position: relative; }
+.ai-stat-clickable:hover { border-color: var(--accent); }
+.ai-stat-clickable:hover .ai-stat-num { color: var(--accent); }
+.ai-stat-arrow {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.ai-stat-clickable:hover .ai-stat-arrow { opacity: 1; color: var(--accent); }
 
 /* Mode selection cards */
 .ai-modes-grid {

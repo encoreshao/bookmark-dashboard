@@ -33,7 +33,7 @@ export interface GoogleApp {
   label: string;
   url: string;
   bg: string | null;
-  type: 'solid' | 'google' | 'gemini';
+  type: 'solid' | 'google' | 'gemini' | 'aistudio';
 }
 
 export interface FolderItem {

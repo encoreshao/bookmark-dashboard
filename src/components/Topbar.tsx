@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSettings } from '@/context/SettingsContext';
 import { useUI } from '@/context/UIContext';
 import { createTranslator } from '@/utils/i18n';
-import { GOOGLE_APPS, AppIcon } from '@/utils/googleApps';
+import { GOOGLE_APPS, AI_APP_IDS, AppIcon } from '@/utils/googleApps';
 
 interface TopbarProps {
   googleAppsOpen: boolean;
@@ -126,15 +126,46 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
             {!compact && <span>{t('nav-apps')}</span>}
           </button>
           <div className={`google-apps-menu${googleAppsOpen ? ' open' : ''}`} id="google-apps-menu">
-            <p className="gam-title">Google Apps</p>
-            <div className="gam-grid gam-grid-4">
-              {visibleApps.map(app => (
-                <a key={app.id} className="gam-item" href={app.url} target="_blank" rel="noopener">
-                  <AppIcon app={app} />
-                  <span>{app.label}</span>
-                </a>
-              ))}
-            </div>
+            {(() => {
+              const regularApps = visibleApps.filter(a => !AI_APP_IDS.includes(a.id));
+              const aiApps = visibleApps.filter(a => AI_APP_IDS.includes(a.id));
+              return (
+                <>
+                  {regularApps.length > 0 && (
+                    <>
+                      <p className="gam-title">Google Apps</p>
+                      <div className="gam-grid gam-grid-4">
+                        {regularApps.map(app => (
+                          <a key={app.id} className="gam-item" href={app.url} target="_blank" rel="noopener">
+                            <AppIcon app={app} />
+                            <span>{app.label}</span>
+                          </a>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {aiApps.length > 0 && (
+                    <>
+                      <div className="gam-divider" />
+                      <p className="gam-title gam-title-ai">
+                        <svg viewBox="0 0 24 24" fill="none" width="14" height="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.287 1.288L3 12l5.8 1.9a2 2 0 0 1 1.288 1.287L12 21l1.9-5.8a2 2 0 0 1 1.287-1.288L21 12l-5.8-1.9a2 2 0 0 1-1.288-1.287Z"/>
+                        </svg>
+                        AI
+                      </p>
+                      <div className="gam-grid gam-grid-4">
+                        {aiApps.map(app => (
+                          <a key={app.id} className="gam-item" href={app.url} target="_blank" rel="noopener">
+                            <AppIcon app={app} />
+                            <span>{app.label}</span>
+                          </a>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </div>
 

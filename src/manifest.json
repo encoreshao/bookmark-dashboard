@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Bookmark Dashboard - AI Powered",
   "short_name": "Bookmarks",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "Replace your new tab with an AI-powered bookmark dashboard. Search, organize and analyze your bookmarks with smart AI insights.",
   "author": "Encore Shao",
   "icons": {

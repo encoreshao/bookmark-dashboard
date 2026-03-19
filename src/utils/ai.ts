@@ -108,7 +108,7 @@ function flattenTree(
           id: node.id,
           title: node.title,
           path,
-          bookmarkCount: node.children.filter(c => c.url).length,
+          bookmarkCount: node.children.length,
         });
       }
       const sub = flattenTree(node.children, path, node.id);

@@ -7,10 +7,10 @@ import {
   runOverviewAnalysis, runReorganizeAnalysis,
   findDuplicates, checkDeadLinks, getBookmarkStats,
   type AIOverview, type ReorganizeResult, type DuplicateGroup,
-  type DeadLink, type AIAction,
+  type DeadLink, type AIAction, type FlatFolder,
 } from '@/utils/ai';
 
-type ScanMode = 'home' | 'overview' | 'duplicates' | 'dead-links' | 'reorganize';
+type ScanMode = 'home' | 'overview' | 'duplicates' | 'dead-links' | 'reorganize' | 'empty-folders';
 
 interface AIInsightsViewProps {
   onBack: () => void;
@@ -19,7 +19,7 @@ interface AIInsightsViewProps {
 function AIInsightsView({ onBack }: AIInsightsViewProps) {
   const { settings } = useSettings();
   const { openSettings, showToast, confirm } = useUI();
-  const { allBookmarks, removeMultiple, moveMultiple, createFolder, renameBookmark, loadBookmarks } = useBookmarks();
+  const { allBookmarks, removeMultiple, removeFolder, moveMultiple, createFolder, renameBookmark, loadBookmarks } = useBookmarks();
   const t = createTranslator(settings.language);
 
   const [mode, setMode] = useState<ScanMode>('home');
@@ -33,12 +33,26 @@ function AIInsightsView({ onBack }: AIInsightsViewProps) {
   const [deadProgress, setDeadProgress] = useState({ checked: 0, total: 0 });
   const [reorganize, setReorganize] = useState<ReorganizeResult | null>(null);
   const [actionStatus, setActionStatus] = useState<Record<string, 'pending' | 'done' | 'error'>>({});
+  const [emptyFolders, setEmptyFolders] = useState<FlatFolder[]>([]);
   const deadLinkAbort = useRef<AbortController | null>(null);
 
   const hasKey = !!settings.aiApiKey;
   const stats = getBookmarkStats(allBookmarks);
 
   const goHome = () => { setMode('home'); setError(''); };
+
+  const showEmptyFolders = () => {
+    setEmptyFolders(stats.emptyFolderList);
+    setMode('empty-folders');
+  };
+
+  const deleteEmptyFolder = async (folder: FlatFolder) => {
+    const ok = await confirm(t('remove-bookmark'), folder.path);
+    if (!ok) return;
+    removeFolder(folder.id);
+    setEmptyFolders(prev => prev.filter(f => f.id !== folder.id));
+    showToast(t('removed'));
+  };
 
   /* ---- Runners ---- */
 
@@ -307,7 +321,10 @@ function AIInsightsView({ onBack }: AIInsightsViewProps) {
             <div className="ai-stat"><span className="ai-stat-num">{stats.totalBookmarks}</span><span className="ai-stat-label">Bookmarks</span></div>
             <div className="ai-stat"><span className="ai-stat-num">{stats.totalFolders}</span><span className="ai-stat-label">Folders</span></div>
             <div className="ai-stat"><span className="ai-stat-num">{stats.totalDomains}</span><span className="ai-stat-label">Domains</span></div>
-            <div className="ai-stat"><span className="ai-stat-num">{stats.emptyFolders}</span><span className="ai-stat-label">Empty Folders</span></div>
+            <div className="ai-stat ai-stat-clickable" onClick={stats.emptyFolders > 0 ? showEmptyFolders : undefined} style={stats.emptyFolders > 0 ? { cursor: 'pointer' } : undefined}>
+              <span className="ai-stat-num">{stats.emptyFolders}</span><span className="ai-stat-label">Empty Folders</span>
+              {stats.emptyFolders > 0 && <span className="ai-stat-arrow">→</span>}
+            </div>
           </div>
 
           {/* Scan Mode Cards */}
@@ -634,6 +651,42 @@ function AIInsightsView({ onBack }: AIInsightsViewProps) {
           <button className="ai-btn-analyze" onClick={runReorganize} style={{ alignSelf: 'center' }}>
             {t('ai-reanalyze')}
           </button>
+        </div>
+      )}
+
+      {/* ---- EMPTY FOLDERS ---- */}
+      {mode === 'empty-folders' && (
+        <div className="ai-results">
+          {emptyFolders.length === 0 ? (
+            <div className="ai-empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="40" height="40">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
+              </svg>
+              <h3>{t('ai-no-empty-folders')}</h3>
+              <p>{t('ai-no-empty-folders-desc')}</p>
+            </div>
+          ) : (
+            <>
+              <p className="ai-dup-count">
+                <strong>{emptyFolders.length}</strong> empty {emptyFolders.length === 1 ? 'folder' : 'folders'}
+              </p>
+              <div className="ai-dead-list">
+                {emptyFolders.map(folder => (
+                  <div key={folder.id} className="ai-dead-item">
+                    <div className="ai-dead-item-info">
+                      <span className="ai-dead-item-title">{folder.title}</span>
+                      <span className="ai-dead-item-meta">{folder.path}</span>
+                    </div>
+                    <button className="ai-dup-delete" onClick={() => deleteEmptyFolder(folder)} title={t('remove-bookmark')}>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+                        <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

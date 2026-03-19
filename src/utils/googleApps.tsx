@@ -10,15 +10,22 @@ export const GOOGLE_APPS: GoogleApp[] = [
   { id: 'slides',      label: 'Slides',      url: 'https://slides.google.com/',            bg: '#F4B400', type: 'solid' },
   { id: 'meet',        label: 'Meet',        url: 'https://meet.google.com/',              bg: '#00897B', type: 'solid' },
   { id: 'keep',        label: 'Keep',        url: 'https://keep.google.com/',              bg: '#FBBC04', type: 'solid' },
-  { id: 'ai-search',   label: 'AI Search',   url: 'https://www.google.com/search?udm=50', bg: null,      type: 'google' },
-  { id: 'gemini',      label: 'Gemini',      url: 'https://gemini.google.com/',            bg: null,      type: 'gemini' },
   { id: 'notebooklm',  label: 'NotebookLM',  url: 'https://notebooklm.google.com/',       bg: '#5F6368', type: 'solid' },
   { id: 'youtube',     label: 'YouTube',     url: 'https://www.youtube.com/',              bg: '#FF0000', type: 'solid' },
   { id: 'workspace',   label: 'Workspace',   url: 'https://studio.workspace.google.com/',  bg: '#4285F4', type: 'solid' },
-  { id: 'aistudio',    label: 'AI Studio',   url: 'https://aistudio.google.com/app/',      bg: null,      type: 'gemini' },
+  { id: 'ai-search',   label: 'AI Search',   url: 'https://www.google.com/search?udm=50', bg: null,      type: 'google' },
+  { id: 'gemini',      label: 'Gemini',      url: 'https://gemini.google.com/',            bg: null,      type: 'gemini' },
+  { id: 'aistudio',    label: 'AI Studio',   url: 'https://aistudio.google.com/app/',      bg: null,      type: 'aistudio' },
 ];
 
+export const AI_APP_IDS = ['ai-search', 'gemini', 'aistudio', 'notebooklm'];
+
 export const ALL_APP_IDS = GOOGLE_APPS.map(a => a.id);
+
+export const DEFAULT_VISIBLE_APP_IDS = [
+  'gmail', 'calendar', 'drive', 'docs', 'youtube',
+  'gemini', 'aistudio',
+];
 
 const SOLID_ICONS: Record<string, React.ReactElement> = {
   gmail:      <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>,
@@ -34,6 +41,39 @@ const SOLID_ICONS: Record<string, React.ReactElement> = {
   workspace:  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2.5c1.38 0 2.5 1.12 2.5 2.5S13.38 11.5 12 11.5 9.5 10.38 9.5 9 10.62 6.5 12 6.5zM17 17H7v-1.5c0-1.67 3.33-2.5 5-2.5s5 .83 5 2.5V17z"/>,
 };
 
+function GeminiIcon() {
+  return (
+    <svg viewBox="0 0 28 28" fill="none" width="22" height="22">
+      <path d="M14 2C14 2 9 9 2 14C9 14 14 9 14 2Z" fill="url(#g1)"/>
+      <path d="M14 2C14 2 19 9 26 14C19 14 14 9 14 2Z" fill="url(#g2)"/>
+      <path d="M14 26C14 26 9 19 2 14C9 14 14 19 14 26Z" fill="url(#g3)"/>
+      <path d="M14 26C14 26 19 19 26 14C19 14 14 19 14 26Z" fill="url(#g4)"/>
+      <defs>
+        <linearGradient id="g1" x1="14" y1="2" x2="2" y2="14"><stop stopColor="#4285F4"/><stop offset="1" stopColor="#9334E6"/></linearGradient>
+        <linearGradient id="g2" x1="14" y1="2" x2="26" y2="14"><stop stopColor="#9334E6"/><stop offset="1" stopColor="#4285F4"/></linearGradient>
+        <linearGradient id="g3" x1="14" y1="26" x2="2" y2="14"><stop stopColor="#4285F4"/><stop offset="1" stopColor="#34A853"/></linearGradient>
+        <linearGradient id="g4" x1="14" y1="26" x2="26" y2="14"><stop stopColor="#34A853"/><stop offset="1" stopColor="#4285F4"/></linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+function AIStudioIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+      <defs>
+        <linearGradient id="ais1" x1="0" y1="0" x2="24" y2="24">
+          <stop offset="0%" stopColor="#4285F4"/>
+          <stop offset="50%" stopColor="#9B72CB"/>
+          <stop offset="100%" stopColor="#D96570"/>
+        </linearGradient>
+      </defs>
+      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.287 1.288L3 12l5.8 1.9a2 2 0 0 1 1.288 1.287L12 21l1.9-5.8a2 2 0 0 1 1.287-1.288L21 12l-5.8-1.9a2 2 0 0 1-1.288-1.287Z" fill="url(#ais1)"/>
+      <circle cx="19" cy="5" r="2" fill="url(#ais1)" opacity="0.6"/>
+    </svg>
+  );
+}
+
 export function AppIcon({ app }: { app: GoogleApp }): React.ReactElement {
   if (app.type === 'google') {
     return (
@@ -48,22 +88,10 @@ export function AppIcon({ app }: { app: GoogleApp }): React.ReactElement {
     );
   }
   if (app.type === 'gemini') {
-    return (
-      <div className="gam-icon gam-icon-gemini">
-        <svg viewBox="0 0 28 28" fill="none" width="22" height="22">
-          <path d="M14 2C14 2 9 9 2 14C9 14 14 9 14 2Z" fill="url(#g1)"/>
-          <path d="M14 2C14 2 19 9 26 14C19 14 14 9 14 2Z" fill="url(#g2)"/>
-          <path d="M14 26C14 26 9 19 2 14C9 14 14 19 14 26Z" fill="url(#g3)"/>
-          <path d="M14 26C14 26 19 19 26 14C19 14 14 19 14 26Z" fill="url(#g4)"/>
-          <defs>
-            <linearGradient id="g1" x1="14" y1="2" x2="2" y2="14"><stop stopColor="#4285F4"/><stop offset="1" stopColor="#9334E6"/></linearGradient>
-            <linearGradient id="g2" x1="14" y1="2" x2="26" y2="14"><stop stopColor="#9334E6"/><stop offset="1" stopColor="#4285F4"/></linearGradient>
-            <linearGradient id="g3" x1="14" y1="26" x2="2" y2="14"><stop stopColor="#4285F4"/><stop offset="1" stopColor="#34A853"/></linearGradient>
-            <linearGradient id="g4" x1="14" y1="26" x2="26" y2="14"><stop stopColor="#34A853"/><stop offset="1" stopColor="#4285F4"/></linearGradient>
-          </defs>
-        </svg>
-      </div>
-    );
+    return <div className="gam-icon gam-icon-gemini"><GeminiIcon /></div>;
+  }
+  if (app.type === 'aistudio') {
+    return <div className="gam-icon gam-icon-gemini"><AIStudioIcon /></div>;
   }
   const icon = SOLID_ICONS[app.id] ?? SOLID_ICONS.docs;
   return (

@@ -49,6 +49,7 @@ const TRANSLATIONS: Translations = {
     'ai-score': 'Organization Score', 'ai-summary': 'Summary',
     'ai-insights': 'Insights', 'ai-actions': 'Suggested Actions',
     'ai-categories': 'Categories', 'ai-error': 'Analysis failed. Please check your API key and try again.',
+    'ai-no-empty-folders': 'No empty folders!', 'ai-no-empty-folders-desc': 'All your folders contain bookmarks.',
     'footer-feedback': 'Feedback & Issues',
   },
   zh: {
@@ -92,6 +93,7 @@ const TRANSLATIONS: Translations = {
     'ai-score': '组织评分', 'ai-summary': '摘要',
     'ai-insights': '洞察', 'ai-actions': '建议操作',
     'ai-categories': '分类', 'ai-error': '分析失败，请检查您的API密钥后重试。',
+    'ai-no-empty-folders': '没有空文件夹！', 'ai-no-empty-folders-desc': '所有文件夹都包含书签。',
     'footer-feedback': '反馈与问题',
   },
   ja: {
@@ -137,6 +139,7 @@ const TRANSLATIONS: Translations = {
     'ai-score': '整理スコア', 'ai-summary': '概要',
     'ai-insights': 'インサイト', 'ai-actions': '推奨アクション',
     'ai-categories': 'カテゴリー', 'ai-error': '分析に失敗しました。APIキーを確認して再試行してください。',
+    'ai-no-empty-folders': '空のフォルダーはありません！', 'ai-no-empty-folders-desc': 'すべてのフォルダーにブックマークが含まれています。',
     'footer-feedback': 'フィードバック',
   },
 };

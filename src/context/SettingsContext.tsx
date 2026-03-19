@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import type { AppSettings, Theme, DisplayMode, Language, NavDisplay, PinnedDisplay, FolderSidebarMode, AIProvider } from '@/types';
-import { ALL_APP_IDS } from '@/utils/googleApps';
+import { ALL_APP_IDS, DEFAULT_VISIBLE_APP_IDS } from '@/utils/googleApps';
 
 const DEFAULTS: AppSettings = {
   theme: 'dark',
@@ -13,7 +13,7 @@ const DEFAULTS: AppSettings = {
   folderSidebarMode: 'pinned',
   language: 'en',
   navDisplay: 'compact',
-  visibleApps: ALL_APP_IDS,
+  visibleApps: DEFAULT_VISIBLE_APP_IDS,
   aiProvider: 'openai',
   aiApiKey: '',
   aiModel: 'gpt-4o-mini',

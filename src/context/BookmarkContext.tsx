@@ -6,6 +6,7 @@ interface BookmarkContextValue {
   isLoading: boolean;
   loadBookmarks: () => void;
   removeBookmark: (id: string) => void;
+  removeFolder: (id: string) => void;
   moveBookmark: (id: string, parentId: string) => void;
   createFolder: (title: string, parentId?: string) => Promise<BookmarkNode>;
   renameBookmark: (id: string, title: string) => Promise<void>;
@@ -29,10 +30,25 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const removeBookmark = useCallback((id: string) => {
-    chrome.bookmarks.remove(id, () => {
-      loadBookmarks();
-    });
-  }, [loadBookmarks]);
+    // Optimistically remove from state to preserve scroll position
+    function removeNode(nodes: BookmarkNode[]): BookmarkNode[] {
+      return nodes
+        .filter(n => n.id !== id)
+        .map(n => n.children ? { ...n, children: removeNode(n.children) } : n);
+    }
+    setAllBookmarks(prev => removeNode(prev));
+    chrome.bookmarks.remove(id);
+  }, []);
+
+  const removeFolder = useCallback((id: string) => {
+    function removeNode(nodes: BookmarkNode[]): BookmarkNode[] {
+      return nodes
+        .filter(n => n.id !== id)
+        .map(n => n.children ? { ...n, children: removeNode(n.children) } : n);
+    }
+    setAllBookmarks(prev => removeNode(prev));
+    chrome.bookmarks.removeTree(id);
+  }, []);
 
   const moveBookmark = useCallback((id: string, parentId: string) => {
     chrome.bookmarks.move(id, { parentId }, () => {
@@ -94,7 +110,7 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
   return (
     <BookmarkContext.Provider value={{
       allBookmarks, isLoading, loadBookmarks,
-      removeBookmark, moveBookmark,
+      removeBookmark, removeFolder, moveBookmark,
       createFolder, renameBookmark,
       removeMultiple, moveMultiple,
     }}>
