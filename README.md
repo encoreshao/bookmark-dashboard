@@ -1,162 +1,216 @@
-# Bookmark Dashboard - AI Powered
+<p align="center">
+  <img src="src/icons/icon128.png" width="80" alt="Bookmark Dashboard" />
+</p>
 
-A powerful, AI-enhanced Chrome extension that replaces your new tab with a fully-featured bookmark dashboard — built with **React + TypeScript + Vite**.
+<h1 align="center">Bookmark Dashboard — AI Powered</h1>
+
+<p align="center">
+  <strong>Replace your new tab with a smart, beautiful bookmark command center.</strong><br/>
+  Search, organize, analyze and optimize your entire bookmark library — powered by AI.
+</p>
+
+<p align="center">
+  <a href="https://chromewebstore.google.com/detail/bookmark-dashboard/imknfkidkilkomeomcidnnjojiilaofb"><img src="https://img.shields.io/chrome-web-store/v/imknfkidkilkomeomcidnnjojiilaofb?label=Chrome%20Web%20Store&color=4285F4&style=flat-square" alt="Chrome Web Store" /></a>
+  <img src="https://img.shields.io/badge/manifest-v3-10B981?style=flat-square" alt="Manifest V3" />
+  <img src="https://img.shields.io/badge/react-18-61DAFB?style=flat-square&logo=react&logoColor=white" alt="React 18" />
+  <img src="https://img.shields.io/badge/typescript-5-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/license-MIT-F59E0B?style=flat-square" alt="MIT License" />
+</p>
+
+---
+
+## Why Bookmark Dashboard?
+
+Chrome's default new tab is wasted real estate. Bookmark Dashboard turns it into a powerful productivity hub — every bookmark you've ever saved is one keystroke away, and AI helps you keep it all tidy.
+
+- **Instant access** — your bookmarks load the moment you open a new tab
+- **AI that acts** — not just suggestions, but one-click reorganization of your entire library
+- **Zero lock-in** — works directly with Chrome's bookmark API; uninstall anytime and everything stays
+
+---
 
 ## Features
 
-### Core
-- Browse all Chrome bookmarks organised by folder
-- Search bookmarks by title or URL (keyboard shortcut: `/`)
-- Grid and list view modes
-- Drag bookmarks between folders
-- Pin any bookmark for quick access (top bar or right sidebar)
-- Folder sidebar — pinned or floating, collapsible tree
-- Greeting + live clock with locale-aware formatting
+### Bookmark Management
+
+| Feature | Description |
+|---|---|
+| **Full-text search** | Find any bookmark by title or URL — press `/` to jump straight to the search bar |
+| **Folder browsing** | Browse bookmarks organized by folder with full path breadcrumbs |
+| **Grid & list views** | Switch between a compact list or visual grid layout |
+| **Drag & drop** | Move bookmarks between folders by dragging |
+| **Pin favorites** | Pin any bookmark to the top bar or a dedicated right sidebar for instant access |
+| **Folder sidebar** | Collapsible folder tree — pin it open or use it as a floating overlay |
 
 ### AI Insights
-- **Smart Analysis** — AI-powered organisation scoring, category breakdown, and actionable insights
-- **Find Duplicates** — instant local scan for duplicate URLs with one-click cleanup
-- **Dead Link Scanner** — checks all bookmarks for broken URLs and lets you remove them
-- **Smart Reorganise** — AI suggests folder restructuring; apply moves, merges, renames, and deletions with a single click
-- Supports **OpenAI**, **Google Gemini**, and **Anthropic Claude** providers
 
-### Visualisation
-- **Domain Graph** — treemap-inspired dashboard grouping bookmarks by website domain
-- **Recently Added** — instantly see your 50 newest bookmarks
+Connect your own API key (OpenAI, Google Gemini, or Anthropic Claude) and unlock intelligent bookmark management:
 
-### Customisation
-- Dark / light / system theme with smooth transitions
-- Background image presets or custom URL
-- Customisable Google Apps launcher (choose which apps appear)
-- Full internationalisation: English, 中文, 日本語
+| Mode | What it does |
+|---|---|
+| **Smart Analysis** | Scores your organization quality (0–100), surfaces insights about folder structure, naming consistency, and content diversity |
+| **Find Duplicates** | Instant local scan — finds every duplicate URL across all folders with one-click cleanup |
+| **Dead Link Scanner** | Checks every bookmark for broken URLs with a live progress bar; remove dead links in bulk |
+| **Smart Reorganize** | AI proposes concrete actions — move, merge, rename, create, delete — and you apply each with a single click |
+
+Custom instructions let you steer the AI's analysis (e.g. *"Group by project, not by technology"*).
+
+### Visualization
+
+- **Domain Graph** — treemap-style dashboard showing your bookmarks grouped by website domain; click any tile to explore
+- **Recently Added** — your 50 newest bookmarks at a glance with relative timestamps
+
+### Customization
+
+- **Themes** — dark, light, or system-following with smooth transitions
+- **Backgrounds** — choose a preset photo or paste any image URL
+- **Google Apps launcher** — customizable popup with your favorite Google services
+- **Internationalization** — full UI support for English, 中文, and 日本語
+- **Keyboard-first** — nearly every action has a shortcut
+
+---
 
 ## Keyboard Shortcuts
 
 | Key | Action |
 |---|---|
 | `/` | Focus search |
-| `?` | Toggle keyboard shortcuts modal |
-| `S` | Open Settings |
+| `?` | Show all keyboard shortcuts |
+| `S` | Open settings |
 | `T` | Cycle theme (dark → light → system) |
 | `V` | Toggle view (list ↔ grid) |
 | `D` | Domain graph |
 | `R` | Recently added |
 | `A` | AI Insights |
 | `G` | Google Apps popup |
-| `Shift + G` | Open Google.com |
+| `Shift+G` | Open Google.com |
 | `Esc` | Close / go back |
 
-## Install (Developer Mode)
+---
 
-> **Requires a one-time build step.** Chrome loads the compiled `dist/` folder — not the source directory.
+## Getting Started
+
+### Install from Chrome Web Store
+
+<a href="https://chromewebstore.google.com/detail/bookmark-dashboard/imknfkidkilkomeomcidnnjojiilaofb">
+  <img src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/iNEddTyWiMfLSwFD6qGq.png" width="200" alt="Available on Chrome Web Store" />
+</a>
+
+### Install from Source (Developer Mode)
 
 ```bash
-# 1. Clone the repo
 git clone https://github.com/encoreshao/bookmark-dashboard.git
 cd bookmark-dashboard
-
-# 2. Install dependencies
 npm install
-
-# 3. Build — compiles React + copies all extension assets into dist/
 npm run build
-
-# 4. Load the extension
-#    chrome://extensions → Enable Developer mode → Load unpacked → select the dist/ folder
 ```
 
-Open a new tab to see the dashboard.
+Then load in Chrome:
 
-### Development (watch mode)
+1. Navigate to `chrome://extensions`
+2. Enable **Developer mode**
+3. Click **Load unpacked** → select the `dist/` folder
+4. Open a new tab
+
+### Development
 
 ```bash
-npm run dev   # rebuilds dist/ automatically on every source change
+npm run dev
 ```
 
-After each rebuild, click **↺ Update** in `chrome://extensions` (or enable auto-reload with an extension like [Extensions](https://chromewebstore.google.com/detail/bookmark-dashboard/imknfkidkilkomeomcidnnjojiilaofb)).
+Vite rebuilds `dist/` on every source change. Click **↺ Update** in `chrome://extensions` to reload.
 
-## Project Structure
-
-```
-➜ tree src -d -L 4 -I "node_modules|dist"
-src
-├── components
-├── context
-├── hooks
-├── icons
-├── js
-├── options
-├── styles
-├── types
-└── utils
-```
+---
 
 ## Settings
 
-Open settings with the **⚙** icon or press `S`.
+Press `S` or click the gear icon.
 
-| Tab | Options |
+| Tab | What's inside |
 |---|---|
-| General | Display name, Language, Display mode, Nav display, Theme (dark / light / system), Background image, Folder sidebar mode, Pinned bookmarks display |
-| Personalization | Custom instructions, Google account |
-| AI & Apps | Provider (OpenAI / Gemini / Claude), Model, API key, Google Apps visibility |
+| **General** | Display name, language, display mode, nav style, folder sidebar mode, pinned bookmarks position, theme, background image |
+| **Personalization** | Custom AI instructions, Google account & sync (coming soon) |
+| **AI & Apps** | AI provider & model selection, API key, Google Apps visibility |
 
-## Release
-
-### 1. Bump the version
-
-Edit `"version"` in both `src/manifest.json` and `package.json`.
-
-### 2. Build and package
-
-```bash
-./scripts/release.sh
-```
-
-The script will:
-
-1. Run `npm run build` — compiles React and copies all extension assets so `dist/` is complete
-2. Zip the entire `dist/` folder into `releases/bookmark-dashboard-v{version}.zip`
-3. Bundle `config/credentials/key.pem` if it exists (keeps extension ID consistent)
-
-**Options:**
-
-```bash
-./scripts/release.sh 1.3.0      # override version
-./scripts/release.sh --no-key   # skip PEM bundling
-```
-
-### 3. Upload to Chrome Web Store
-
-1. Go to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard)
-2. Select your extension and upload `dist/bookmark-dashboard-v{version}.zip`
-
-### PEM Key
-
-The private key maintains a consistent extension ID across Web Store updates. Store it at:
-
-```
-config/credentials/key.pem
-```
-
-This directory is git-ignored. Never commit the key to the repository.
+---
 
 ## Tech Stack
 
 | Layer | Technology |
 |---|---|
-| UI | React 18 + TypeScript |
+| UI | React 18 · TypeScript 5 |
 | Build | Vite 5 |
+| Extension | Chrome Manifest V3 |
 | Storage | `chrome.storage.local` |
 | Bookmarks | `chrome.bookmarks` API |
-| AI | OpenAI / Google Gemini / Anthropic Claude APIs |
-| Styling | CSS custom properties (no CSS-in-JS) |
+| AI | OpenAI · Google Gemini · Anthropic Claude |
+| Styling | CSS custom properties |
 | i18n | Custom lightweight translator |
+
+---
+
+## Project Structure
+
+```
+src/
+├── components/     # React UI components (Topbar, BookmarkView, AIInsightsView, …)
+├── context/        # React Context providers (Settings, Bookmarks, UI)
+├── types/          # Shared TypeScript interfaces
+├── utils/          # AI, bookmarks, i18n, time, Google Apps
+├── styles/         # CSS (main dashboard + options page)
+├── js/             # Service worker, options logic, manifest info
+├── options/        # Extension options page (standalone HTML)
+├── icons/          # Extension icons (16 / 48 / 128 px)
+├── index.html      # Vite entry — new tab page
+├── main.tsx        # React entry point
+├── App.tsx         # Root component + keyboard shortcuts
+└── manifest.json   # Chrome extension manifest (V3)
+```
+
+---
+
+## Release
+
+### 1. Bump version
+
+Update `"version"` in both `src/manifest.json` and `package.json`.
+
+### 2. Build & package
+
+```bash
+./scripts/release.sh
+```
+
+This runs the build, zips `dist/` into `releases/bookmark-dashboard-v{version}.zip`, and optionally bundles your PEM key for a consistent extension ID.
+
+```bash
+./scripts/release.sh 2.1.0      # override version
+./scripts/release.sh --no-key   # skip PEM bundling
+```
+
+### 3. Publish
+
+Upload the zip to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard).
+
+> **PEM key** — store at `config/credentials/key.pem` (git-ignored). This keeps your extension ID stable across updates.
+
+---
+
+## Contributing
+
+Contributions are welcome. Please open an issue first to discuss what you'd like to change.
+
+1. Fork the repo
+2. Create a feature branch (`git checkout -b feature/amazing-thing`)
+3. Commit your changes
+4. Push and open a Pull Request
+
+---
 
 ## Author
 
-[Encore Shao](https://github.com/encoreshao)
+**Encore Shao** — [GitHub](https://github.com/encoreshao)
 
 ## License
 
-MIT
+[MIT](LICENSE)
