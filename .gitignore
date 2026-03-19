@@ -9,6 +9,7 @@
 .git/*
 .vscode/*
 .cursor/*
+.superpowers/*
 
 node_modules/
 dist/
@@ -17,3 +18,5 @@ releases/
 key.pem
 config/credentials/*
 !config/credentials/.gitkeep
+
+.claude/settings.local.json
