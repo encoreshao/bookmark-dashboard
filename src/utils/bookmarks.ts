@@ -24,8 +24,10 @@ export function getHostname(url: string): string {
 
 /**
  * Flatten bookmark tree into a list of folder objects with their direct bookmark children.
- * Chrome's root children are "Bookmarks bar", "Other bookmarks", etc. — we traverse INTO
- * them but don't create a folder entry for them (they're containers, not user folders).
+ * Chrome's root children are "Bookmarks bar", "Other bookmarks", etc. We traverse into
+ * subfolders with paths like "Dev / React". Root containers themselves are listed only
+ * when they hold direct bookmark links (not only nested folders); otherwise those links
+ * would be missing because URL nodes are not traversed separately.
  *
  * Only folders that contain at least one direct bookmark URL are included.
  * Each folder title is the full path from root (e.g. "Dev / React / Hooks").
@@ -39,8 +41,9 @@ export function collectFolders(nodes: BookmarkNode[]): FolderItem[] {
       const isRoot = ROOT_IDS.has(node.id);
       const currentPath = isRoot ? pathParts : [...pathParts, node.title];
       const items = node.children.filter(c => c.url);
-      if (!isRoot && node.title && items.length > 0) {
-        folders.push({ id: node.id, title: currentPath.join(' / '), items });
+      if (node.title && items.length > 0) {
+        const title = isRoot ? node.title : currentPath.join(' / ');
+        folders.push({ id: node.id, title, items });
       }
       node.children.forEach(c => traverse(c, currentPath));
     }
