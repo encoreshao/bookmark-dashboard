@@ -22,6 +22,10 @@ export function TagProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     chrome.storage.local.get(['bd_bookmarkTags', 'bd_tagColors'], (result) => {
+      if (chrome.runtime.lastError) {
+        console.error('TagContext: failed to load tags', chrome.runtime.lastError.message);
+        return;
+      }
       if (result.bd_bookmarkTags && typeof result.bd_bookmarkTags === 'object') {
         setTagMap(result.bd_bookmarkTags);
       }
@@ -57,13 +61,17 @@ export function TagProvider({ children }: { children: React.ReactNode }) {
     }
 
     const newMap = { ...tagMap, [id]: normalized };
-    setTagMap(newMap);
-    chrome.storage.local.set({ bd_bookmarkTags: newMap });
-
+    const toStore: Record<string, unknown> = { bd_bookmarkTags: newMap };
     if (colorsDirty) {
       setTagColors(newColors);
-      chrome.storage.local.set({ bd_tagColors: newColors });
+      toStore.bd_tagColors = newColors;
     }
+    setTagMap(newMap);
+    chrome.storage.local.set(toStore, () => {
+      if (chrome.runtime.lastError) {
+        console.error('TagContext: failed to save tags', chrome.runtime.lastError.message);
+      }
+    });
   }, [tagMap, tagColors]);
 
   const toggleActiveTag = useCallback((name: string) => {
