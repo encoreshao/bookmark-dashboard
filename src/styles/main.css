@@ -897,7 +897,7 @@ body.has-bg-image .bookmark-remove {
 .view-list .folder-items {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
   padding: 6px 8px 10px;
 }
 
@@ -909,17 +909,19 @@ body.has-bg-image .bookmark-remove {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 12px 8px 16px;
-  padding-right: 68px;
+  padding: 10px 68px 10px 16px;
+  min-height: 48px;
   border-radius: 8px;
   cursor: pointer;
   text-decoration: none;
   color: inherit;
-  transition: background-color 0.15s ease;
+  box-shadow: inset 3px 0 0 var(--domain-color, var(--border));
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .view-list .bookmark-item:hover {
   background: var(--bg-tertiary);
+  box-shadow: inset 4px 0 0 var(--domain-color, var(--accent));
 }
 
 .view-list .bookmark-pin {
@@ -935,12 +937,19 @@ body.has-bg-image .bookmark-remove {
 }
 
 .view-list .bookmark-favicon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 4px;
   object-fit: contain;
   flex-shrink: 0;
-  background: var(--bg-tertiary);
+}
+
+.view-list .bookmark-list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
 }
 
 .view-list .bookmark-title {
@@ -950,8 +959,6 @@ body.has-bg-image .bookmark-remove {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1;
-  min-width: 0;
 }
 
 .view-list .bookmark-url {
@@ -960,8 +967,6 @@ body.has-bg-image .bookmark-remove {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 280px;
-  flex-shrink: 0;
 }
 
 /* --- Compact View --- */
@@ -979,8 +984,8 @@ body.has-bg-image .bookmark-remove {
 .view-compact .bookmark-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 4px 68px 4px 16px;
+  gap: 10px;
+  padding: 0 68px 0 16px;
   height: 28px;
   border-radius: 6px;
   cursor: pointer;
@@ -993,11 +998,12 @@ body.has-bg-image .bookmark-remove {
   background: var(--bg-tertiary);
 }
 
-.view-compact .bookmark-favicon {
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-  object-fit: contain;
+.view-compact .bookmark-domain-dot {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background: var(--domain-color, var(--text-muted));
   flex-shrink: 0;
 }
 
@@ -1010,13 +1016,6 @@ body.has-bg-image .bookmark-remove {
   text-overflow: ellipsis;
   flex: 1;
   min-width: 0;
-}
-
-.view-compact .bookmark-url {
-  font-size: 0.65rem;
-  color: var(--text-muted);
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 
 .view-compact .bookmark-pin {

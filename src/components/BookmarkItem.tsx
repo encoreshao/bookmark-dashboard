@@ -58,6 +58,7 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
   return (
     <div
       className={`bookmark-item-wrapper${isPinned ? ' is-pinned' : ''}${dragging ? ' bm-dragging' : ''}`}
+      style={{ '--domain-color': domainColor } as React.CSSProperties}
       draggable
       data-bookmark-id={bookmark.id}
       onDragStart={handleDragStart}
@@ -99,12 +100,20 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
             </div>
           </>
         )}
-        {(displayMode === 'list' || displayMode === 'compact') && (
+        {displayMode === 'list' && (
           <>
             <img className="bookmark-favicon" src={favicon} alt="" loading="lazy"
                  onError={e => (e.currentTarget.style.display = 'none')} />
+            <div className="bookmark-list-content">
+              <span className="bookmark-title">{bookmark.title}</span>
+              <span className="bookmark-url">{hostname}</span>
+            </div>
+          </>
+        )}
+        {displayMode === 'compact' && (
+          <>
+            <span className="bookmark-domain-dot" />
             <span className="bookmark-title">{bookmark.title}</span>
-            <span className="bookmark-url">{hostname}</span>
           </>
         )}
       </a>
