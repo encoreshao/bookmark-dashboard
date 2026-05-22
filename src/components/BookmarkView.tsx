@@ -3,7 +3,7 @@ import { useSettings } from '@/context/SettingsContext';
 import { useBookmarks } from '@/context/BookmarkContext';
 import { useUI } from '@/context/UIContext';
 import { createTranslator } from '@/utils/i18n';
-import { collectFolders, filterFolders } from '@/utils/bookmarks';
+import { collectFolders, filterFolders, findBookmarkById } from '@/utils/bookmarks';
 import BookmarkItem from '@/components/BookmarkItem';
 import { useOGImages } from '@/hooks/useOGImages';
 import type { BookmarkNode, OGImageCache } from '@/types';
@@ -11,22 +11,13 @@ import type { BookmarkNode, OGImageCache } from '@/types';
 function PinnedSection({ pinnedIds, ogImages }: { pinnedIds: string[]; ogImages: OGImageCache }) {
   const { allBookmarks } = useBookmarks();
   const { settings } = useSettings();
-  if (settings.pinnedDisplay !== 'top' || pinnedIds.length === 0) return null;
+  if (pinnedIds.length === 0) return null;
   const viewClass = settings.displayMode === 'grid' ? 'view-grid'
     : settings.displayMode === 'compact' ? 'view-compact'
     : 'view-list';
 
   const items = pinnedIds
-    .map(id => {
-      function find(nodes: BookmarkNode[]): BookmarkNode | undefined {
-        for (const n of nodes) {
-          if (n.id === id) return n;
-          if (n.children) { const f = find(n.children); if (f) return f; }
-        }
-        return undefined;
-      }
-      return find(allBookmarks);
-    })
+    .map(id => findBookmarkById(allBookmarks, id))
     .filter((bm): bm is BookmarkNode => !!bm);
 
   if (items.length === 0) return null;
