@@ -86,7 +86,7 @@ function TagPicker({ bookmarkId, bookmarkTitle, anchorEl, onClose }: Props) {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (filtered.length > 0 && !canCreate) {
+      if (filtered.length > 0) {
         toggleTag(filtered[0]);
         setQuery('');
       } else if (canCreate) {
