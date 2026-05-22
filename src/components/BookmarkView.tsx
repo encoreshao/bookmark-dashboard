@@ -2,9 +2,11 @@ import React, { useMemo, useState } from 'react';
 import { useSettings } from '@/context/SettingsContext';
 import { useBookmarks } from '@/context/BookmarkContext';
 import { useUI } from '@/context/UIContext';
+import { useTags } from '@/context/TagContext';
 import { createTranslator } from '@/utils/i18n';
 import { collectFolders, filterFolders, findBookmarkById } from '@/utils/bookmarks';
 import BookmarkItem from '@/components/BookmarkItem';
+import TagFilterStrip from '@/components/TagFilterStrip';
 import { useOGImages } from '@/hooks/useOGImages';
 import type { BookmarkNode, OGImageCache } from '@/types';
 
@@ -114,10 +116,20 @@ interface Props { searchQuery: string; }
 function BookmarkView({ searchQuery }: Props) {
   const { settings } = useSettings();
   const { allBookmarks, isLoading } = useBookmarks();
+  const { tagMap, activeTags } = useTags();
   const ogImages = useOGImages();
 
   const folders = useMemo(() => collectFolders(allBookmarks), [allBookmarks]);
-  const filtered = useMemo(() => filterFolders(folders, searchQuery), [folders, searchQuery]);
+  const filtered = useMemo(() => {
+    if (activeTags.length === 0) return filterFolders(folders, searchQuery);
+    const tagFiltered = folders.map(f => ({
+      ...f,
+      items: f.items.filter(bm =>
+        activeTags.every(tag => (tagMap[bm.id] ?? []).includes(tag))
+      ),
+    })).filter(f => f.items.length > 0);
+    return filterFolders(tagFiltered, searchQuery);
+  }, [folders, searchQuery, activeTags, tagMap]);
 
   if (isLoading) return (
     <section className="bookmarks-section">
@@ -127,6 +139,7 @@ function BookmarkView({ searchQuery }: Props) {
 
   return (
     <section className="bookmarks-section">
+      <TagFilterStrip />
       <div id="bookmarks">
         {settings.pinnedDisplay === 'top' && (
           <PinnedSection pinnedIds={settings.pinnedIds} ogImages={ogImages} />
@@ -136,7 +149,7 @@ function BookmarkView({ searchQuery }: Props) {
         ))}
         {filtered.length === 0 && (
           <div className="empty-state">
-            <p>No bookmarks match your search.</p>
+            <p>{activeTags.length > 0 ? 'No bookmarks match the selected tags.' : 'No bookmarks match your search.'}</p>
           </div>
         )}
       </div>
