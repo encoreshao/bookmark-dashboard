@@ -5,13 +5,16 @@ import { useUI } from '@/context/UIContext';
 import { createTranslator } from '@/utils/i18n';
 import { collectFolders, filterFolders } from '@/utils/bookmarks';
 import BookmarkItem from '@/components/BookmarkItem';
-import type { BookmarkNode } from '@/types';
+import { useOGImages } from '@/hooks/useOGImages';
+import type { BookmarkNode, OGImageCache } from '@/types';
 
-function PinnedSection({ pinnedIds }: { pinnedIds: string[] }) {
+function PinnedSection({ pinnedIds, ogImages }: { pinnedIds: string[]; ogImages: OGImageCache }) {
   const { allBookmarks } = useBookmarks();
   const { settings } = useSettings();
   if (settings.pinnedDisplay !== 'top' || pinnedIds.length === 0) return null;
-  const isGrid = settings.displayMode === 'grid';
+  const viewClass = settings.displayMode === 'grid' ? 'view-grid'
+    : settings.displayMode === 'compact' ? 'view-compact'
+    : 'view-list';
 
   const items = pinnedIds
     .map(id => {
@@ -29,7 +32,7 @@ function PinnedSection({ pinnedIds }: { pinnedIds: string[] }) {
   if (items.length === 0) return null;
 
   return (
-    <div className={`bookmark-folder${isGrid ? ' view-grid' : ' view-list'}`}>
+    <div className={`bookmark-folder ${viewClass}`}>
       <div className="folder-header">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
              strokeLinecap="round" strokeLinejoin="round" className="folder-icon">
@@ -40,7 +43,9 @@ function PinnedSection({ pinnedIds }: { pinnedIds: string[] }) {
         <span className="folder-count">{items.length}</span>
       </div>
       <div className="folder-items">
-        {items.map(bm => <BookmarkItem key={bm.id} bookmark={bm} isPinned showPin />)}
+        {items.map(bm => (
+          <BookmarkItem key={bm.id} bookmark={bm} isPinned showPin ogImageUrl={ogImages[bm.id]} />
+        ))}
       </div>
     </div>
   );
@@ -48,8 +53,10 @@ function PinnedSection({ pinnedIds }: { pinnedIds: string[] }) {
 
 function FolderSection({
   folder,
+  ogImages,
 }: {
   folder: { id: string; title: string; items: BookmarkNode[] };
+  ogImages: OGImageCache;
 }) {
   const { settings } = useSettings();
   const { moveBookmark } = useBookmarks();
@@ -57,7 +64,9 @@ function FolderSection({
   const t = createTranslator(settings.language);
   const [collapsed, setCollapsed] = useState(false);
   const [dropActive, setDropActive] = useState(false);
-  const isGrid = settings.displayMode === 'grid';
+  const viewClass = settings.displayMode === 'grid' ? 'view-grid'
+    : settings.displayMode === 'compact' ? 'view-compact'
+    : 'view-list';
 
   const handleDragOver = (e: React.DragEvent) => {
     if (!e.dataTransfer.types.includes('text/plain')) return;
@@ -83,7 +92,7 @@ function FolderSection({
 
   return (
     <div
-      className={`bookmark-folder ${isGrid ? 'view-grid' : 'view-list'}${dropActive ? ' folder-drop-active' : ''}`}
+      className={`bookmark-folder ${viewClass}${dropActive ? ' folder-drop-active' : ''}`}
       id={`folder-${folder.id}`}
       data-folder-id={folder.id}
       onDragOver={handleDragOver}
@@ -100,7 +109,9 @@ function FolderSection({
       </div>
       {!collapsed && (
         <div className="folder-items">
-          {folder.items.map(bm => <BookmarkItem key={bm.id} bookmark={bm} showPin />)}
+          {folder.items.map(bm => (
+            <BookmarkItem key={bm.id} bookmark={bm} showPin ogImageUrl={ogImages[bm.id]} />
+          ))}
         </div>
       )}
     </div>
@@ -112,6 +123,7 @@ interface Props { searchQuery: string; }
 function BookmarkView({ searchQuery }: Props) {
   const { settings } = useSettings();
   const { allBookmarks, isLoading } = useBookmarks();
+  const ogImages = useOGImages();
 
   const folders = useMemo(() => collectFolders(allBookmarks), [allBookmarks]);
   const filtered = useMemo(() => filterFolders(folders, searchQuery), [folders, searchQuery]);
@@ -126,10 +138,10 @@ function BookmarkView({ searchQuery }: Props) {
     <section className="bookmarks-section">
       <div id="bookmarks">
         {settings.pinnedDisplay === 'top' && (
-          <PinnedSection pinnedIds={settings.pinnedIds} />
+          <PinnedSection pinnedIds={settings.pinnedIds} ogImages={ogImages} />
         )}
         {filtered.map(folder => (
-          <FolderSection key={folder.id} folder={folder} />
+          <FolderSection key={folder.id} folder={folder} ogImages={ogImages} />
         ))}
         {filtered.length === 0 && (
           <div className="empty-state">
