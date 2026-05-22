@@ -40,7 +40,7 @@
 /* ── Tag icon button in action bar ── */
 .bookmark-tag {
   position: absolute;
-  top: 8px;
+  top: 4px;
   right: 56px;
   width: 26px;
   height: 26px;
@@ -49,7 +49,7 @@
   background: var(--bg-tertiary);
   color: var(--text-muted);
   cursor: pointer;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   transition: background 0.15s, color 0.15s;
@@ -59,22 +59,33 @@
   width: 13px;
   height: 13px;
 }
-.bookmark-item-wrapper:hover .bookmark-tag,
-.bookmark-tag.is-active {
-  display: flex;
-}
 .bookmark-tag:hover,
 .bookmark-tag.is-active {
   background: var(--accent);
   color: #fff;
 }
 
-/* Adjust existing pin/remove positions to make room for tag button */
+/* List and compact: vertically center the tag button to match pin/remove */
+.view-list .bookmark-tag,
+.view-compact .bookmark-tag {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Adjust pin/remove positions to make room for the tag button (3 buttons total) */
 .bookmark-item-wrapper .bookmark-pin {
   right: 30px;
 }
 .bookmark-item-wrapper .bookmark-remove {
   right: 4px;
+}
+
+/* Increase list/compact right padding to prevent content going under 3 buttons */
+.view-list .bookmark-item {
+  padding-right: 90px;
+}
+.view-compact .bookmark-item {
+  padding-right: 90px;
 }
 
 /* ── Floating TagPicker popup ── */
