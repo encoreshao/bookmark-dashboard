@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import type { TagMap, TagColorMap } from '@/types';
 import { normalizeTag, assignTagColor } from '@/utils/tags';
 
@@ -20,6 +20,12 @@ export function TagProvider({ children }: { children: React.ReactNode }) {
   const [tagColors, setTagColors] = useState<TagColorMap>({});
   const [activeTags, setActiveTags] = useState<string[]>([]);
 
+  // Fix 1: Refs to always read latest state without stale-closure issues
+  const tagMapRef = useRef(tagMap);
+  const tagColorsRef = useRef(tagColors);
+  useEffect(() => { tagMapRef.current = tagMap; }, [tagMap]);
+  useEffect(() => { tagColorsRef.current = tagColors; }, [tagColors]);
+
   useEffect(() => {
     chrome.storage.local.get(['bd_bookmarkTags', 'bd_tagColors'], (result) => {
       if (chrome.runtime.lastError) {
@@ -33,6 +39,25 @@ export function TagProvider({ children }: { children: React.ReactNode }) {
         setTagColors(result.bd_tagColors);
       }
     });
+  }, []);
+
+  // Fix 2: Clean up orphaned tagMap entries when bookmarks are deleted
+  useEffect(() => {
+    const onRemoved = (id: string) => {
+      setTagMap(prev => {
+        if (!prev[id]) return prev;
+        const next = { ...prev };
+        delete next[id];
+        chrome.storage.local.set({ bd_bookmarkTags: next }, () => {
+          if (chrome.runtime.lastError) {
+            console.error('TagContext: cleanup write failed:', chrome.runtime.lastError.message);
+          }
+        });
+        return next;
+      });
+    };
+    chrome.bookmarks.onRemoved.addListener(onRemoved);
+    return () => chrome.bookmarks.onRemoved.removeListener(onRemoved);
   }, []);
 
   const allTags = useMemo(() => {
@@ -49,9 +74,10 @@ export function TagProvider({ children }: { children: React.ReactNode }) {
 
   const setTagsForBookmark = useCallback((id: string, tags: string[]) => {
     const normalized = [...new Set(tags.map(normalizeTag).filter(Boolean))];
+    const currentMap = tagMapRef.current;
+    const currentColors = tagColorsRef.current;
 
-    // Assign colors to any new tags before updating state
-    const newColors = { ...tagColors };
+    const newColors = { ...currentColors };
     let colorsDirty = false;
     for (const tag of normalized) {
       if (!newColors[tag]) {
@@ -60,19 +86,18 @@ export function TagProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    const newMap = { ...tagMap, [id]: normalized };
+    const newMap = { ...currentMap, [id]: normalized };
     const toStore: Record<string, unknown> = { bd_bookmarkTags: newMap };
-    if (colorsDirty) {
-      setTagColors(newColors);
-      toStore.bd_tagColors = newColors;
-    }
+    if (colorsDirty) toStore.bd_tagColors = newColors;
+
     setTagMap(newMap);
+    if (colorsDirty) setTagColors(newColors);
     chrome.storage.local.set(toStore, () => {
       if (chrome.runtime.lastError) {
-        console.error('TagContext: failed to save tags', chrome.runtime.lastError.message);
+        console.error('TagContext: storage write failed:', chrome.runtime.lastError.message);
       }
     });
-  }, [tagMap, tagColors]);
+  }, []); // refs keep this stable — no deps needed
 
   const toggleActiveTag = useCallback((name: string) => {
     setActiveTags(prev =>

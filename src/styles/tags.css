@@ -59,7 +59,8 @@
   width: 13px;
   height: 13px;
 }
-.bookmark-item-wrapper:hover .bookmark-tag {
+.bookmark-item-wrapper:hover .bookmark-tag,
+.bookmark-tag.is-active {
   display: flex;
 }
 .bookmark-tag:hover,

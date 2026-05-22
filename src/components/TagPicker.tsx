@@ -130,7 +130,7 @@ function TagPicker({ bookmarkId, bookmarkTitle, anchorEl, onClose }: Props) {
             <div className="tag-picker-check">
               {applied.includes(tag) && '✓'}
             </div>
-            <div className="tag-picker-dot" style={{ background: tagColors[tag] ?? '#89b4fa' }} />
+            <div className="tag-picker-dot" style={{ background: tagColors[tag] ?? 'var(--text-muted)' }} />
             <span style={{ color: tagColors[tag] ?? 'inherit' }}>{tag}</span>
           </div>
         ))}

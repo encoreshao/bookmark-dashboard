@@ -156,7 +156,7 @@ function FolderSidebar() {
                 className={`sidebar-tag-item${activeTags.includes(tag) ? ' is-active' : ''}`}
                 onClick={() => toggleActiveTag(tag)}
               >
-                <span className="sidebar-tag-dot" style={{ background: tagColors[tag] ?? '#89b4fa' }} />
+                <span className="sidebar-tag-dot" style={{ background: tagColors[tag] ?? 'var(--text-muted)' }} />
                 <span style={{ color: tagColors[tag] ?? 'inherit' }}>{tag}</span>
                 <span className="sidebar-tag-count">{tagCounts[tag] ?? 0}</span>
               </div>
@@ -166,7 +166,7 @@ function FolderSidebar() {
 
         {allTags.length === 0 && (
           <div style={{ padding: '6px 14px', fontSize: '11px', color: 'var(--text-muted)' }}>
-            No tags yet — add them via the 🏷 button on any bookmark.
+            No tags yet — add them via the tag button on any bookmark.
           </div>
         )}
       </div>
