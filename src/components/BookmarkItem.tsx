@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSettings } from '@/context/SettingsContext';
 import { useBookmarks } from '@/context/BookmarkContext';
 import { useUI } from '@/context/UIContext';
+import { useTags } from '@/context/TagContext';
 import { createTranslator } from '@/utils/i18n';
 import { getFaviconUrl, getHostname, getDomainColor } from '@/utils/bookmarks';
+import TagPicker from '@/components/TagPicker';
 import type { BookmarkNode } from '@/types';
 
 interface Props {
@@ -17,17 +19,19 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
   const { settings, saveSetting } = useSettings();
   const { removeBookmark } = useBookmarks();
   const { confirm, showToast } = useUI();
+  const { tagColors, getTagsForBookmark } = useTags();
   const t = createTranslator(settings.language);
   const [dragging, setDragging] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const tagBtnRef = useRef<HTMLButtonElement>(null);
   const displayMode = settings.displayMode;
   const hostname = getHostname(bookmark.url ?? '');
   const initials = hostname.replace(/^www\./, '').slice(0, 2).toUpperCase() || '??';
   const domainColor = getDomainColor(hostname);
   const [ogImgError, setOgImgError] = useState(false);
-  useEffect(() => {
-    setOgImgError(false);
-  }, [ogImageUrl]);
+  useEffect(() => { setOgImgError(false); }, [ogImageUrl]);
   const pinned = settings.pinnedIds.includes(bookmark.id);
+  const tags = getTagsForBookmark(bookmark.id);
 
   const togglePin = () => {
     const wasPinned = pinned;
@@ -50,10 +54,24 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
     e.dataTransfer.effectAllowed = 'move';
     setTimeout(() => setDragging(true), 0);
   };
-
   const handleDragEnd = () => setDragging(false);
 
   const favicon = getFaviconUrl(bookmark.url ?? '');
+
+  const tagChips = (
+    <div className="bm-tag-row">
+      {tags.map(tag => (
+        <span
+          key={tag}
+          className="bm-tag"
+          style={{ color: tagColors[tag] ?? 'inherit' }}
+        >
+          {tag}
+        </span>
+      ))}
+      <span className="bm-tag-add" onClick={() => setPickerOpen(true)}>+ tag</span>
+    </div>
+  );
 
   return (
     <div
@@ -97,6 +115,7 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
                 <span className="bookmark-og-domain">{hostname}</span>
               </div>
               <span className="bookmark-title">{bookmark.title}</span>
+              {tagChips}
             </div>
           </>
         )}
@@ -107,6 +126,7 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
             <div className="bookmark-list-content">
               <span className="bookmark-title">{bookmark.title}</span>
               <span className="bookmark-url">{hostname}</span>
+              {tagChips}
             </div>
           </>
         )}
@@ -114,9 +134,35 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
           <>
             <span className="bookmark-domain-dot" />
             <span className="bookmark-title">{bookmark.title}</span>
+            {tags.length > 0 && (
+              <div className="bm-tag-row" style={{ marginLeft: 'auto', marginTop: 0, flexWrap: 'nowrap' }}>
+                {tags.slice(0, 2).map(tag => (
+                  <span key={tag} className="bm-tag" style={{ color: tagColors[tag] ?? 'inherit' }}>
+                    {tag}
+                  </span>
+                ))}
+                {tags.length > 2 && (
+                  <span className="bm-tag" style={{ color: 'var(--text-muted)' }}>+{tags.length - 2}</span>
+                )}
+              </div>
+            )}
           </>
         )}
       </a>
+
+      {/* Tag button */}
+      <button
+        ref={tagBtnRef}
+        className={`bookmark-tag${pickerOpen ? ' is-active' : ''}`}
+        title="Manage tags"
+        onClick={e => { e.preventDefault(); setPickerOpen(o => !o); }}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+             strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.41 0l7.3-7.3a1 1 0 0 0 0-1.41L12 2z"/>
+          <circle cx="7" cy="7" r="1" fill="currentColor"/>
+        </svg>
+      </button>
 
       {showPin && (
         <button
@@ -138,6 +184,16 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
           <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
         </svg>
       </button>
+
+      {/* Floating tag picker */}
+      {pickerOpen && tagBtnRef.current && (
+        <TagPicker
+          bookmarkId={bookmark.id}
+          bookmarkTitle={bookmark.title}
+          anchorEl={tagBtnRef.current}
+          onClose={() => setPickerOpen(false)}
+        />
+      )}
     </div>
   );
 }
