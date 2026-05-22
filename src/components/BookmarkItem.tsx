@@ -3,22 +3,27 @@ import { useSettings } from '@/context/SettingsContext';
 import { useBookmarks } from '@/context/BookmarkContext';
 import { useUI } from '@/context/UIContext';
 import { createTranslator } from '@/utils/i18n';
-import { getFaviconUrl } from '@/utils/bookmarks';
+import { getFaviconUrl, getHostname, getDomainColor } from '@/utils/bookmarks';
 import type { BookmarkNode } from '@/types';
 
 interface Props {
   bookmark: BookmarkNode;
   isPinned?: boolean;
   showPin?: boolean;
+  ogImageUrl?: string | null;
 }
 
-function BookmarkItem({ bookmark, isPinned = false, showPin = true }: Props) {
+function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }: Props) {
   const { settings, saveSetting } = useSettings();
   const { removeBookmark } = useBookmarks();
   const { confirm, showToast } = useUI();
   const t = createTranslator(settings.language);
   const [dragging, setDragging] = useState(false);
-  const isGrid = settings.displayMode === 'grid';
+  const displayMode = settings.displayMode;
+  const hostname = getHostname(bookmark.url ?? '');
+  const initials = hostname.replace(/^www\./, '').slice(0, 2).toUpperCase() || '??';
+  const domainColor = getDomainColor(hostname);
+  const [ogImgError, setOgImgError] = useState(false);
   const pinned = settings.pinnedIds.includes(bookmark.id);
 
   const togglePin = () => {
@@ -62,20 +67,41 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true }: Props) {
         rel="noopener"
         title={bookmark.title}
       >
-        {isGrid ? (
+        {displayMode === 'grid' && (
           <>
-            <div className="bookmark-favicon-wrap">
-              <img className="bookmark-favicon" src={favicon} alt="" loading="lazy"
-                   onError={e => (e.currentTarget.style.display = 'none')} />
+            {ogImageUrl === undefined && (
+              <div className="bookmark-og-shimmer" />
+            )}
+            {ogImageUrl !== undefined && ogImageUrl && !ogImgError && (
+              <img
+                className="bookmark-og-image"
+                src={ogImageUrl}
+                alt=""
+                loading="lazy"
+                onError={() => setOgImgError(true)}
+              />
+            )}
+            {ogImageUrl !== undefined && (ogImageUrl === null || ogImgError) && (
+              <div className="bookmark-og-initials" style={{ background: domainColor }}>
+                {initials}
+              </div>
+            )}
+            <div className="bookmark-og-footer">
+              <div className="bookmark-og-domain-row">
+                <img className="bookmark-favicon" src={favicon} alt="" loading="lazy"
+                     onError={e => (e.currentTarget.style.display = 'none')} />
+                <span className="bookmark-og-domain">{hostname}</span>
+              </div>
+              <span className="bookmark-title">{bookmark.title}</span>
             </div>
-            <span className="bookmark-title">{bookmark.title}</span>
           </>
-        ) : (
+        )}
+        {(displayMode === 'list' || displayMode === 'compact') && (
           <>
             <img className="bookmark-favicon" src={favicon} alt="" loading="lazy"
                  onError={e => (e.currentTarget.style.display = 'none')} />
             <span className="bookmark-title">{bookmark.title}</span>
-            <span className="bookmark-url">{bookmark.url ? new URL(bookmark.url).hostname : ''}</span>
+            <span className="bookmark-url">{hostname}</span>
           </>
         )}
       </a>
