@@ -807,7 +807,7 @@ body.has-bg-image .bookmark-remove {
 }
 
 /* OG preview image */
-.bookmark-og-image {
+.view-grid .bookmark-og-image {
   width: 100%;
   height: 90px;
   object-fit: cover;
@@ -816,7 +816,7 @@ body.has-bg-image .bookmark-remove {
 }
 
 /* Domain initials fallback */
-.bookmark-og-initials {
+.view-grid .bookmark-og-initials {
   width: 100%;
   height: 90px;
   display: flex;
@@ -829,13 +829,13 @@ body.has-bg-image .bookmark-remove {
   flex-shrink: 0;
 }
 
-/* Shimmer loading state */
+/* Shimmer loading state (grid only) */
 @keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
-.bookmark-og-shimmer {
+.view-grid .bookmark-og-shimmer {
   width: 100%;
   height: 90px;
   flex-shrink: 0;
@@ -846,11 +846,11 @@ body.has-bg-image .bookmark-remove {
     var(--bg-tertiary) 75%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
+  animation: shimmer 1.4s linear infinite;
 }
 
 /* Card footer */
-.bookmark-og-footer {
+.view-grid .bookmark-og-footer {
   padding: 8px 10px 10px;
   display: flex;
   flex-direction: column;
@@ -859,14 +859,14 @@ body.has-bg-image .bookmark-remove {
   min-width: 0;
 }
 
-.bookmark-og-domain-row {
+.view-grid .bookmark-og-domain-row {
   display: flex;
   align-items: center;
   gap: 5px;
   min-width: 0;
 }
 
-.bookmark-og-domain {
+.view-grid .bookmark-og-domain {
   font-size: 0.6875rem;
   color: var(--text-muted);
   white-space: nowrap;
@@ -2784,12 +2784,8 @@ body.has-bg-image .pinned-sidebar-list .bookmark-item:hover {
   }
 
   .view-grid .folder-items {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 6px;
-  }
-
-  .view-grid .bookmark-item {
-    padding: 12px 6px 10px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
   }
 }
 
@@ -2799,7 +2795,7 @@ body.has-bg-image .pinned-sidebar-list .bookmark-item:hover {
   }
 
   .view-grid .folder-items {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .folder-sidebar,
