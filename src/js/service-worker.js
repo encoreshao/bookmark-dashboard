@@ -11,6 +11,7 @@ async function fetchOGImage(url) {
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {
     const res = await fetch(url, { signal: controller.signal });
+    if (!res.ok) { clearTimeout(timer); return null; }
     clearTimeout(timer);
     const html = await res.text();
     // Match both attribute orderings of the og:image meta tag
@@ -24,19 +25,23 @@ async function fetchOGImage(url) {
   }
 }
 
-async function cacheOGImage(bookmarkId, url) {
-  const data = await chrome.storage.local.get(OG_CACHE_KEY);
-  const cache = data[OG_CACHE_KEY] || {};
-  if (bookmarkId in cache) return; // already cached — never retry
-  const ogUrl = await fetchOGImage(url);
-  cache[bookmarkId] = ogUrl;
-  await chrome.storage.local.set({ [OG_CACHE_KEY]: cache });
-}
-
 async function processQueue(queue) {
   for (let i = 0; i < queue.length; i += BATCH_SIZE) {
     const batch = queue.slice(i, i + BATCH_SIZE);
-    await Promise.all(batch.map(({ id, url }) => cacheOGImage(id, url)));
+    // Fetch all in parallel for speed
+    const results = await Promise.all(
+      batch.map(({ id, url }) =>
+        fetchOGImage(url).then(ogUrl => ({ id, ogUrl }))
+      )
+    );
+    // Single read-modify-write for the whole batch
+    const data = await chrome.storage.local.get(OG_CACHE_KEY);
+    const cache = data[OG_CACHE_KEY] || {};
+    let changed = false;
+    for (const { id, ogUrl } of results) {
+      if (!(id in cache)) { cache[id] = ogUrl; changed = true; }
+    }
+    if (changed) await chrome.storage.local.set({ [OG_CACHE_KEY]: cache });
     if (i + BATCH_SIZE < queue.length) {
       await new Promise(r => setTimeout(r, BATCH_DELAY_MS));
     }
@@ -61,13 +66,21 @@ async function batchFetchAllBookmarks() {
 }
 
 chrome.runtime.onInstalled.addListener(() => {
-  batchFetchAllBookmarks();
+  batchFetchAllBookmarks().catch(err => console.error('[OG] batch fetch failed:', err));
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  batchFetchAllBookmarks();
+  batchFetchAllBookmarks().catch(err => console.error('[OG] batch fetch failed:', err));
 });
 
 chrome.bookmarks.onCreated.addListener((id, bookmark) => {
-  if (bookmark.url) cacheOGImage(id, bookmark.url);
+  if (!bookmark.url) return;
+  fetchOGImage(bookmark.url).then(ogUrl => {
+    chrome.storage.local.get(OG_CACHE_KEY, (data) => {
+      const cache = data[OG_CACHE_KEY] || {};
+      if (id in cache) return;
+      cache[id] = ogUrl;
+      chrome.storage.local.set({ [OG_CACHE_KEY]: cache });
+    });
+  }).catch(() => {});
 });
