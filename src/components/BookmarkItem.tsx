@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSettings } from '@/context/SettingsContext';
 import { useBookmarks } from '@/context/BookmarkContext';
 import { useUI } from '@/context/UIContext';
@@ -24,6 +24,9 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
   const initials = hostname.replace(/^www\./, '').slice(0, 2).toUpperCase() || '??';
   const domainColor = getDomainColor(hostname);
   const [ogImgError, setOgImgError] = useState(false);
+  useEffect(() => {
+    setOgImgError(false);
+  }, [ogImageUrl]);
   const pinned = settings.pinnedIds.includes(bookmark.id);
 
   const togglePin = () => {
@@ -64,7 +67,7 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
         className="bookmark-item"
         href={bookmark.url}
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         title={bookmark.title}
       >
         {displayMode === 'grid' && (
@@ -72,7 +75,7 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
             {ogImageUrl === undefined && (
               <div className="bookmark-og-shimmer" />
             )}
-            {ogImageUrl !== undefined && ogImageUrl && !ogImgError && (
+            {ogImageUrl !== undefined && ogImageUrl !== null && ogImageUrl !== '' && !ogImgError && (
               <img
                 className="bookmark-og-image"
                 src={ogImageUrl}
@@ -81,7 +84,7 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
                 onError={() => setOgImgError(true)}
               />
             )}
-            {ogImageUrl !== undefined && (ogImageUrl === null || ogImgError) && (
+            {ogImageUrl !== undefined && (!ogImageUrl || ogImgError) && (
               <div className="bookmark-og-initials" style={{ background: domainColor }}>
                 {initials}
               </div>
