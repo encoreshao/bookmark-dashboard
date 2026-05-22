@@ -69,3 +69,6 @@ export interface DomainModalState {
   bookmarks: BookmarkNode[];
   color: string;
 }
+
+export type TagMap = Record<string, string[]>;    // bookmarkId → tag names
+export type TagColorMap = Record<string, string>; // tag name → color string
