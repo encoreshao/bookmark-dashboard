@@ -394,6 +394,38 @@ button {
   flex-shrink: 0;
 }
 
+/* ---------- View Mode Toggle ---------- */
+.view-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.view-mode-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  border-radius: 6px;
+  color: var(--text-muted);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.view-mode-btn:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.view-mode-btn.active {
+  background: var(--bg-secondary);
+  color: var(--accent);
+}
+
 /* Custom tooltip shown in compact (icon-only) mode */
 body.nav-compact .nav-link[data-tooltip]::after {
   content: attr(data-tooltip);

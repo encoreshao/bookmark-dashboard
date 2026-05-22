@@ -16,8 +16,6 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
   const t = createTranslator(settings.language);
   const [version, setVersion] = useState('');
   const [extName, setExtName] = useState('Bookmark Dashboard');
-  const isGrid = settings.displayMode === 'grid';
-
   useEffect(() => {
     try {
       const mf = chrome.runtime.getManifest();
@@ -40,11 +38,6 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
   const toggleTheme = () => {
     const cycle = { dark: 'light', light: 'system', system: 'dark' } as const;
     saveSetting('theme', cycle[settings.theme] ?? 'dark');
-  };
-
-  const toggleView = () => {
-    const next = settings.displayMode === 'grid' ? 'list' : 'grid';
-    saveSetting('displayMode', next);
   };
 
   const visibleApps = GOOGLE_APPS.filter(a => (settings.visibleApps ?? []).includes(a.id));
@@ -197,22 +190,14 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           {!compact && <span>{t('nav-theme')}</span>}
         </button>
 
-        <button
-          className="nav-link"
-          onClick={toggleView}
-          data-tooltip={compact ? `View (V)` : undefined}
-        >
-          {isGrid ? (
+        <div className="view-mode-toggle">
+          <button
+            className={`view-mode-btn${settings.displayMode === 'list' ? ' active' : ''}`}
+            onClick={() => saveSetting('displayMode', 'list')}
+            title="List view"
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round">
-              <rect width="7" height="7" x="3" y="3" rx="1"/>
-              <rect width="7" height="7" x="14" y="3" rx="1"/>
-              <rect width="7" height="7" x="14" y="14" rx="1"/>
-              <rect width="7" height="7" x="3" y="14" rx="1"/>
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round">
+                 strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
               <line x1="8" x2="21" y1="6" y2="6"/>
               <line x1="8" x2="21" y1="12" y2="12"/>
               <line x1="8" x2="21" y1="18" y2="18"/>
@@ -220,9 +205,34 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
               <line x1="3" x2="3.01" y1="12" y2="12"/>
               <line x1="3" x2="3.01" y1="18" y2="18"/>
             </svg>
-          )}
-          {!compact && <span>{t('nav-view')}</span>}
-        </button>
+          </button>
+          <button
+            className={`view-mode-btn${settings.displayMode === 'grid' ? ' active' : ''}`}
+            onClick={() => saveSetting('displayMode', 'grid')}
+            title="Grid view"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                 strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+              <rect width="7" height="7" x="3" y="3" rx="1"/>
+              <rect width="7" height="7" x="14" y="3" rx="1"/>
+              <rect width="7" height="7" x="14" y="14" rx="1"/>
+              <rect width="7" height="7" x="3" y="14" rx="1"/>
+            </svg>
+          </button>
+          <button
+            className={`view-mode-btn${settings.displayMode === 'compact' ? ' active' : ''}`}
+            onClick={() => saveSetting('displayMode', 'compact')}
+            title="Compact view"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                 strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+              <line x1="4" x2="20" y1="6" y2="6"/>
+              <line x1="4" x2="20" y1="10" y2="10"/>
+              <line x1="4" x2="20" y1="14" y2="14"/>
+              <line x1="4" x2="20" y1="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
 
         <button
           className="nav-link"
