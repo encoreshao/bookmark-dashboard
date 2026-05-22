@@ -2,9 +2,11 @@ import { useState, useMemo } from 'react';
 import { useSettings } from '@/context/SettingsContext';
 import { useBookmarks } from '@/context/BookmarkContext';
 import { useUI } from '@/context/UIContext';
+import { useTags } from '@/context/TagContext';
 import { createTranslator } from '@/utils/i18n';
 import { buildSidebarTree } from '@/utils/bookmarks';
 import type { SidebarNode } from '@/utils/bookmarks';
+import { getTagCounts } from '@/utils/tags';
 
 function SidebarItem({
   node,
@@ -66,6 +68,9 @@ function FolderSidebar() {
   const [search, setSearch] = useState('');
 
   const panelVisible = isPinned || floatOpen;
+
+  const { allTags, tagColors, tagMap, activeTags, toggleActiveTag } = useTags();
+  const tagCounts = useMemo(() => getTagCounts(tagMap), [tagMap]);
 
   const tree = useMemo(() => buildSidebarTree(allBookmarks), [allBookmarks]);
 
@@ -137,6 +142,33 @@ function FolderSidebar() {
             <SidebarItem key={node.id} node={node} depth={0} onSelect={handleSelect} />
           ))}
         </div>
+
+        {/* Tags section */}
+        {allTags.length > 0 && (
+          <div className="sidebar-tags-section">
+            <div style={{ height: 1, background: 'var(--border)', margin: '8px 14px' }} />
+            <div className="sidebar-tags-header">
+              <span className="sidebar-tags-title">Tags</span>
+            </div>
+            {allTags.map(tag => (
+              <div
+                key={tag}
+                className={`sidebar-tag-item${activeTags.includes(tag) ? ' is-active' : ''}`}
+                onClick={() => toggleActiveTag(tag)}
+              >
+                <span className="sidebar-tag-dot" style={{ background: tagColors[tag] ?? '#89b4fa' }} />
+                <span style={{ color: tagColors[tag] ?? 'inherit' }}>{tag}</span>
+                <span className="sidebar-tag-count">{tagCounts[tag] ?? 0}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {allTags.length === 0 && (
+          <div style={{ padding: '6px 14px', fontSize: '11px', color: 'var(--text-muted)' }}>
+            No tags yet — add them via the 🏷 button on any bookmark.
+          </div>
+        )}
       </div>
     </nav>
   );
