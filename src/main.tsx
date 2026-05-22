@@ -3,8 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { SettingsProvider } from '@/context/SettingsContext';
 import { BookmarkProvider } from '@/context/BookmarkContext';
 import { UIProvider } from '@/context/UIContext';
+import { TagProvider } from '@/context/TagContext';
 import App from '@/App';
 import './styles/main.css';
+import './styles/tags.css';
 
 try {
   const mf = chrome.runtime.getManifest();
@@ -17,7 +19,9 @@ createRoot(root).render(
     <SettingsProvider>
       <BookmarkProvider>
         <UIProvider>
-          <App />
+          <TagProvider>
+            <App />
+          </TagProvider>
         </UIProvider>
       </BookmarkProvider>
     </SettingsProvider>
