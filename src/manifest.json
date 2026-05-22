@@ -23,6 +23,7 @@
     "favicon"
   ],
   "host_permissions": [
+    "*://*/*",
     "https://api.openai.com/*",
     "https://generativelanguage.googleapis.com/*",
     "https://api.anthropic.com/*"

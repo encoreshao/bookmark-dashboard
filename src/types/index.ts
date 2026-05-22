@@ -2,7 +2,10 @@
 export type BookmarkNode = chrome.bookmarks.BookmarkTreeNode;
 
 export type Theme = 'dark' | 'light' | 'system';
-export type DisplayMode = 'grid' | 'list';
+export type DisplayMode = 'grid' | 'list' | 'compact';
+// A missing key in OGImageCache means "not yet fetched" → shimmer in UI
+// null means "fetched, no og:image found" → show domain initials
+export type OGImageCache = Record<string, string | null>;
 export type Language = 'en' | 'zh' | 'ja';
 export type NavDisplay = 'full' | 'compact';
 export type PinnedDisplay = 'top' | 'sidebar';
