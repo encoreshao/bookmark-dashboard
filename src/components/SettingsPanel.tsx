@@ -3,7 +3,7 @@ import { useSettings, DEFAULTS } from '@/context/SettingsContext';
 import { useUI } from '@/context/UIContext';
 import { createTranslator } from '@/utils/i18n';
 import { GOOGLE_APPS, ALL_APP_IDS, AppIcon } from '@/utils/googleApps';
-import type { AppSettings, Theme, DisplayMode, Language, NavDisplay, PinnedDisplay, FolderSidebarMode, AIProvider } from '@/types';
+import type { AppSettings, Theme, Language, NavDisplay, PinnedDisplay, FolderSidebarMode, AIProvider } from '@/types';
 import { getModelsForProvider, getDefaultModel } from '@/utils/ai';
 
 const BG_PRESETS = [
@@ -141,18 +141,6 @@ function SettingsPanel() {
                     { value: 'en', label: 'English' },
                     { value: 'zh', label: '中文' },
                     { value: 'ja', label: '日本語' },
-                  ]}
-                />
-              </div>
-
-              <div className="sp-group">
-                <label className="sp-label">{t('sp-display-mode')}</label>
-                <Toggle<DisplayMode>
-                  value={draft.displayMode}
-                  onChange={v => set('displayMode', v)}
-                  options={[
-                    { value: 'list', label: 'List' },
-                    { value: 'grid', label: 'Grid' },
                   ]}
                 />
               </div>
