@@ -75,12 +75,12 @@ chrome.runtime.onStartup.addListener(() => {
 
 chrome.bookmarks.onCreated.addListener((id, bookmark) => {
   if (!bookmark.url) return;
-  fetchOGImage(bookmark.url).then(ogUrl => {
-    chrome.storage.local.get(OG_CACHE_KEY, (data) => {
-      const cache = data[OG_CACHE_KEY] || {};
-      if (id in cache) return;
-      cache[id] = ogUrl;
-      chrome.storage.local.set({ [OG_CACHE_KEY]: cache });
-    });
-  }).catch(() => {});
+  (async () => {
+    const ogUrl = await fetchOGImage(bookmark.url);
+    const data = await chrome.storage.local.get(OG_CACHE_KEY);
+    const cache = data[OG_CACHE_KEY] || {};
+    if (id in cache) return;
+    cache[id] = ogUrl;
+    await chrome.storage.local.set({ [OG_CACHE_KEY]: cache });
+  })().catch(err => console.error('[OG] onCreated cache failed:', err));
 });
