@@ -897,7 +897,7 @@ body.has-bg-image .bookmark-remove {
 .view-list .folder-items {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   padding: 6px 8px 10px;
 }
 
@@ -973,7 +973,7 @@ body.has-bg-image .bookmark-remove {
 .view-compact .folder-items {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 2px;
   padding: 4px 8px 8px;
 }
 
