@@ -69,7 +69,13 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
           {tag}
         </span>
       ))}
-      <span className="bm-tag-add" onClick={() => setPickerOpen(true)}>+ tag</span>
+      <button
+          type="button"
+          className="bm-tag-add"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setPickerOpen(true); }}
+        >
+          + tag
+        </button>
     </div>
   );
 
@@ -153,6 +159,7 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
       {/* Tag button */}
       <button
         ref={tagBtnRef}
+        type="button"
         className={`bookmark-tag${pickerOpen ? ' is-active' : ''}`}
         title="Manage tags"
         onClick={e => { e.preventDefault(); setPickerOpen(o => !o); }}
