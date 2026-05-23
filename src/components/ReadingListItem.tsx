@@ -29,7 +29,7 @@ function ReadingListItem({ item, isActive, onSelect, onArchive, onUnarchive, onR
   return (
     <div className={classes} onClick={() => onSelect(item.id)}>
       <div className="rl-item-body">
-        <div className="rl-item-title" title={item.title}>{item.title}</div>
+        <div className="rl-item-title" title={item.cachedTitle || item.title}>{item.cachedTitle || item.title}</div>
         <div className="rl-item-meta">{hostname} · {relativeTime(item.addedAt, settings.language)}</div>
       </div>
       <div className="rl-item-actions">
