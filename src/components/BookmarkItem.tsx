@@ -3,6 +3,7 @@ import { useSettings } from '@/context/SettingsContext';
 import { useBookmarks } from '@/context/BookmarkContext';
 import { useUI } from '@/context/UIContext';
 import { useTags } from '@/context/TagContext';
+import { useReadingList } from '@/context/ReadingListContext';
 import { createTranslator } from '@/utils/i18n';
 import { getFaviconUrl, getHostname, getDomainColor } from '@/utils/bookmarks';
 import TagPicker from '@/components/TagPicker';
@@ -20,6 +21,7 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
   const { removeBookmark } = useBookmarks();
   const { confirm, showToast } = useUI();
   const { tagColors, getTagsForBookmark } = useTags();
+  const { addItem, isInReadingList } = useReadingList();
   const t = createTranslator(settings.language);
   const [dragging, setDragging] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -47,6 +49,17 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
     if (!ok) return;
     removeBookmark(bookmark.id);
     showToast(t('removed'));
+  };
+
+  const handleAddToReadingList = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isInReadingList(bookmark.url ?? '')) {
+      showToast('Already in reading list');
+      return;
+    }
+    await addItem(bookmark.url ?? '', bookmark.title, bookmark.id);
+    showToast('Added to reading list');
   };
 
   const handleDragStart = (e: React.DragEvent) => {
@@ -155,6 +168,21 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
           </>
         )}
       </a>
+
+      {/* Reading list button */}
+      <button
+        type="button"
+        className={`bookmark-readlist${isInReadingList(bookmark.url ?? '') ? ' is-saved' : ''}`}
+        title="Add to reading list"
+        onClick={handleAddToReadingList}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+             strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          <line x1="12" y1="8" x2="12" y2="14"/>
+          <line x1="9" y1="11" x2="15" y2="11"/>
+        </svg>
+      </button>
 
       {/* Tag button */}
       <button
