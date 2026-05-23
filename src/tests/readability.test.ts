@@ -11,8 +11,6 @@ const ARTICLE_HTML = `<!DOCTYPE html><html><head><title>Test Article</title></he
   </article>
 </body></html>`;
 
-const JUNK_HTML = `<!DOCTYPE html><html><body><p>Hi</p></body></html>`;
-
 beforeEach(() => {
   vi.restoreAllMocks();
 });
@@ -64,9 +62,8 @@ describe('fetchAndParse', () => {
     } as Response);
 
     const result = await fetchAndParse('https://example.com/article');
-    if (result) {
-      expect(result.content).not.toContain('<script');
-      expect(result.content).not.toContain('alert(');
-    }
+    expect(result).not.toBeNull();
+    expect(result!.content).not.toContain('<script');
+    expect(result!.content).not.toContain('alert(');
   });
 });

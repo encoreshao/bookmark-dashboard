@@ -16,10 +16,10 @@ export async function fetchAndParse(url: string): Promise<ParsedArticle | null> 
     doc.head.prepend(base);
 
     const article = new Readability(doc).parse();
-    if (!article) return null;
+    if (!article?.content) return null;
 
     return {
-      title: article.title,
+      title: article.title ?? '',
       byline: article.byline ?? null,
       content: DOMPurify.sanitize(article.content),
     };
