@@ -55,9 +55,12 @@ export function ReadingListProvider({ children }: { children: React.ReactNode })
       cachedByline: null,
     };
 
-    const next = [newItem, ...itemsRef.current];
-    setItems(next);
-    persist(next);
+    setItems(prev => {
+      if (prev.find(i => i.url === url)) return prev;
+      const next = [newItem, ...prev];
+      persist(next);
+      return next;
+    });
 
     const parsed = await fetchAndParse(url);
     setItems(prev => {
