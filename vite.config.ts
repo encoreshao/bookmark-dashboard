@@ -61,4 +61,9 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+
+  test: {
+    environment: 'jsdom',
+    globals: true,
+  },
 });
