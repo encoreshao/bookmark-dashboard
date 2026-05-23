@@ -52,12 +52,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, color 0.15s;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, background 0.15s, color 0.15s;
   z-index: 1;
 }
 .bookmark-tag svg {
   width: 13px;
   height: 13px;
+}
+.bookmark-item-wrapper:hover .bookmark-tag,
+.bookmark-tag.is-active {
+  opacity: 1;
+  pointer-events: auto;
 }
 .bookmark-tag:hover,
 .bookmark-tag.is-active {
