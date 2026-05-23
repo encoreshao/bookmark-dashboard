@@ -39,7 +39,7 @@ function copyExtensionAssets(): Plugin {
 // All source lives in src/.
 // dist/ is the complete, self-contained Chrome extension — load it unpacked.
 export default defineConfig({
-  plugins: [react(), copyExtensionAssets()],
+  plugins: [react(), ...(process.env.VITEST ? [] : [copyExtensionAssets()])],
 
   // Vite root = src/ so the built HTML lands at dist/index.html
   root: resolve(__dirname, 'src'),
