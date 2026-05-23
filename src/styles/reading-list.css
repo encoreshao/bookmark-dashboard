@@ -120,11 +120,6 @@
   border-color: var(--accent);
 }
 
-.theme-dark .rl-item.is-active {
-  background: rgba(37, 99, 235, 0.18);
-  border-color: var(--accent);
-}
-
 .rl-item.is-archived .rl-item-title {
   text-decoration: line-through;
   color: var(--text-muted);
@@ -182,6 +177,13 @@
   color: var(--text-primary);
 }
 
+.rl-action-btn:focus-visible,
+.rl-item-action-btn:focus-visible,
+.bookmark-readlist:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .rl-item-action-btn.danger:hover {
   color: #ef4444;
 }
@@ -192,10 +194,14 @@
   position: absolute;
   inset: 0;
   border-radius: 7px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%);
   background-size: 200% 100%;
   animation: rl-shimmer 1.5s infinite;
   pointer-events: none;
+}
+
+.theme-dark .rl-item-fetching::after {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
 }
 
 @keyframes rl-shimmer {
@@ -419,9 +425,17 @@
 .view-compact .bookmark-readlist {
   top: 50%;
   transform: translateY(-50%);
+  right: 90px;
 }
 
-.view-list .bookmark-item,
-.view-compact .bookmark-item {
+.view-list .bookmark-item-wrapper .bookmark-item,
+.view-compact .bookmark-item-wrapper .bookmark-item {
   padding-right: 120px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rl-item-fetching::after,
+  .rl-shimmer-line {
+    animation: none;
+  }
 }
