@@ -16,6 +16,7 @@ import DomainModal from '@/components/DomainModal';
 import Hero from '@/components/Hero';
 import SearchSection from '@/components/SearchSection';
 import AIInsightsView from '@/components/AIInsightsView';
+import ReadingListView from '@/components/ReadingListView';
 import Footer from '@/components/Footer';
 
 function App() {
@@ -85,6 +86,7 @@ function App() {
       case 'd': e.preventDefault(); setActiveView(activeView === 'domains' ? 'bookmarks' : 'domains'); break;
       case 'r': e.preventDefault(); setActiveView(activeView === 'recent' ? 'bookmarks' : 'recent'); break;
       case 'a': e.preventDefault(); setActiveView(activeView === 'ai' ? 'bookmarks' : 'ai'); break;
+      case 'l': e.preventDefault(); setActiveView(activeView === 'reading' ? 'bookmarks' : 'reading'); break;
     }
   }, [activeView, confirmState, kbdModalOpen, settingsPanelOpen, googleAppsOpen, domainModal,
       settings.theme, settings.displayMode, saveSetting,
@@ -127,6 +129,9 @@ function App() {
         )}
         {activeView === 'ai' && (
           <AIInsightsView onBack={() => setActiveView('bookmarks')} />
+        )}
+        {activeView === 'reading' && (
+          <ReadingListView onBack={() => setActiveView('bookmarks')} />
         )}
       </main>
 

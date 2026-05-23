@@ -10,7 +10,7 @@ export type Language = 'en' | 'zh' | 'ja';
 export type NavDisplay = 'full' | 'compact';
 export type PinnedDisplay = 'top' | 'sidebar';
 export type FolderSidebarMode = 'pinned' | 'float';
-export type ActiveView = 'bookmarks' | 'domains' | 'recent' | 'ai';
+export type ActiveView = 'bookmarks' | 'domains' | 'recent' | 'ai' | 'reading';
 export type AIProvider = 'openai' | 'gemini' | 'claude';
 
 export interface AppSettings {

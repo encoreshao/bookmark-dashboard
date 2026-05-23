@@ -4,9 +4,11 @@ import { SettingsProvider } from '@/context/SettingsContext';
 import { BookmarkProvider } from '@/context/BookmarkContext';
 import { UIProvider } from '@/context/UIContext';
 import { TagProvider } from '@/context/TagContext';
+import { ReadingListProvider } from '@/context/ReadingListContext';
 import App from '@/App';
 import './styles/main.css';
 import './styles/tags.css';
+import './styles/reading-list.css';
 
 try {
   const mf = chrome.runtime.getManifest();
@@ -20,7 +22,9 @@ createRoot(root).render(
       <BookmarkProvider>
         <UIProvider>
           <TagProvider>
-            <App />
+            <ReadingListProvider>
+              <App />
+            </ReadingListProvider>
           </TagProvider>
         </UIProvider>
       </BookmarkProvider>
