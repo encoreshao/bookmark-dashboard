@@ -213,9 +213,10 @@
 .rl-reader {
   flex: 1;
   overflow-y: auto;
-  padding: 32px 40px;
+  padding: 48px 60px;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .rl-reader::-webkit-scrollbar { width: 6px; }
@@ -250,6 +251,7 @@
 .rl-reader-shimmer {
   max-width: 680px;
   width: 100%;
+  align-self: stretch;
 }
 
 .rl-shimmer-line {
@@ -265,6 +267,7 @@
 /* Error / unavailable */
 .rl-reader-unavailable {
   max-width: 680px;
+  width: 100%;
   padding: 24px;
   border-radius: 10px;
   border: 1px solid var(--border);
@@ -286,6 +289,7 @@
 /* Article header */
 .rl-article-header {
   max-width: 680px;
+  width: 100%;
   margin-bottom: 24px;
 }
 
@@ -306,8 +310,9 @@
 /* Article body */
 .rl-article-content {
   max-width: 680px;
-  font-size: 18px;
-  line-height: 1.7;
+  width: 100%;
+  font-size: 17px;
+  line-height: 1.75;
   color: var(--text-secondary);
   flex: 1;
 }
@@ -347,6 +352,7 @@
 /* Reader action bar */
 .rl-reader-actions {
   max-width: 680px;
+  width: 100%;
   display: flex;
   gap: 10px;
   padding: 20px 0 8px;
@@ -392,13 +398,13 @@
 .bookmark-readlist {
   position: absolute;
   top: 4px;
-  right: 86px; /* left of tag button at 56px: 56 + 30 = 86 */
+  right: 84px; /* tag(56) + tag-width(26) + gap(2) = 84 */
   width: 26px;
   height: 26px;
   border-radius: 6px;
   border: none;
-  background: var(--accent);
-  color: #fff;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -406,7 +412,7 @@
   padding: 0;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.15s;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
   z-index: 2;
 }
 
@@ -416,16 +422,18 @@
   pointer-events: auto;
 }
 
+.bookmark-readlist:hover,
 .bookmark-readlist.is-saved {
-  background: var(--accent-hover);
+  background: var(--accent);
+  color: #fff;
 }
 
-/* List/compact: vertically center and increase right padding for 4 buttons */
+/* List/compact: vertically center — same right position since tags.css normalises pin to 30px */
 .view-list .bookmark-readlist,
 .view-compact .bookmark-readlist {
   top: 50%;
   transform: translateY(-50%);
-  right: 90px;
+  right: 84px;
 }
 
 .view-list .bookmark-item-wrapper .bookmark-item,
