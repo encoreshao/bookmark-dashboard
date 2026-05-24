@@ -310,6 +310,19 @@ function SettingsPanel() {
               </div>
 
               <div className="sp-group">
+                <label className="sp-label">{t('sp-auto-tag')}</label>
+                <p className="sp-desc">{t('sp-auto-tag-desc')}</p>
+                <Toggle<'on' | 'off'>
+                  value={draft.aiAutoTagEnabled ? 'on' : 'off'}
+                  onChange={v => set('aiAutoTagEnabled', v === 'on')}
+                  options={[
+                    { value: 'on', label: 'On' },
+                    { value: 'off', label: 'Off' },
+                  ]}
+                />
+              </div>
+
+              <div className="sp-group">
                 <label className="sp-label">{t('sp-ai-api-key')}</label>
                 <p className="sp-desc">{t('sp-ai-api-key-desc')}</p>
                 <input
