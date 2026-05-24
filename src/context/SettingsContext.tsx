@@ -18,6 +18,7 @@ const DEFAULTS: AppSettings = {
   aiApiKey: '',
   aiModel: 'gpt-4o-mini',
   aiCustomInstructions: '',
+  aiAutoTagEnabled: true,
 };
 
 const STORAGE_KEYS: Record<keyof AppSettings, string> = {
@@ -36,6 +37,7 @@ const STORAGE_KEYS: Record<keyof AppSettings, string> = {
   aiApiKey: 'bd_aiApiKey',
   aiModel: 'bd_aiModel',
   aiCustomInstructions: 'bd_aiCustomInstructions',
+  aiAutoTagEnabled: 'bd_aiAutoTagEnabled',
 };
 
 interface SettingsContextValue {

@@ -29,6 +29,7 @@ export interface AppSettings {
   aiApiKey: string;
   aiModel: string;
   aiCustomInstructions: string;
+  aiAutoTagEnabled: boolean;
 }
 
 export interface GoogleApp {
