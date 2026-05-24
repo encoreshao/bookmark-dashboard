@@ -225,6 +225,8 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
         <TagPicker
           bookmarkId={bookmark.id}
           bookmarkTitle={bookmark.title}
+          bookmarkUrl={bookmark.url}
+          hasAIKey={!!settings.aiApiKey}
           anchorEl={tagBtnRef.current}
           onClose={() => setPickerOpen(false)}
         />

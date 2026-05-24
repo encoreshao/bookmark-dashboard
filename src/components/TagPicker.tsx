@@ -2,19 +2,25 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useTags } from '@/context/TagContext';
 import { normalizeTag } from '@/utils/tags';
+import { suggestTags } from '@/utils/ai';
+import type { AIProvider } from '@/types';
 
 interface Props {
   bookmarkId: string;
   bookmarkTitle: string;
+  bookmarkUrl?: string;
+  hasAIKey?: boolean;
   anchorEl: HTMLElement;
   onClose: () => void;
 }
 
-function TagPicker({ bookmarkId, bookmarkTitle, anchorEl, onClose }: Props) {
+function TagPicker({ bookmarkId, bookmarkTitle, bookmarkUrl, hasAIKey, anchorEl, onClose }: Props) {
   const { allTags, tagColors, getTagsForBookmark, setTagsForBookmark } = useTags();
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
+  const [suggestState, setSuggestState] = useState<'idle' | 'loading' | 'done'>('idle');
+  const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
 
   const applied = getTagsForBookmark(bookmarkId);
 
@@ -84,6 +90,21 @@ function TagPicker({ bookmarkId, bookmarkTitle, anchorEl, onClose }: Props) {
     inputRef.current?.focus();
   }, [normalizedQuery, applied, bookmarkId, setTagsForBookmark]);
 
+  const handleSuggest = useCallback(async () => {
+    setSuggestState('loading');
+    try {
+      const result = await chrome.storage.local.get(['bd_aiApiKey', 'bd_aiProvider', 'bd_aiModel']);
+      const apiKey   = result.bd_aiApiKey   as string;
+      const provider = (result.bd_aiProvider ?? 'openai') as AIProvider;
+      const model    = (result.bd_aiModel   ?? 'gpt-4o-mini') as string;
+      const tags = await suggestTags(provider, apiKey, model, bookmarkTitle, bookmarkUrl ?? '');
+      setAiSuggestions(tags);
+      setSuggestState('done');
+    } catch {
+      setSuggestState('idle');
+    }
+  }, [bookmarkTitle, bookmarkUrl]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (filtered.length > 0) {
@@ -110,6 +131,37 @@ function TagPicker({ bookmarkId, bookmarkTitle, anchorEl, onClose }: Props) {
         </svg>
         Tags · <strong>{bookmarkTitle}</strong>
       </div>
+      {/* AI suggest row */}
+      {hasAIKey && (
+        <div className="tag-picker-suggest-row">
+          {suggestState === 'loading' ? (
+            <span className="tag-picker-suggest-loading">Suggesting…</span>
+          ) : suggestState === 'done' && aiSuggestions.length > 0 ? (
+            <div className="tag-picker-suggestions">
+              <span className="tag-picker-suggest-hint">✨ Suggestions</span>
+              <div className="tag-picker-suggest-chips">
+                {aiSuggestions.map(tag => {
+                  const isApplied = applied.includes(tag);
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      className={`tag-picker-suggest-chip${isApplied ? ' is-applied' : ''}`}
+                      onClick={() => { toggleTag(tag); }}
+                    >
+                      {isApplied ? '✓ ' : ''}{tag}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <button type="button" className="tag-picker-suggest-btn" onClick={handleSuggest}>
+              ✨ Suggest with AI
+            </button>
+          )}
+        </div>
+      )}
       <div className="tag-picker-input-wrap">
         <input
           ref={inputRef}
