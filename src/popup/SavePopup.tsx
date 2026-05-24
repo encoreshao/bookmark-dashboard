@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { suggestTags } from '@/utils/ai';
 import { normalizeTag, assignTagColor } from '@/utils/tags';
 import type { AIProvider, TagMap, TagColorMap } from '@/types';
@@ -18,7 +18,12 @@ export default function SavePopup() {
   const [customTag, setCustomTag] = useState('');
   const [popupState, setPopupState] = useState<PopupState>('loading');
 
+  const genRef = useRef(0);
+  const applyingRef = useRef(false);
+  const cleanedRef = useRef(false);
+
   const loadAndSuggest = useCallback(async () => {
+    const gen = ++genRef.current;
     setPopupState('loading');
     const result = await chrome.storage.local.get([
       'bd_pendingAutoTag', 'bd_aiApiKey', 'bd_aiProvider', 'bd_aiModel',
@@ -35,20 +40,22 @@ export default function SavePopup() {
 
     try {
       const tags = await suggestTags(provider, apiKey, model, pTag.title, pTag.url);
+      if (gen !== genRef.current) return;
       setSuggestions(tags);
       setSelected(new Set(tags));
       setPopupState('ready');
     } catch {
+      if (gen !== genRef.current) return;
       setPopupState('error');
     }
   }, []);
 
   useEffect(() => { void loadAndSuggest(); }, [loadAndSuggest]);
 
-  // Clear storage key when popup closes without Apply
+  // Clear storage key when popup closes without Apply/Skip
   useEffect(() => {
     const onUnload = () => {
-      chrome.storage.local.remove('bd_pendingAutoTag');
+      if (!cleanedRef.current) chrome.storage.local.remove('bd_pendingAutoTag');
     };
     window.addEventListener('unload', onUnload);
     return () => window.removeEventListener('unload', onUnload);
@@ -63,7 +70,8 @@ export default function SavePopup() {
   }
 
   async function handleApply() {
-    if (!pending) return;
+    if (!pending || applyingRef.current) return;
+    applyingRef.current = true;
     const tags = [...selected];
     const custom = normalizeTag(customTag);
     if (custom) tags.push(custom);
@@ -82,20 +90,21 @@ export default function SavePopup() {
     }
 
     await chrome.storage.local.set({ bd_bookmarkTags: tagMap, bd_tagColors: colors });
+    cleanedRef.current = true;
     await chrome.storage.local.remove('bd_pendingAutoTag');
     window.close();
   }
 
   async function handleSkip() {
+    cleanedRef.current = true;
     await chrome.storage.local.remove('bd_pendingAutoTag');
     window.close();
   }
 
-  function handleOpenSettings() {
-    chrome.storage.local.set({ bd_pendingSettingsTab: 'ai-apps' }, () => {
-      window.open(chrome.runtime.getURL('index.html'), '_blank');
-      window.close();
-    });
+  async function handleOpenSettings() {
+    await chrome.storage.local.set({ bd_pendingSettingsTab: 'ai-apps' });
+    window.open(chrome.runtime.getURL('index.html'), '_blank');
+    window.close();
   }
 
   const hostname = (() => {
