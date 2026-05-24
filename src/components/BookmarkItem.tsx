@@ -176,7 +176,7 @@ function BookmarkItem({ bookmark, isPinned = false, showPin = true, ogImageUrl }
         title="Add to reading list"
         onClick={handleAddToReadingList}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
              strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
           <line x1="12" y1="8" x2="12" y2="14"/>

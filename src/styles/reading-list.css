@@ -416,14 +416,18 @@
   z-index: 2;
 }
 
-.bookmark-item-wrapper:hover .bookmark-readlist,
-.bookmark-readlist.is-saved {
+.bookmark-item-wrapper:hover .bookmark-readlist {
   opacity: 1;
   pointer-events: auto;
 }
 
-.bookmark-readlist:hover,
-.bookmark-readlist.is-saved {
+.bookmark-readlist:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Already saved: show accent colour on hover to signal state */
+.bookmark-item-wrapper:hover .bookmark-readlist.is-saved {
   background: var(--accent);
   color: #fff;
 }
