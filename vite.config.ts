@@ -50,6 +50,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         newtab: resolve(__dirname, 'src/index.html'),
+        popup:  resolve(__dirname, 'src/popup/save-popup.html'),
       },
     },
     assetsInlineLimit: 4096,
