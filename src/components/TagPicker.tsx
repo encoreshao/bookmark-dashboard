@@ -19,7 +19,7 @@ function TagPicker({ bookmarkId, bookmarkTitle, bookmarkUrl, hasAIKey, anchorEl,
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
-  const [suggestState, setSuggestState] = useState<'idle' | 'loading' | 'done'>('idle');
+  const [suggestState, setSuggestState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
   const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
 
   const applied = getTagsForBookmark(bookmarkId);
@@ -97,11 +97,15 @@ function TagPicker({ bookmarkId, bookmarkTitle, bookmarkUrl, hasAIKey, anchorEl,
       const apiKey   = result.bd_aiApiKey   as string;
       const provider = (result.bd_aiProvider ?? 'openai') as AIProvider;
       const model    = (result.bd_aiModel   ?? 'gpt-4o-mini') as string;
+      if (!apiKey) {
+        setSuggestState('idle');
+        return;
+      }
       const tags = await suggestTags(provider, apiKey, model, bookmarkTitle, bookmarkUrl ?? '');
       setAiSuggestions(tags);
       setSuggestState('done');
     } catch {
-      setSuggestState('idle');
+      setSuggestState('error');
     }
   }, [bookmarkTitle, bookmarkUrl]);
 
@@ -136,6 +140,13 @@ function TagPicker({ bookmarkId, bookmarkTitle, bookmarkUrl, hasAIKey, anchorEl,
         <div className="tag-picker-suggest-row">
           {suggestState === 'loading' ? (
             <span className="tag-picker-suggest-loading">Suggesting…</span>
+          ) : suggestState === 'error' ? (
+            <div className="tag-picker-suggest-error">
+              Failed to get suggestions.{' '}
+              <button type="button" className="tag-picker-suggest-btn" onClick={handleSuggest}>
+                Try again
+              </button>
+            </div>
           ) : suggestState === 'done' && aiSuggestions.length > 0 ? (
             <div className="tag-picker-suggestions">
               <span className="tag-picker-suggest-hint">✨ Suggestions</span>
@@ -155,6 +166,8 @@ function TagPicker({ bookmarkId, bookmarkTitle, bookmarkUrl, hasAIKey, anchorEl,
                 })}
               </div>
             </div>
+          ) : suggestState === 'done' && aiSuggestions.length === 0 ? (
+            <span className="tag-picker-suggest-hint">No suggestions found.</span>
           ) : (
             <button type="button" className="tag-picker-suggest-btn" onClick={handleSuggest}>
               ✨ Suggest with AI

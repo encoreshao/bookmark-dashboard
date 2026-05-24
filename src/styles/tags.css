@@ -384,3 +384,5 @@
   color: var(--accent-blue, #89b4fa);
   border-color: var(--accent-blue, #89b4fa);
 }
+
+.tag-picker-suggest-error { font-size: 10px; color: var(--accent-red, #f38ba8); }
