@@ -308,7 +308,7 @@ Every bookmark ID and folder ID MUST come from the data above.`;
 
 /* ======== AI API Callers ======== */
 
-async function callOpenAI(apiKey: string, model: string, prompt: string): Promise<string> {
+async function callOpenAI(apiKey: string, model: string, prompt: string, maxTokens = 4000): Promise<string> {
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
@@ -316,7 +316,7 @@ async function callOpenAI(apiKey: string, model: string, prompt: string): Promis
       model,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
-      max_tokens: 4000,
+      max_tokens: maxTokens,
     }),
   });
   if (!res.ok) throw new Error(`OpenAI API error: ${res.status}`);
@@ -324,14 +324,14 @@ async function callOpenAI(apiKey: string, model: string, prompt: string): Promis
   return data.choices?.[0]?.message?.content ?? '';
 }
 
-async function callGemini(apiKey: string, model: string, prompt: string): Promise<string> {
+async function callGemini(apiKey: string, model: string, prompt: string, maxTokens = 4000): Promise<string> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.3, maxOutputTokens: 4000 },
+      generationConfig: { temperature: 0.3, maxOutputTokens: maxTokens },
     }),
   });
   if (!res.ok) throw new Error(`Gemini API error: ${res.status}`);
@@ -339,7 +339,7 @@ async function callGemini(apiKey: string, model: string, prompt: string): Promis
   return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
 }
 
-async function callClaude(apiKey: string, model: string, prompt: string): Promise<string> {
+async function callClaude(apiKey: string, model: string, prompt: string, maxTokens = 4000): Promise<string> {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -350,7 +350,7 @@ async function callClaude(apiKey: string, model: string, prompt: string): Promis
     },
     body: JSON.stringify({
       model,
-      max_tokens: 4000,
+      max_tokens: maxTokens,
       messages: [{ role: 'user', content: prompt }],
     }),
   });
@@ -359,11 +359,11 @@ async function callClaude(apiKey: string, model: string, prompt: string): Promis
   return data.content?.[0]?.text ?? '';
 }
 
-async function callAI(provider: AIProvider, apiKey: string, model: string, prompt: string): Promise<string> {
+async function callAI(provider: AIProvider, apiKey: string, model: string, prompt: string, maxTokens = 4000): Promise<string> {
   switch (provider) {
-    case 'openai': return callOpenAI(apiKey, model, prompt);
-    case 'gemini': return callGemini(apiKey, model, prompt);
-    case 'claude': return callClaude(apiKey, model, prompt);
+    case 'openai': return callOpenAI(apiKey, model, prompt, maxTokens);
+    case 'gemini': return callGemini(apiKey, model, prompt, maxTokens);
+    case 'claude': return callClaude(apiKey, model, prompt, maxTokens);
   }
 }
 
@@ -392,4 +392,34 @@ export async function runReorganizeAnalysis(
   const result = parseJSON<ReorganizeResult>(raw);
   result.actions = result.actions.map((a, i) => ({ ...a, id: `action-${i}` }));
   return result;
+}
+
+function buildTagSuggestionPrompt(title: string, url: string): string {
+  return `You are a bookmark tagging assistant.
+Given a page title and URL, suggest 1 to 3 short, lowercase tags.
+Tags should be concise (1-2 words), specific, and reusable.
+
+Title: ${title}
+URL: ${url}
+
+Respond with ONLY a JSON array of strings, no explanation:
+["example", "tag", "here"]`;
+}
+
+export async function suggestTags(
+  provider: AIProvider,
+  apiKey: string,
+  model: string,
+  title: string,
+  url: string,
+): Promise<string[]> {
+  const prompt = buildTagSuggestionPrompt(title, url);
+  const raw = await callAI(provider, apiKey, model, prompt, 60);
+  try {
+    const result = parseJSON<string[]>(raw);
+    if (!Array.isArray(result)) return [];
+    return result.filter((t): t is string => typeof t === 'string').slice(0, 3);
+  } catch {
+    return [];
+  }
 }
