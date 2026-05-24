@@ -103,7 +103,7 @@ export default function SavePopup() {
 
   async function handleOpenSettings() {
     await chrome.storage.local.set({ bd_pendingSettingsTab: 'ai-apps' });
-    window.open(chrome.runtime.getURL('index.html'), '_blank');
+    await chrome.tabs.create({ url: chrome.runtime.getURL('index.html') });
     window.close();
   }
 
