@@ -98,6 +98,17 @@ function App() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
+  useEffect(() => {
+    if (!isLoaded) return;
+    chrome.storage.local.get('bd_pendingSettingsTab', (result) => {
+      const tab = result.bd_pendingSettingsTab as string | undefined;
+      if (tab) {
+        chrome.storage.local.remove('bd_pendingSettingsTab');
+        openSettings(tab);
+      }
+    });
+  }, [isLoaded, openSettings]);
+
   const showHeroSearch = activeView === 'bookmarks';
 
   if (!isLoaded) return null;
