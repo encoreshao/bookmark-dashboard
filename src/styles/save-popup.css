@@ -1,0 +1,142 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #1e1e2e;
+  color: #cdd6f4;
+  width: 340px;
+  overflow: hidden;
+}
+
+.sp-popup { display: flex; flex-direction: column; }
+
+.sp-popup-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #45475a;
+}
+
+.sp-popup-icon { font-size: 18px; flex-shrink: 0; }
+
+.sp-popup-title-wrap { flex: 1; min-width: 0; }
+
+.sp-popup-title {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sp-popup-domain { font-size: 10px; color: #6c7086; margin-top: 2px; }
+
+.sp-popup-body { padding: 12px 14px; }
+
+/* Loading */
+.sp-popup-loading-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #6c7086;
+  margin-bottom: 10px;
+}
+
+.sp-spinner {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border: 1.5px solid #89b4fa;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: sp-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes sp-spin { to { transform: rotate(360deg); } }
+
+.sp-shimmer-row { display: flex; gap: 6px; margin-bottom: 8px; }
+
+.sp-shimmer-chip {
+  height: 22px; width: 55px;
+  background: #313244; border-radius: 11px; opacity: 0.5;
+}
+
+.sp-shimmer-chip.wide { width: 80px; }
+
+.sp-shimmer-actions { display: flex; gap: 6px; }
+
+.sp-shimmer-btn { flex: 1; height: 28px; background: #313244; border-radius: 6px; opacity: 0.35; }
+.sp-shimmer-btn.wide { flex: 2; }
+
+/* Hint */
+.sp-hint { font-size: 10px; color: #a6aabf; margin-bottom: 8px; }
+
+/* Chips */
+.sp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+
+.sp-chip {
+  background: #313244;
+  color: #6c7086;
+  border: 1.5px solid #45475a;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.sp-chip.is-selected {
+  background: #89b4fa20;
+  color: #89b4fa;
+  border-color: #89b4fa;
+}
+
+/* Custom input */
+.sp-custom-input {
+  width: 100%;
+  background: #313244;
+  border: 1px solid #45475a;
+  border-radius: 6px;
+  padding: 5px 8px;
+  color: #cdd6f4;
+  font-size: 11px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.sp-custom-input:focus { border-color: #89b4fa; }
+
+/* Action buttons */
+.sp-actions { display: flex; gap: 6px; }
+
+.sp-btn-skip {
+  flex: 1;
+  background: #313244; color: #6c7086;
+  border: none; padding: 6px;
+  border-radius: 6px; font-size: 11px; cursor: pointer;
+}
+
+.sp-btn-apply {
+  flex: 2;
+  background: #89b4fa; color: #1e1e2e;
+  border: none; padding: 6px;
+  border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer;
+}
+
+.sp-btn-apply:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.sp-btn-settings {
+  flex: 2;
+  background: #f9e2af20; color: #f9e2af;
+  border: 1px solid #f9e2af40; padding: 6px;
+  border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer;
+}
+
+/* No-key state */
+.sp-no-key-title { font-size: 12px; font-weight: 600; color: #f9e2af; margin-bottom: 5px; }
+.sp-no-key-desc  { font-size: 11px; color: #6c7086; line-height: 1.5; margin-bottom: 12px; }
+
+/* Error state */
+.sp-error-msg { font-size: 11px; color: #a6aabf; margin-bottom: 12px; }
