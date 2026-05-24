@@ -75,6 +75,8 @@ chrome.runtime.onStartup.addListener(() => {
 
 chrome.bookmarks.onCreated.addListener((id, bookmark) => {
   if (!bookmark.url) return;
+
+  // OG image fetch (existing)
   (async () => {
     const ogUrl = await fetchOGImage(bookmark.url);
     const data = await chrome.storage.local.get(OG_CACHE_KEY);
@@ -83,4 +85,20 @@ chrome.bookmarks.onCreated.addListener((id, bookmark) => {
     cache[id] = ogUrl;
     await chrome.storage.local.set({ [OG_CACHE_KEY]: cache });
   })().catch(err => console.error('[OG] onCreated cache failed:', err));
+
+  // Auto-tag popup
+  (async () => {
+    const result = await chrome.storage.local.get('bd_aiAutoTagEnabled');
+    if (result.bd_aiAutoTagEnabled === false) return;
+    await chrome.storage.local.set({
+      bd_pendingAutoTag: { bookmarkId: id, title: bookmark.title ?? '', url: bookmark.url },
+    });
+    await chrome.windows.create({
+      url: chrome.runtime.getURL('popup/save-popup.html'),
+      type: 'popup',
+      width: 340,
+      height: 280,
+      focused: true,
+    });
+  })().catch(err => console.error('[AutoTag] popup failed:', err));
 });
