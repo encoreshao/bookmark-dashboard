@@ -16,6 +16,11 @@ const SHORTCUTS = [
   { key: 'Esc', description: 'Close / go back' },
 ];
 
+// Chrome extension commands — key bindings set at chrome://extensions/shortcuts
+const EXTENSION_COMMANDS = [
+  { description: 'AI tag current page' },
+];
+
 function KeyboardShortcuts() {
   const { kbdModalOpen, closeKbdModal } = useUI();
   if (!kbdModalOpen) return null;
@@ -45,6 +50,19 @@ function KeyboardShortcuts() {
                   </React.Fragment>
                 ))}
               </span>
+            </div>
+          ))}
+          <div className="kbd-section-title">Extension shortcuts</div>
+          {EXTENSION_COMMANDS.map(cmd => (
+            <div key={cmd.description} className="kbd-row">
+              <span className="kbd-desc">{cmd.description}</span>
+              <a
+                className="kbd-configure-link"
+                href="chrome://extensions/shortcuts"
+                onClick={e => { e.preventDefault(); chrome.tabs.create({ url: 'chrome://extensions/shortcuts' }); }}
+              >
+                Configure →
+              </a>
             </div>
           ))}
         </div>

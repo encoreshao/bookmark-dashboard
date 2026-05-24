@@ -17,10 +17,16 @@
     "newtab": "index.html"
   },
   "options_page": "options/index.html",
+  "commands": {
+    "open-ai-tag": {
+      "description": "Open AI tag popup for current page"
+    }
+  },
   "permissions": [
     "bookmarks",
     "storage",
-    "favicon"
+    "favicon",
+    "tabs"
   ],
   "host_permissions": [
     "*://*/*",

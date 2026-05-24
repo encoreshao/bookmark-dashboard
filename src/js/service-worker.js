@@ -102,3 +102,27 @@ chrome.bookmarks.onCreated.addListener((id, bookmark) => {
     });
   })().catch(err => console.error('[AutoTag] popup failed:', err));
 });
+
+// Keyboard command: open AI tag popup for the currently active bookmarked page
+chrome.commands.onCommand.addListener((command) => {
+  if (command !== 'open-ai-tag') return;
+  (async () => {
+    const result = await chrome.storage.local.get('bd_aiAutoTagEnabled');
+    if (result.bd_aiAutoTagEnabled === false) return;
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab?.url || !tab.url.startsWith('http')) return;
+    const bookmarks = await chrome.bookmarks.search({ url: tab.url });
+    if (!bookmarks.length) return;
+    const bm = bookmarks[0];
+    await chrome.storage.local.set({
+      bd_pendingAutoTag: { bookmarkId: bm.id, title: bm.title || tab.title || '', url: tab.url },
+    });
+    await chrome.windows.create({
+      url: chrome.runtime.getURL('popup/save-popup.html'),
+      type: 'popup',
+      width: 340,
+      height: 280,
+      focused: true,
+    });
+  })().catch(err => console.error('[AutoTag] command failed:', err));
+});

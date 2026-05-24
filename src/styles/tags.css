@@ -346,34 +346,34 @@
 /* AI suggest row inside TagPicker */
 .tag-picker-suggest-row {
   padding: 6px 8px;
-  border-bottom: 1px solid var(--border-subtle, #45475a);
-  background: var(--bg-base, #181825);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
 }
 
 .tag-picker-suggest-btn {
   width: 100%;
   background: none;
-  border: 1px solid var(--border-subtle, #45475a);
+  border: 1px solid var(--border);
   border-radius: 5px;
   padding: 4px 8px;
-  color: var(--accent-green, #a6e3a1);
+  color: var(--accent);
   font-size: 10px;
   cursor: pointer;
   text-align: left;
 }
 
-.tag-picker-suggest-btn:hover { background: var(--bg-surface, #313244); }
+.tag-picker-suggest-btn:hover { background: var(--bg-tertiary); }
 
 .tag-picker-suggest-loading { font-size: 10px; color: var(--text-muted); }
 
-.tag-picker-suggest-hint { font-size: 9px; color: var(--text-subtext, #a6aabf); display: block; margin-bottom: 5px; }
+.tag-picker-suggest-hint { font-size: 9px; color: var(--text-secondary); display: block; margin-bottom: 5px; }
 
 .tag-picker-suggest-chips { display: flex; flex-wrap: wrap; gap: 4px; }
 
 .tag-picker-suggest-chip {
-  background: var(--bg-surface, #313244);
+  background: var(--bg-tertiary);
   color: var(--text-muted);
-  border: 1px solid var(--border-subtle, #45475a);
+  border: 1px solid var(--border);
   padding: 2px 7px;
   border-radius: 8px;
   font-size: 10px;
@@ -381,8 +381,8 @@
 }
 
 .tag-picker-suggest-chip.is-applied {
-  color: var(--accent-blue, #89b4fa);
-  border-color: var(--accent-blue, #89b4fa);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
-.tag-picker-suggest-error { font-size: 10px; color: var(--accent-red, #f38ba8); }
+.tag-picker-suggest-error { font-size: 10px; color: #EF4444; }

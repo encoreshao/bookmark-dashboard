@@ -2062,6 +2062,26 @@ body.has-bg-image .bookmark-remove {
   color: var(--text-muted);
 }
 
+.kbd-section-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 10px 0 4px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.kbd-configure-link {
+  font-size: 0.75rem;
+  color: var(--accent);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.kbd-configure-link:hover { text-decoration: underline; }
+
 kbd {
   display: inline-flex;
   align-items: center;
