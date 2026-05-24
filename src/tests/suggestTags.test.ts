@@ -64,4 +64,16 @@ describe('suggestTags', () => {
     const result = await suggestTags('openai', 'sk-test', 'gpt-4o-mini', 'Title', 'https://example.com');
     expect(result).toEqual(['react', 'tutorial']);
   });
+
+  it('returns parsed tag array when using Gemini provider', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        candidates: [{ content: { parts: [{ text: '["typescript", "testing", "vitest"]' }] } }],
+      }),
+    } as Response);
+
+    const result = await suggestTags('gemini', 'gemini-key', 'gemini-2.0-flash', 'Testing with Vitest', 'https://vitest.dev');
+    expect(result).toEqual(['typescript', 'testing', 'vitest']);
+  });
 });

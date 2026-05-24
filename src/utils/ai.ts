@@ -306,6 +306,18 @@ Provide 5-10 specific, actionable operations. Focus on:
 Every bookmark ID and folder ID MUST come from the data above.`;
 }
 
+function buildTagSuggestionPrompt(title: string, url: string): string {
+  return `You are a bookmark tagging assistant.
+Given a page title and URL, suggest 1 to 3 short, lowercase tags.
+Tags should be concise (1-2 words), specific, and reusable.
+
+Title: ${title}
+URL: ${url}
+
+Respond with ONLY a JSON array of strings, no explanation:
+["example", "tag", "here"]`;
+}
+
 /* ======== AI API Callers ======== */
 
 async function callOpenAI(apiKey: string, model: string, prompt: string, maxTokens = 4000): Promise<string> {
@@ -392,18 +404,6 @@ export async function runReorganizeAnalysis(
   const result = parseJSON<ReorganizeResult>(raw);
   result.actions = result.actions.map((a, i) => ({ ...a, id: `action-${i}` }));
   return result;
-}
-
-function buildTagSuggestionPrompt(title: string, url: string): string {
-  return `You are a bookmark tagging assistant.
-Given a page title and URL, suggest 1 to 3 short, lowercase tags.
-Tags should be concise (1-2 words), specific, and reusable.
-
-Title: ${title}
-URL: ${url}
-
-Respond with ONLY a JSON array of strings, no explanation:
-["example", "tag", "here"]`;
 }
 
 export async function suggestTags(
