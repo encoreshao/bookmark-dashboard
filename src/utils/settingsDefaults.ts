@@ -2,7 +2,7 @@ import type { AppSettings } from '@/types';
 import { DEFAULT_VISIBLE_APP_IDS } from '@/utils/googleApps';
 
 export const DEFAULTS: AppSettings = {
-  theme: 'dark',
+  theme: 'light',
   displayMode: 'list',
   userName: 'Guest',
   backgroundImage: '',

@@ -5,7 +5,7 @@ describe('skeletonSettings', () => {
 
   it('returns DEFAULTS when localStorage is empty', () => {
     const s = readSkeletonSettings();
-    expect(s.theme).toBe('dark');
+    expect(s.theme).toBe('light');
     expect(s.folderSidebarOpen).toBe(true);
     expect(s.folderSidebarMode).toBe('pinned');
     expect(s.displayMode).toBe('list');
