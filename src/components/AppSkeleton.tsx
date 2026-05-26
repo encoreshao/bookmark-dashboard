@@ -27,11 +27,12 @@ export function BookmarkAreaSkeleton({ displayMode }: { displayMode: DisplayMode
   }
 
   // list or compact
+  const isCompact = displayMode === 'compact';
   return (
     <section className="bookmarks-section">
       <div id="bookmarks">
         {[3, 4, 2].map((rowCount, i) => (
-          <div key={i} className="bookmark-folder view-list" style={{ marginBottom: 16 }}>
+          <div key={i} className={`bookmark-folder ${isCompact ? 'view-compact' : 'view-list'}`} style={{ marginBottom: 16 }}>
             <div className="folder-header">
               <div className="skel" style={{ width: 16, height: 16, borderRadius: 3, flexShrink: 0 }} />
               <div className="skel" style={{ width: 80 + i * 35, height: 12, borderRadius: 4 }} />
@@ -39,7 +40,7 @@ export function BookmarkAreaSkeleton({ displayMode }: { displayMode: DisplayMode
             </div>
             <div className="folder-items">
               {Array.from({ length: rowCount }).map((_, j) => (
-                <div key={j} className="skel" style={{ height: 40, borderRadius: 6, marginBottom: 4 }} />
+                <div key={j} className="skel" style={{ height: isCompact ? 28 : 40, borderRadius: 6, marginBottom: 4 }} />
               ))}
             </div>
           </div>

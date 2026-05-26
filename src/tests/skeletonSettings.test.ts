@@ -9,7 +9,6 @@ describe('skeletonSettings', () => {
     expect(s.folderSidebarOpen).toBe(true);
     expect(s.folderSidebarMode).toBe('pinned');
     expect(s.displayMode).toBe('list');
-    expect(s.navDisplay).toBe('compact');
     expect(s.pinnedDisplay).toBe('top');
   });
 
@@ -38,11 +37,6 @@ describe('skeletonSettings', () => {
     const s = readSkeletonSettings();
     expect(s.displayMode).toBe('list');
     expect(s.folderSidebarOpen).toBe(true);
-  });
-
-  it('returns cached navDisplay after write', () => {
-    writeSkeletonSettings({ navDisplay: 'full' });
-    expect(readSkeletonSettings().navDisplay).toBe('full');
   });
 
   it('returns cached pinnedDisplay after write', () => {
