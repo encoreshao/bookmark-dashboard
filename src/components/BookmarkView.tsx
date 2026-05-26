@@ -7,6 +7,7 @@ import { createTranslator } from '@/utils/i18n';
 import { collectFolders, filterFolders, findBookmarkById } from '@/utils/bookmarks';
 import BookmarkItem from '@/components/BookmarkItem';
 import TagFilterStrip from '@/components/TagFilterStrip';
+import { BookmarkAreaSkeleton } from '@/components/AppSkeleton';
 import { useOGImages } from '@/hooks/useOGImages';
 import type { BookmarkNode, OGImageCache } from '@/types';
 
@@ -131,11 +132,7 @@ function BookmarkView({ searchQuery }: Props) {
     return filterFolders(tagFiltered, searchQuery);
   }, [folders, searchQuery, activeTags, tagMap]);
 
-  if (isLoading) return (
-    <section className="bookmarks-section">
-      <div className="empty-state">Loading bookmarks...</div>
-    </section>
-  );
+  if (isLoading) return <BookmarkAreaSkeleton displayMode={settings.displayMode} />;
 
   return (
     <section className="bookmarks-section">
