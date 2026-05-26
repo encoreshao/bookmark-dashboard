@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import type { AppSettings, Theme, DisplayMode, Language, NavDisplay, PinnedDisplay, FolderSidebarMode, AIProvider } from '@/types';
 import { ALL_APP_IDS, DEFAULT_VISIBLE_APP_IDS } from '@/utils/googleApps';
+import { writeSkeletonSettings } from '@/utils/skeletonSettings';
 
 const DEFAULTS: AppSettings = {
   theme: 'dark',
@@ -106,6 +107,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const saveSetting = useCallback(<K extends keyof AppSettings>(key: K, value: AppSettings[K]) => {
     const storageKey = STORAGE_KEYS[key];
     chrome.storage.local.set({ [storageKey]: value });
+    writeSkeletonSettings({ [key]: value } as Partial<AppSettings>);
     setSettings(s => ({ ...s, [key]: value }));
   }, []);
 
@@ -115,6 +117,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       toStore[STORAGE_KEYS[key]] = value;
     }
     chrome.storage.local.set(toStore);
+    writeSkeletonSettings(partial);
     setSettings(s => ({ ...s, ...partial }));
   }, []);
 
