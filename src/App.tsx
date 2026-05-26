@@ -54,12 +54,12 @@ function App() {
       return;
     }
 
-    if (e.key === '/' || (e.key === 'k' && (e.metaKey || e.ctrlKey))) {
+    if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       document.getElementById('search-input')?.focus();
       return;
     }
-    if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
+    if (e.key === '?') {
       e.preventDefault();
       kbdModalOpen ? closeKbdModal() : openKbdModal();
       return;

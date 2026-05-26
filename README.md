@@ -35,12 +35,12 @@ Chrome's default new tab is wasted real estate. Bookmark Dashboard turns it into
 
 | Feature | Description |
 |---|---|
-| **Full-text search** | Find any bookmark by title or URL — press `/` to jump straight to the search bar |
+| **Full-text search** | Find any bookmark by title or URL — press `⌘K` / `Ctrl+K` to jump straight to the search bar |
 | **Folder browsing** | Browse bookmarks organized by folder with full path breadcrumbs |
 | **Grid & list views** | Switch between a compact list or visual grid layout |
 | **Drag & drop** | Move bookmarks between folders by dragging |
 | **Pin favorites** | Pin any bookmark to the top bar or a dedicated right sidebar for instant access |
-| **Folder sidebar** | Collapsible folder tree — pin it open or use it as a floating overlay |
+| **Folder sidebar** | Collapsible folder tree — pin it open or use it as a floating overlay; the sidebar splits evenly between folders (top half) and tags (bottom half), each scrollable independently |
 
 ### AI Insights
 
@@ -74,7 +74,8 @@ Custom instructions let you steer the AI's analysis (e.g. *"Group by project, no
 
 | Key | Action |
 |---|---|
-| `/` | Focus search |
+| `⌘K` / `Ctrl+K` | Focus search |
+| `N` | Add new bookmark |
 | `?` | Show all keyboard shortcuts |
 | `S` | Open settings |
 | `T` | Cycle theme (dark → light → system) |
@@ -82,6 +83,7 @@ Custom instructions let you steer the AI's analysis (e.g. *"Group by project, no
 | `D` | Domain graph |
 | `R` | Recently added |
 | `A` | AI Insights |
+| `L` | Reading list |
 | `G` | Google Apps popup |
 | `Shift+G` | Open Google.com |
 | `Esc` | Close / go back |

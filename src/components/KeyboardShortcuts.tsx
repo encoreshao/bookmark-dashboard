@@ -12,8 +12,8 @@ const SHORTCUT_GROUPS = [
       </svg>
     ),
     shortcuts: [
-      { key: 'N',   description: 'Add new bookmark' },
-      { key: '/',   description: 'Focus search' },
+      { key: 'N',       description: 'Add new bookmark' },
+      { key: '⌘ + K',  description: 'Focus search' },
     ],
   },
   {

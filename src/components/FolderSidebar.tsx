@@ -146,7 +146,6 @@ function FolderSidebar() {
         {/* Tags section */}
         {allTags.length > 0 && (
           <div className="sidebar-tags-section">
-            <div style={{ height: 1, background: 'var(--border)', margin: '8px 14px' }} />
             <div className="sidebar-tags-header">
               <span className="sidebar-tags-title">Tags</span>
             </div>

@@ -266,6 +266,10 @@
 
 /* ── Sidebar Tags section ── */
 .sidebar-tags-section {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  border-top: 1px solid var(--border);
   padding: 0;
 }
 .sidebar-tags-header {
@@ -311,6 +315,26 @@
   background: var(--bg-tertiary);
   padding: 1px 5px;
   border-radius: 8px;
+}
+
+.theme-light .sidebar-tags-section {
+  background: var(--bg-primary);
+}
+.theme-light .sidebar-tags-header {
+  background: var(--bg-primary);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.theme-light .sidebar-tag-item:hover {
+  background: #D1D9E6;
+}
+.theme-light .sidebar-tag-item.is-active {
+  background: #C8D3E3;
+}
+.theme-light .sidebar-tag-count {
+  background: #CBD5E1;
+  color: #334155;
 }
 .sidebar-new-tag {
   display: flex;
