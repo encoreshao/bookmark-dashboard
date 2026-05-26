@@ -19,6 +19,7 @@ import SearchSection from '@/components/SearchSection';
 import AIInsightsView from '@/components/AIInsightsView';
 import ReadingListView from '@/components/ReadingListView';
 import Footer from '@/components/Footer';
+import AppSkeleton from '@/components/AppSkeleton';
 
 function App() {
   const { settings, isLoaded, saveSetting } = useSettings();
@@ -116,7 +117,7 @@ function App() {
 
   const showHeroSearch = activeView === 'bookmarks';
 
-  if (!isLoaded) return null;
+  if (!isLoaded) return <AppSkeleton />;
 
   return (
     <>
