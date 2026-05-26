@@ -64,7 +64,10 @@ export default function AppSkeleton() {
           <div className="skel" style={{ width: 140, height: 13, borderRadius: 4 }} />
         </div>
         <nav className="topbar-nav">
-          {[72, 60, 68].map((w, i) => (
+          {(sk.navDisplay === 'compact'
+            ? [38, 38, 38, 38, 38]
+            : [88, 90, 102, 70, 90]
+          ).map((w, i) => (
             <div key={i} className="skel" style={{ width: w, height: 30, borderRadius: 8 }} />
           ))}
         </nav>

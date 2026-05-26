@@ -1,26 +1,8 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import type { AppSettings, Theme, DisplayMode, Language, NavDisplay, PinnedDisplay, FolderSidebarMode, AIProvider } from '@/types';
-import { ALL_APP_IDS, DEFAULT_VISIBLE_APP_IDS } from '@/utils/googleApps';
+import { ALL_APP_IDS } from '@/utils/googleApps';
 import { writeSkeletonSettings } from '@/utils/skeletonSettings';
-
-const DEFAULTS: AppSettings = {
-  theme: 'dark',
-  displayMode: 'list',
-  userName: 'Guest',
-  backgroundImage: '',
-  pinnedIds: [],
-  pinnedDisplay: 'top',
-  folderSidebarOpen: true,
-  folderSidebarMode: 'pinned',
-  language: 'en',
-  navDisplay: 'compact',
-  visibleApps: DEFAULT_VISIBLE_APP_IDS,
-  aiProvider: 'openai',
-  aiApiKey: '',
-  aiModel: 'gpt-4o-mini',
-  aiCustomInstructions: '',
-  aiAutoTagEnabled: true,
-};
+import { DEFAULTS } from '@/utils/settingsDefaults';
 
 const STORAGE_KEYS: Record<keyof AppSettings, string> = {
   theme: 'bd_theme',

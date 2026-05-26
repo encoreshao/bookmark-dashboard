@@ -10,6 +10,7 @@ describe('skeletonSettings', () => {
     expect(s.folderSidebarMode).toBe('pinned');
     expect(s.displayMode).toBe('list');
     expect(s.pinnedDisplay).toBe('top');
+    expect(s.navDisplay).toBe('compact');
   });
 
   it('returns cached theme after write', () => {
@@ -42,6 +43,11 @@ describe('skeletonSettings', () => {
   it('returns cached pinnedDisplay after write', () => {
     writeSkeletonSettings({ pinnedDisplay: 'sidebar' });
     expect(readSkeletonSettings().pinnedDisplay).toBe('sidebar');
+  });
+
+  it('returns cached navDisplay after write', () => {
+    writeSkeletonSettings({ navDisplay: 'full' });
+    expect(readSkeletonSettings().navDisplay).toBe('full');
   });
 
   it('ignores non-skeleton keys passed to writeSkeletonSettings', () => {
