@@ -26,22 +26,22 @@ export function readSkeletonSettings(): SkeletonSettings {
   };
   try {
     const theme = localStorage.getItem(SK_KEYS.theme);
-    if (theme) s.theme = theme as Theme;
+    if (theme !== null) s.theme = theme as Theme;
 
     const open = localStorage.getItem(SK_KEYS.folderSidebarOpen);
     if (open !== null) s.folderSidebarOpen = open === 'true';
 
     const mode = localStorage.getItem(SK_KEYS.folderSidebarMode);
-    if (mode) s.folderSidebarMode = mode as FolderSidebarMode;
+    if (mode !== null) s.folderSidebarMode = mode as FolderSidebarMode;
 
     const display = localStorage.getItem(SK_KEYS.displayMode);
-    if (display) s.displayMode = display as DisplayMode;
+    if (display !== null) s.displayMode = display as DisplayMode;
 
     const nav = localStorage.getItem(SK_KEYS.navDisplay);
-    if (nav) s.navDisplay = nav as NavDisplay;
+    if (nav !== null) s.navDisplay = nav as NavDisplay;
 
     const pinned = localStorage.getItem(SK_KEYS.pinnedDisplay);
-    if (pinned) s.pinnedDisplay = pinned as PinnedDisplay;
+    if (pinned !== null) s.pinnedDisplay = pinned as PinnedDisplay;
   } catch { /* localStorage unavailable */ }
   return s;
 }

@@ -1,6 +1,6 @@
 import { readSkeletonSettings, writeSkeletonSettings } from '@/utils/skeletonSettings';
 
-describe('readSkeletonSettings', () => {
+describe('skeletonSettings', () => {
   beforeEach(() => localStorage.clear());
 
   it('returns DEFAULTS when localStorage is empty', () => {
@@ -38,6 +38,16 @@ describe('readSkeletonSettings', () => {
     const s = readSkeletonSettings();
     expect(s.displayMode).toBe('list');
     expect(s.folderSidebarOpen).toBe(true);
+  });
+
+  it('returns cached navDisplay after write', () => {
+    writeSkeletonSettings({ navDisplay: 'full' });
+    expect(readSkeletonSettings().navDisplay).toBe('full');
+  });
+
+  it('returns cached pinnedDisplay after write', () => {
+    writeSkeletonSettings({ pinnedDisplay: 'sidebar' });
+    expect(readSkeletonSettings().pinnedDisplay).toBe('sidebar');
   });
 
   it('ignores non-skeleton keys passed to writeSkeletonSettings', () => {
