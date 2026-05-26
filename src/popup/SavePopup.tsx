@@ -3,6 +3,19 @@ import { suggestTags } from '@/utils/ai';
 import { normalizeTag, assignTagColor } from '@/utils/tags';
 import type { AIProvider, TagMap, TagColorMap } from '@/types';
 
+const CHIP_COLORS = [
+  '#3B82F6', // blue
+  '#22C55E', // green
+  '#A855F7', // purple
+  '#F97316', // orange
+  '#EC4899', // pink
+  '#14B8A6', // teal
+  '#EF4444', // red
+  '#EAB308', // yellow
+  '#6366F1', // indigo
+  '#06B6D4', // cyan
+];
+
 interface PendingAutoTag {
   bookmarkId: string;
   title: string;
@@ -15,16 +28,20 @@ export default function SavePopup() {
   const [pending, setPending] = useState<PendingAutoTag | null>(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [customTag, setCustomTag] = useState('');
+  const [customTags, setCustomTags] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState('');
   const [popupState, setPopupState] = useState<PopupState>('loading');
 
   const genRef = useRef(0);
   const applyingRef = useRef(false);
   const cleanedRef = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const loadAndSuggest = useCallback(async () => {
     const gen = ++genRef.current;
     setPopupState('loading');
+    setCustomTags([]);
+    setInputValue('');
     const result = await chrome.storage.local.get([
       'bd_pendingAutoTag', 'bd_aiApiKey', 'bd_aiProvider', 'bd_aiModel',
     ]);
@@ -52,7 +69,6 @@ export default function SavePopup() {
 
   useEffect(() => { void loadAndSuggest(); }, [loadAndSuggest]);
 
-  // Clear storage key when popup closes without Apply/Skip
   useEffect(() => {
     const onUnload = () => {
       if (!cleanedRef.current) chrome.storage.local.remove('bd_pendingAutoTag');
@@ -69,13 +85,46 @@ export default function SavePopup() {
     });
   }
 
+  function commitInputTag() {
+    const tag = normalizeTag(inputValue);
+    if (!tag) return false;
+    if (!customTags.includes(tag) && !suggestions.includes(tag)) {
+      setCustomTags(prev => [...prev, tag]);
+    }
+    setInputValue('');
+    return true;
+  }
+
+  function removeCustomTag(tag: string) {
+    setCustomTags(prev => prev.filter(t => t !== tag));
+  }
+
+  function handleInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const added = commitInputTag();
+      // Empty input + Enter → apply if anything is selected
+      if (!added && appliedCount > 0) void handleApply();
+    } else if (e.key === ',' || e.key === 'Tab') {
+      e.preventDefault();
+      commitInputTag();
+    } else if (e.key === 'Backspace' && !inputValue && customTags.length > 0) {
+      setCustomTags(prev => prev.slice(0, -1));
+    }
+  }
+
   async function handleApply() {
     if (!pending || applyingRef.current) return;
     applyingRef.current = true;
-    const tags = [...selected];
-    const custom = normalizeTag(customTag);
-    if (custom) tags.push(custom);
-    const unique = [...new Set(tags.filter(Boolean))];
+
+    // Commit any text still in the input
+    const pending_input = normalizeTag(inputValue);
+    const allTags = [
+      ...selected,
+      ...customTags,
+      ...(pending_input ? [pending_input] : []),
+    ];
+    const unique = [...new Set(allTags.filter(Boolean))];
 
     const result = await chrome.storage.local.get(['bd_bookmarkTags', 'bd_tagColors']);
     const tagMap    = (result.bd_bookmarkTags ?? {}) as TagMap;
@@ -111,16 +160,23 @@ export default function SavePopup() {
     try { return pending?.url ? new URL(pending.url).hostname : ''; } catch { return ''; }
   })();
 
-  const appliedCount = selected.size + (normalizeTag(customTag) ? 1 : 0);
+  const pendingInput = normalizeTag(inputValue) ? 1 : 0;
+  const appliedCount = selected.size + customTags.length + pendingInput;
 
   return (
     <div className="sp-popup">
       <div className="sp-popup-header">
-        <span className="sp-popup-icon">🔖</span>
+        <div className="sp-header-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+               strokeLinecap="round" strokeLinejoin="round" width="17" height="17">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
         <div className="sp-popup-title-wrap">
           <div className="sp-popup-title">{pending?.title || 'Untitled'}</div>
-          <div className="sp-popup-domain">{hostname} · ✓ Saved</div>
+          <div className="sp-popup-domain">{hostname}</div>
         </div>
+        <div className="sp-saved-badge">✓ Saved</div>
       </div>
 
       <div className="sp-popup-body">
@@ -169,24 +225,53 @@ export default function SavePopup() {
           <>
             <p className="sp-hint">✨ AI suggested — tap to toggle</p>
             <div className="sp-chips">
-              {suggestions.map(tag => (
+              {suggestions.map((tag, i) => (
                 <button
                   key={tag}
                   type="button"
                   className={`sp-chip${selected.has(tag) ? ' is-selected' : ''}`}
+                  style={{ '--chip-color': CHIP_COLORS[i % CHIP_COLORS.length] } as React.CSSProperties}
                   onClick={() => toggleChip(tag)}
                 >
-                  {selected.has(tag) ? '✓ ' : ''}{tag}
+                  {selected.has(tag) && <span className="sp-chip-dot" />}
+                  {tag}
                 </button>
               ))}
             </div>
-            <input
-              className="sp-custom-input"
-              placeholder="Add custom tag…"
-              value={customTag}
-              onChange={e => setCustomTag(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter' && appliedCount > 0) void handleApply(); }}
-            />
+
+            {/* Multi-tag input */}
+            <div
+              className="sp-tag-input-wrap"
+              onClick={() => inputRef.current?.focus()}
+            >
+              {customTags.map(tag => (
+                <span key={tag} className="sp-custom-chip">
+                  {tag}
+                  <button
+                    type="button"
+                    className="sp-custom-chip-remove"
+                    onMouseDown={e => { e.preventDefault(); removeCustomTag(tag); }}
+                    tabIndex={-1}
+                  >
+                    <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2"
+                         strokeLinecap="round" width="8" height="8">
+                      <path d="M8 2 2 8M2 2l6 6"/>
+                    </svg>
+                  </button>
+                </span>
+              ))}
+              <input
+                ref={inputRef}
+                className="sp-tag-input"
+                placeholder={customTags.length === 0 ? 'Add custom tags…' : ''}
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
+                onKeyDown={handleInputKeyDown}
+                onBlur={() => commitInputTag()}
+              />
+            </div>
+            <p className="sp-tag-hint">Enter or comma to add · Backspace to remove</p>
+
             <div className="sp-actions">
               <button className="sp-btn-skip" onClick={handleSkip}>Skip</button>
               <button

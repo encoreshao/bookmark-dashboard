@@ -10,6 +10,7 @@ import DomainView from '@/components/DomainView';
 import RecentView from '@/components/RecentView';
 import SettingsPanel from '@/components/SettingsPanel';
 import KeyboardShortcuts from '@/components/KeyboardShortcuts';
+import AddBookmarkDialog from '@/components/AddBookmarkDialog';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import Toast from '@/components/Toast';
 import DomainModal from '@/components/DomainModal';
@@ -25,6 +26,7 @@ function App() {
     activeView, setActiveView,
     settingsPanelOpen, openSettings, closeSettings,
     kbdModalOpen, openKbdModal, closeKbdModal,
+    addBookmarkOpen, openAddBookmark, closeAddBookmark,
     searchQuery, setSearchQuery,
     confirmState, resolveConfirm,
     domainModal, closeDomainModal,
@@ -41,6 +43,7 @@ function App() {
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       if (confirmState.open) { resolveConfirm(false); return; }
+      if (addBookmarkOpen) { closeAddBookmark(); return; }
       if (kbdModalOpen) { closeKbdModal(); return; }
       if (settingsPanelOpen) { closeSettings(); return; }
       if (googleAppsOpen) { setGoogleAppsOpen(false); return; }
@@ -87,10 +90,12 @@ function App() {
       case 'r': e.preventDefault(); setActiveView(activeView === 'recent' ? 'bookmarks' : 'recent'); break;
       case 'a': e.preventDefault(); setActiveView(activeView === 'ai' ? 'bookmarks' : 'ai'); break;
       case 'l': e.preventDefault(); setActiveView(activeView === 'reading' ? 'bookmarks' : 'reading'); break;
+      case 'n': e.preventDefault(); openAddBookmark(); break;
     }
-  }, [activeView, confirmState, kbdModalOpen, settingsPanelOpen, googleAppsOpen, domainModal,
+  }, [activeView, confirmState, kbdModalOpen, addBookmarkOpen, settingsPanelOpen, googleAppsOpen, domainModal,
       settings.theme, settings.displayMode, saveSetting,
-      resolveConfirm, closeKbdModal, openKbdModal, closeSettings, openSettings,
+      resolveConfirm, closeKbdModal, openKbdModal, closeAddBookmark, openAddBookmark,
+      closeSettings, openSettings,
       setActiveView, setSearchQuery, setGoogleAppsOpen, closeDomainModal]);
 
   useEffect(() => {
@@ -150,6 +155,7 @@ function App() {
 
       <SettingsPanel />
       <KeyboardShortcuts />
+      <AddBookmarkDialog />
       <ConfirmDialog />
       <Toast />
       {domainModal && <DomainModal />}

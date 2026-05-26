@@ -12,6 +12,9 @@ interface UIContextValue {
   kbdModalOpen: boolean;
   openKbdModal: () => void;
   closeKbdModal: () => void;
+  addBookmarkOpen: boolean;
+  openAddBookmark: () => void;
+  closeAddBookmark: () => void;
   searchQuery: string;
   setSearchQuery: (q: string) => void;
   confirm: (message: string, detail?: string) => Promise<boolean>;
@@ -31,6 +34,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false);
   const [activeSettingsTab, setActiveSettingsTab] = useState('general');
   const [kbdModalOpen, setKbdModalOpen] = useState(false);
+  const [addBookmarkOpen, setAddBookmarkOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [confirmState, setConfirmState] = useState<(ConfirmState & { open: true }) | { open: false }>({ open: false });
   const [toasts, setToasts] = useState<ToastState[]>([]);
@@ -50,6 +54,8 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
 
   const openKbdModal = useCallback(() => setKbdModalOpen(true), []);
   const closeKbdModal = useCallback(() => setKbdModalOpen(false), []);
+  const openAddBookmark = useCallback(() => setAddBookmarkOpen(true), []);
+  const closeAddBookmark = useCallback(() => setAddBookmarkOpen(false), []);
 
   const confirm = useCallback((message: string, detail = ''): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -86,6 +92,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
       settingsPanelOpen, openSettings, closeSettings,
       activeSettingsTab, setActiveSettingsTab,
       kbdModalOpen, openKbdModal, closeKbdModal,
+      addBookmarkOpen, openAddBookmark, closeAddBookmark,
       searchQuery, setSearchQuery,
       confirm, confirmState, resolveConfirm,
       toasts, showToast,

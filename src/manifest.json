@@ -24,6 +24,8 @@
   },
   "permissions": [
     "bookmarks",
+    "contextMenus",
+    "scripting",
     "storage",
     "favicon",
     "tabs"
