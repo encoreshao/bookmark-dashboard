@@ -3009,6 +3009,11 @@ body.nav-compact .nav-add-btn[data-tooltip]:hover::after {
   min-width: 14px;
   background: rgba(255, 255, 255, 0.02);
   border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  padding: 0;
+  appearance: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3016,6 +3021,7 @@ body.nav-compact .nav-add-btn[data-tooltip]:hover::after {
   flex-shrink: 0;
   z-index: 1;
   transition: background-color 0.15s;
+  pointer-events: auto;
 }
 
 .folder-sidebar-trigger:hover {

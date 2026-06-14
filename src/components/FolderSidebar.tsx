@@ -99,15 +99,17 @@ function FolderSidebar() {
       id="folder-sidebar"
     >
       {!isPinned && (
-        <div
+        <button
+          type="button"
           className="folder-sidebar-trigger"
           onClick={() => setFloatOpen(o => !o)}
-          aria-label={floatOpen ? 'Close folders' : 'Open folders'}
+          aria-label={floatOpen ? t('close-folders') : t('open-folders')}
+          aria-expanded={floatOpen}
         >
-          <div className="folder-sidebar-pull-tab">
+          <div className="folder-sidebar-pull-tab" aria-hidden="true">
             {floatOpen ? '‹' : '›'}
           </div>
-        </div>
+        </button>
       )}
 
       <div className="folder-sidebar-panel">
