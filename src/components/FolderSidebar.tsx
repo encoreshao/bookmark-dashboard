@@ -102,18 +102,11 @@ function FolderSidebar() {
         <div
           className="folder-sidebar-trigger"
           onClick={() => setFloatOpen(o => !o)}
+          aria-label={floatOpen ? 'Close folders' : 'Open folders'}
         >
-          {floatOpen ? (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round" className="trigger-icon-close">
-              <path d="m15 18-6-6 6-6"/>
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round" className="trigger-icon-open">
-              <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
-            </svg>
-          )}
+          <div className="folder-sidebar-pull-tab">
+            {floatOpen ? '‹' : '›'}
+          </div>
         </div>
       )}
 
@@ -126,13 +119,22 @@ function FolderSidebar() {
           <span>{t('folders-header')}</span>
         </div>
         <div className="folder-sidebar-search">
-          <input
-            type="text"
-            className="folder-sidebar-search-input"
-            placeholder={t('search-folders')}
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
+          <div className="folder-sidebar-search-inner">
+            <svg className="folder-sidebar-search-icon"
+                 aria-hidden="true"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                 width="12" height="12">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input
+              type="text"
+              className="folder-sidebar-search-input"
+              placeholder={t('search-folders')}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
         </div>
         <div className="folder-sidebar-list">
           {filtered.length === 0 && (
