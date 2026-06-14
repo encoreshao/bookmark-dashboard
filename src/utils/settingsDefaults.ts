@@ -3,7 +3,7 @@ import { DEFAULT_VISIBLE_APP_IDS } from '@/utils/googleApps';
 
 export const DEFAULTS: AppSettings = {
   theme: 'light',
-  displayMode: 'list',
+  displayMode: 'grid',
   userName: 'Guest',
   backgroundImage: '',
   pinnedIds: [],
