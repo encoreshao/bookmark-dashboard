@@ -51,6 +51,10 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
+.theme-light .search-input:focus {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
 .theme-light .bookmark-folder {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
@@ -111,13 +115,13 @@
 }
 
 .theme-light .search-kbd-hint {
-  background: #F8FAFC;
-  border-color: #E2E8F0;
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.12);
   color: #94A3B8;
 }
 
 .theme-light .search-clear {
-  background: #E2E8F0;
+  background: rgba(0, 0, 0, 0.08);
   color: #64748B;
 }
 
@@ -597,15 +601,19 @@ body.has-bg-image .search-section {
   left: 14px;
   width: 18px;
   height: 18px;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.25);
   pointer-events: none;
   transition: color 0.15s ease;
+}
+
+.theme-light .search-icon {
+  color: rgba(0, 0, 0, 0.35);
 }
 
 .search-input {
   width: 100%;
   height: 44px;
-  padding: 0 120px 0 42px;
+  padding: 0 130px 0 42px;
   font-family: var(--font-body);
   font-size: 0.875rem;
   color: var(--text-primary);
@@ -621,8 +629,8 @@ body.has-bg-image .search-section {
 }
 
 .search-input:focus {
-  border-color: var(--search-focus);
-  box-shadow: 0 0 0 3px var(--accent-light), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .search-input:focus ~ .search-icon {
@@ -630,12 +638,16 @@ body.has-bg-image .search-section {
 }
 
 .search-count {
-  font-size: 0.72rem;
+  font-size: 11px;
   font-weight: 500;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.3);
   pointer-events: none;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.theme-light .search-count {
+  color: rgba(0, 0, 0, 0.4);
 }
 
 .search-right-group {
@@ -649,8 +661,8 @@ body.has-bg-image .search-section {
 .search-kbd-hint {
   font-size: 0.7rem;
   font-family: monospace;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 5px;
   padding: 2px 6px;
   color: var(--text-muted);
@@ -665,7 +677,7 @@ body.has-bg-image .search-section {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--bg-tertiary);
+  background: rgba(255, 255, 255, 0.1);
   color: var(--text-muted);
   cursor: pointer;
   flex-shrink: 0;
