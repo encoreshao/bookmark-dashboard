@@ -120,6 +120,18 @@
   color: #94A3B8;
 }
 
+.theme-light .kbd-footer-link {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.theme-light .kbd-footer-link:hover {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.theme-light .kbd-footer-sep {
+  background: rgba(0, 0, 0, 0.12);
+}
+
 .theme-light .app-footer-author,
 .theme-light .app-footer-link {
   color: rgba(0, 0, 0, 0.35);
@@ -537,17 +549,18 @@ button {
   color: var(--accent);
 }
 
-/* Universal tooltip — shown on any [data-tooltip] element in the topbar */
-.topbar [data-tooltip] {
+/* Universal tooltip — topbar (below) and modal (above) */
+.topbar [data-tooltip],
+.kbd-modal [data-tooltip] {
   position: relative;
 }
 
-.topbar [data-tooltip]::after {
+.topbar [data-tooltip]::after,
+.kbd-modal [data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
-  top: calc(100% + 8px);
   left: 50%;
-  transform: translateX(-50%) translateY(2px);
+  transform: translateX(-50%) translateY(-2px);
   background: var(--bg-tertiary);
   color: var(--text-primary);
   border: 1px solid var(--border);
@@ -560,11 +573,30 @@ button {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.08s ease, transform 0.08s ease, visibility 0.08s;
-  z-index: 500;
+  z-index: 600;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
 }
 
+/* Topbar: tooltip appears below the button */
+.topbar [data-tooltip]::after {
+  top: calc(100% + 8px);
+  transform: translateX(-50%) translateY(2px);
+}
+
 .topbar [data-tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Modal: tooltip appears above the element */
+.kbd-modal [data-tooltip]::after {
+  bottom: calc(100% + 8px);
+  top: auto;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.kbd-modal [data-tooltip]:hover::after {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
@@ -2357,6 +2389,37 @@ body.has-bg-image .bookmark-remove {
 }
 
 .kbd-configure-link:hover { text-decoration: underline; }
+
+.kbd-modal-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 14px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+.kbd-footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  transition: color 0.15s;
+  position: relative;
+}
+
+.kbd-footer-link:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.kbd-footer-sep {
+  width: 1px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
 
 /* ── Key badge ── */
 kbd {
