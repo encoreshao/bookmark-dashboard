@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/encoreshao/bookmark-dashboard/master/src/icons/icon128.png" width="80" alt="Bookmark Dashboard" />
+  <img src="src/icons/icon128.png" width="80" alt="Bookmark Dashboard" />
 </p>
 
 <h1 align="center">Bookmark Dashboard — AI Powered</h1>
@@ -171,7 +171,7 @@ Configure the AI-tag-current-page extension shortcut at `chrome://extensions/sho
 ### Install from Chrome Web Store
 
 <a href="https://chromewebstore.google.com/detail/bookmark-dashboard/imknfkidkilkomeomcidnnjojiilaofb">
-  <img src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/iNEddTyWiMfLSwFD6qGq.png" width="200" alt="Available on Chrome Web Store" />
+  <img src="https://raw.githubusercontent.com/encoreshao/bookmark-dashboard/master/src/icons/icon128.png" width="200" alt="Available on Chrome Web Store" />
 </a>
 
 ### Install from Source (Developer Mode)
