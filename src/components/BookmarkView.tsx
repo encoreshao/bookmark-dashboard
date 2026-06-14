@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useSettings } from '@/context/SettingsContext';
 import { useBookmarks } from '@/context/BookmarkContext';
 import { useUI } from '@/context/UIContext';
@@ -131,6 +131,17 @@ function BookmarkView({ searchQuery }: Props) {
     })).filter(f => f.items.length > 0);
     return filterFolders(tagFiltered, searchQuery);
   }, [folders, searchQuery, activeTags, tagMap]);
+
+  useEffect(() => {
+    const el = document.getElementById('search-count');
+    if (!el) return;
+    if (!searchQuery) {
+      el.textContent = '';
+      return;
+    }
+    const count = filtered.reduce((sum, f) => sum + f.items.length, 0);
+    el.textContent = count > 0 ? `${count} result${count === 1 ? '' : 's'}` : '';
+  }, [filtered, searchQuery]);
 
   if (isLoading) return <BookmarkAreaSkeleton displayMode={settings.displayMode} />;
 
