@@ -22,7 +22,14 @@ function Footer() {
           </svg>
           {extName} <span className="app-footer-version">{version}</span>
         </span>
-        <span className="app-footer-author">Made by Encore Shao</span>
+        <a
+          className="app-footer-author"
+          href="https://github.com/encoreshao"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Made by Encore Shao
+        </a>
         <a
           className="app-footer-link"
           href="https://bookmark.linktr.cn"

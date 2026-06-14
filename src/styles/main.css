@@ -120,10 +120,12 @@
   color: #94A3B8;
 }
 
+.theme-light .app-footer-author,
 .theme-light .app-footer-link {
   color: rgba(0, 0, 0, 0.35);
 }
 
+.theme-light .app-footer-author:hover,
 .theme-light .app-footer-link:hover {
   color: rgba(0, 0, 0, 0.6);
 }
@@ -4748,7 +4750,13 @@ body.has-bg-image .dv-stat-value {
 .app-footer-author {
   font-size: 10px;
   font-weight: 400;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.app-footer-author:hover {
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .app-footer-dot {
@@ -4763,6 +4771,7 @@ body.has-bg-image .dv-stat-value {
   color: rgba(255, 255, 255, 0.35);
   text-decoration: none;
   font-weight: 400;
+  margin-left: 12px;
   transition: color 0.15s;
 }
 
