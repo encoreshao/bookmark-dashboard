@@ -47,7 +47,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
 
   return (
     <header className="topbar">
-      <div className="topbar-left" data-tooltip={isPinned ? extName : undefined}>
+      <div className="topbar-brand" data-tooltip={isPinned ? extName : undefined}>
         <div className="topbar-logo">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
@@ -59,20 +59,6 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
       </div>
 
       <nav className="topbar-nav">
-        <button
-          className="nav-add-btn"
-          onClick={openAddBookmark}
-          data-tooltip={compact ? 'Add Bookmark (N)' : undefined}
-          title={compact ? undefined : 'Add Bookmark (N)'}
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-               strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
-            <line x1="12" y1="5" x2="12" y2="19"/>
-            <line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          {!compact && <span>Add</span>}
-        </button>
-
         <button
           className={`nav-link${activeView === 'recent' ? ' active' : ''}`}
           onClick={() => setActiveView(activeView === 'recent' ? 'bookmarks' : 'recent')}
@@ -110,6 +96,19 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
             <path d="m12 3-1.9 5.8a2 2 0 0 1-1.287 1.288L3 12l5.8 1.9a2 2 0 0 1 1.288 1.287L12 21l1.9-5.8a2 2 0 0 1 1.287-1.288L21 12l-5.8-1.9a2 2 0 0 1-1.288-1.287Z"/>
           </svg>
           {!compact && <span>{t('nav-ai')}</span>}
+        </button>
+
+        <button
+          className={`nav-link${activeView === 'reading' ? ' active' : ''}`}
+          onClick={() => setActiveView(activeView === 'reading' ? 'bookmarks' : 'reading')}
+          data-tooltip={compact ? 'Reading List (L)' : undefined}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+               strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+          {!compact && <span>Reading</span>}
         </button>
 
         <div className="nav-google-apps" ref={googleAppsMenuRef} style={{ position: 'relative' }}>
@@ -175,48 +174,9 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
             })()}
           </div>
         </div>
+      </nav>
 
-        <button
-          className={`nav-link${activeView === 'reading' ? ' active' : ''}`}
-          onClick={() => setActiveView(activeView === 'reading' ? 'bookmarks' : 'reading')}
-          data-tooltip={compact ? 'Reading List (L)' : undefined}
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-               strokeLinecap="round" strokeLinejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-          </svg>
-          {!compact && <span>Reading</span>}
-        </button>
-
-        <button
-          className="nav-link"
-          onClick={toggleTheme}
-          data-tooltip={compact ? `Theme (T)` : undefined}
-        >
-          {settings.theme === 'dark' && (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-            </svg>
-          )}
-          {settings.theme === 'light' && (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="4"/>
-              <path d="M12 2v2M12 20v2m-8.66-14 1.41 1.41M19.07 4.93l1.41 1.41M2 12h2M20 12h2m-14.07 5.07 1.41 1.41M17.66 17.66l1.41 1.41"/>
-            </svg>
-          )}
-          {settings.theme === 'system' && (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round">
-              <rect width="20" height="14" x="2" y="3" rx="2"/>
-              <path d="M8 21h8"/><path d="M12 17v4"/>
-            </svg>
-          )}
-          {!compact && <span>{t('nav-theme')}</span>}
-        </button>
-
+      <div className="topbar-utils">
         <div className="view-mode-toggle">
           <button
             className={`view-mode-btn${settings.displayMode === 'list' ? ' active' : ''}`}
@@ -262,31 +222,70 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
         </div>
 
         <button
-          className="nav-link"
+          className="nav-link util-btn"
+          onClick={toggleTheme}
+          title={`Theme: ${settings.theme} (T)`}
+        >
+          {settings.theme === 'dark' && (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                 strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          )}
+          {settings.theme === 'light' && (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                 strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2m-8.66-14 1.41 1.41M19.07 4.93l1.41 1.41M2 12h2M20 12h2m-14.07 5.07 1.41 1.41M17.66 17.66l1.41 1.41"/>
+            </svg>
+          )}
+          {settings.theme === 'system' && (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                 strokeLinecap="round" strokeLinejoin="round">
+              <rect width="20" height="14" x="2" y="3" rx="2"/>
+              <path d="M8 21h8"/><path d="M12 17v4"/>
+            </svg>
+          )}
+        </button>
+
+        <button
+          className="nav-link util-btn"
           onClick={openKbdModal}
-          data-tooltip={compact ? `Shortcuts (?)` : undefined}
+          title="Shortcuts (?)"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="4" width="20" height="16" rx="2"/>
             <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/>
           </svg>
-          {!compact && <span>{t('nav-shortcuts')}</span>}
         </button>
 
         <button
-          className="nav-link"
+          className="nav-link util-btn"
           onClick={() => openSettings()}
-          data-tooltip={compact ? `Settings (S)` : undefined}
+          title="Settings (S)"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                strokeLinecap="round" strokeLinejoin="round">
             <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
             <circle cx="12" cy="12" r="3"/>
           </svg>
-          {!compact && <span>{t('nav-settings')}</span>}
         </button>
-      </nav>
+
+        <button
+          className="nav-add-btn"
+          onClick={openAddBookmark}
+          title="Add Bookmark (N)"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+               strokeLinecap="round" strokeLinejoin="round" width="14" height="14"
+               aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Add</span>
+        </button>
+      </div>
     </header>
   );
 }
