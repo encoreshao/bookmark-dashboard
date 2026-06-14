@@ -48,6 +48,10 @@
   color: #1D4ED8;
 }
 
+.theme-light .util-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
 .theme-light .search-input {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -221,11 +225,13 @@ body.has-bg-image.theme-light .topbar {
 }
 
 body.has-bg-image.theme-light .topbar-title,
-body.has-bg-image.theme-light .nav-link {
+body.has-bg-image.theme-light .nav-link,
+body.has-bg-image.theme-light .util-btn {
   color: rgba(255, 255, 255, 0.85);
 }
 
-body.has-bg-image.theme-light .nav-link:hover {
+body.has-bg-image.theme-light .nav-link:hover,
+body.has-bg-image.theme-light .util-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
 }

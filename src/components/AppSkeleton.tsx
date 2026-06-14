@@ -57,7 +57,7 @@ export default function AppSkeleton() {
   return (
     <>
       <header className="topbar">
-        <div className="topbar-left">
+        <div className="topbar-brand">
           <div className="topbar-logo">
             <div className="skel" style={{ width: 22, height: 22, borderRadius: 4 }} />
           </div>

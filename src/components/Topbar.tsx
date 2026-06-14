@@ -50,7 +50,8 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
       <div className="topbar-brand" data-tooltip={isPinned ? extName : undefined}>
         <div className="topbar-logo">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-               strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+               strokeLinecap="round" strokeLinejoin="round" width="22" height="22"
+               aria-hidden="true">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
           </svg>
         </div>
@@ -65,7 +66,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           data-tooltip={compact ? `${t('nav-recent')} (R)` : undefined}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-               strokeLinecap="round" strokeLinejoin="round">
+               strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
           </svg>
           {!compact && <span>{t('nav-recent')}</span>}
@@ -77,7 +78,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           data-tooltip={compact ? `${t('nav-domains')} (D)` : undefined}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-               strokeLinecap="round" strokeLinejoin="round">
+               strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <rect x="2" y="2" width="8" height="8" rx="2"/>
             <rect x="14" y="2" width="8" height="8" rx="2"/>
             <rect x="2" y="14" width="8" height="8" rx="2"/>
@@ -92,7 +93,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           data-tooltip={compact ? `${t('nav-ai')} (A)` : undefined}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-               strokeLinecap="round" strokeLinejoin="round">
+               strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 3-1.9 5.8a2 2 0 0 1-1.287 1.288L3 12l5.8 1.9a2 2 0 0 1 1.288 1.287L12 21l1.9-5.8a2 2 0 0 1 1.287-1.288L21 12l-5.8-1.9a2 2 0 0 1-1.288-1.287Z"/>
           </svg>
           {!compact && <span>{t('nav-ai')}</span>}
@@ -104,7 +105,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           data-tooltip={compact ? 'Reading List (L)' : undefined}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-               strokeLinecap="round" strokeLinejoin="round">
+               strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
           </svg>
@@ -117,8 +118,11 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
             id="btn-google-apps"
             onClick={(e) => { e.stopPropagation(); setGoogleAppsOpen(!googleAppsOpen); }}
             data-tooltip={compact ? `Google Apps (G)` : undefined}
+            aria-haspopup="menu"
+            aria-expanded={googleAppsOpen}
           >
-            <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" width="18" height="18">
+            <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" width="18" height="18"
+                 aria-hidden="true">
               <rect x="3" y="3" width="4" height="4" rx="0.6"/>
               <rect x="10" y="3" width="4" height="4" rx="0.6"/>
               <rect x="17" y="3" width="4" height="4" rx="0.6"/>
@@ -154,7 +158,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
                     <>
                       <div className="gam-divider" />
                       <p className="gam-title gam-title-ai">
-                        <svg viewBox="0 0 24 24" fill="none" width="14" height="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg viewBox="0 0 24 24" fill="none" width="14" height="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <path d="m12 3-1.9 5.8a2 2 0 0 1-1.287 1.288L3 12l5.8 1.9a2 2 0 0 1 1.288 1.287L12 21l1.9-5.8a2 2 0 0 1 1.287-1.288L21 12l-5.8-1.9a2 2 0 0 1-1.288-1.287Z"/>
                         </svg>
                         AI
@@ -184,7 +188,8 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
             title="List view"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+                 strokeLinecap="round" strokeLinejoin="round" width="15" height="15"
+                 aria-hidden="true">
               <line x1="8" x2="21" y1="6" y2="6"/>
               <line x1="8" x2="21" y1="12" y2="12"/>
               <line x1="8" x2="21" y1="18" y2="18"/>
@@ -199,7 +204,8 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
             title="Grid view"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+                 strokeLinecap="round" strokeLinejoin="round" width="15" height="15"
+                 aria-hidden="true">
               <rect width="7" height="7" x="3" y="3" rx="1"/>
               <rect width="7" height="7" x="14" y="3" rx="1"/>
               <rect width="7" height="7" x="14" y="14" rx="1"/>
@@ -212,7 +218,8 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
             title="Compact view"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+                 strokeLinecap="round" strokeLinejoin="round" width="15" height="15"
+                 aria-hidden="true">
               <line x1="4" x2="20" y1="6" y2="6"/>
               <line x1="4" x2="20" y1="10" y2="10"/>
               <line x1="4" x2="20" y1="14" y2="14"/>
@@ -225,23 +232,24 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           className="util-btn"
           onClick={toggleTheme}
           title={`Theme: ${settings.theme} (T)`}
+          aria-label={`Theme: ${settings.theme}`}
         >
           {settings.theme === 'dark' && (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round">
+                 strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
             </svg>
           )}
           {settings.theme === 'light' && (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round">
+                 strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="4"/>
               <path d="M12 2v2M12 20v2m-8.66-14 1.41 1.41M19.07 4.93l1.41 1.41M2 12h2M20 12h2m-14.07 5.07 1.41 1.41M17.66 17.66l1.41 1.41"/>
             </svg>
           )}
           {settings.theme === 'system' && (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round">
+                 strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <rect width="20" height="14" x="2" y="3" rx="2"/>
               <path d="M8 21h8"/><path d="M12 17v4"/>
             </svg>
@@ -252,9 +260,10 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           className="util-btn"
           onClick={openKbdModal}
           title="Shortcuts (?)"
+          aria-label="Keyboard shortcuts"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-               strokeLinecap="round" strokeLinejoin="round">
+               strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <rect x="2" y="4" width="20" height="16" rx="2"/>
             <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/>
           </svg>
@@ -264,9 +273,10 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           className="util-btn"
           onClick={() => openSettings()}
           title="Settings (S)"
+          aria-label="Settings"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-               strokeLinecap="round" strokeLinejoin="round">
+               strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
             <circle cx="12" cy="12" r="3"/>
           </svg>
