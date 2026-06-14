@@ -36,6 +36,7 @@
   --scrollbar-thumb: #94A3B8;
   --scrollbar-track: transparent;
   --glass-border: rgba(0, 0, 0, 0.08);
+  --util-btn-size: 30px;
 }
 
 .theme-light .topbar {
@@ -425,11 +426,17 @@ button {
   height: var(--util-btn-size, 30px);
   padding: 0;
   justify-content: center;
+  border-radius: 7px;
 }
 
 .util-btn svg {
   width: 16px;
   height: 16px;
+}
+
+.util-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 7px;
 }
 
 .nav-link {

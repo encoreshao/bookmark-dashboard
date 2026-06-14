@@ -222,7 +222,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
         </div>
 
         <button
-          className="nav-link util-btn"
+          className="util-btn"
           onClick={toggleTheme}
           title={`Theme: ${settings.theme} (T)`}
         >
@@ -249,7 +249,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
         </button>
 
         <button
-          className="nav-link util-btn"
+          className="util-btn"
           onClick={openKbdModal}
           title="Shortcuts (?)"
         >
@@ -261,7 +261,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
         </button>
 
         <button
-          className="nav-link util-btn"
+          className="util-btn"
           onClick={() => openSettings()}
           title="Settings (S)"
         >
