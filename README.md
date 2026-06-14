@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/icons/icon128.png" width="80" alt="Bookmark Dashboard" />
+  <img src="https://raw.githubusercontent.com/encoreshao/bookmark-dashboard/master/src/icons/icon128.png" width="80" alt="Bookmark Dashboard" />
 </p>
 
 <h1 align="center">Bookmark Dashboard — AI Powered</h1>
