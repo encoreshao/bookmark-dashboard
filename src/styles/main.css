@@ -35,6 +35,7 @@
   --folder-text: #1E293B;
   --scrollbar-thumb: #94A3B8;
   --scrollbar-track: transparent;
+  --glass-border: rgba(0, 0, 0, 0.08);
 }
 
 .theme-light .topbar {
@@ -106,6 +107,7 @@
 
 .theme-light .app-footer-link:hover {
   background: rgba(37, 99, 235, 0.14);
+  border-color: rgba(37, 99, 235, 0.35);
 }
 
 .theme-dark {
@@ -4600,6 +4602,7 @@ body.has-bg-image .dv-stat-value {
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-secondary);
+  margin-right: auto;
 }
 
 .app-footer-icon {
