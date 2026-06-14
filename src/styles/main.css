@@ -120,19 +120,12 @@
   color: #94A3B8;
 }
 
-.theme-light .app-footer-dot {
-  background: #CBD5E1;
-}
-
 .theme-light .app-footer-link {
-  color: #2563EB;
-  background: rgba(37, 99, 235, 0.08);
-  border-color: rgba(37, 99, 235, 0.2);
+  color: rgba(0, 0, 0, 0.35);
 }
 
 .theme-light .app-footer-link:hover {
-  background: rgba(37, 99, 235, 0.14);
-  border-color: rgba(37, 99, 235, 0.35);
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .theme-light .search-kbd-hint {
@@ -4767,19 +4760,14 @@ body.has-bg-image .dv-stat-value {
 
 .app-footer-link {
   font-size: 10px;
-  color: #60a5fa;
-  background: rgba(59, 130, 246, 0.1);
-  border-radius: 5px;
-  padding: 3px 8px;
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: rgba(255, 255, 255, 0.35);
   text-decoration: none;
-  font-weight: 500;
-  transition: background-color 0.15s, border-color 0.15s;
+  font-weight: 400;
+  transition: color 0.15s;
 }
 
 .app-footer-link:hover {
-  background: rgba(59, 130, 246, 0.18);
-  border-color: rgba(59, 130, 246, 0.35);
+  color: rgba(255, 255, 255, 0.65);
 }
 
 body.sidebar-mode-pinned .app-footer {
