@@ -537,30 +537,36 @@ button {
   color: var(--accent);
 }
 
-/* Custom tooltip shown in compact (icon-only) mode */
-body.nav-compact .nav-link[data-tooltip]::after {
+/* Universal tooltip — shown on any [data-tooltip] element in the topbar */
+.topbar [data-tooltip] {
+  position: relative;
+}
+
+.topbar [data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
   top: calc(100% + 8px);
   left: 50%;
-  transform: translateX(-50%) translateY(4px);
+  transform: translateX(-50%) translateY(2px);
   background: var(--bg-tertiary);
   color: var(--text-primary);
   border: 1px solid var(--border);
   border-radius: 7px;
-  padding: 5px 11px;
-  font-size: 0.72rem;
+  padding: 5px 10px;
+  font-size: 0.7rem;
   font-weight: 500;
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  visibility: hidden;
+  transition: opacity 0.08s ease, transform 0.08s ease, visibility 0.08s;
   z-index: 500;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
 }
 
-body.nav-compact .nav-link[data-tooltip]:hover::after {
+.topbar [data-tooltip]:hover::after {
   opacity: 1;
+  visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
 
@@ -2534,32 +2540,6 @@ kbd {
 
 .nav-add-btn svg { flex-shrink: 0; }
 
-body.nav-compact .nav-add-btn[data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  padding: 5px 11px;
-  font-size: 0.72rem;
-  font-weight: 500;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
-  z-index: 200;
-}
-
-body.nav-compact .nav-add-btn[data-tooltip]:hover::after {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0);
-}
 
 /* ---------- Add Bookmark Dialog ---------- */
 .add-bm-overlay {

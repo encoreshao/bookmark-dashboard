@@ -185,7 +185,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           <button
             className={`view-mode-btn${settings.displayMode === 'list' ? ' active' : ''}`}
             onClick={() => saveSetting('displayMode', 'list')}
-            title="List view"
+            data-tooltip="List view"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                  strokeLinecap="round" strokeLinejoin="round" width="15" height="15"
@@ -201,7 +201,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           <button
             className={`view-mode-btn${settings.displayMode === 'grid' ? ' active' : ''}`}
             onClick={() => saveSetting('displayMode', 'grid')}
-            title="Grid view"
+            data-tooltip="Grid view"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                  strokeLinecap="round" strokeLinejoin="round" width="15" height="15"
@@ -215,7 +215,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
           <button
             className={`view-mode-btn${settings.displayMode === 'compact' ? ' active' : ''}`}
             onClick={() => saveSetting('displayMode', 'compact')}
-            title="Compact view"
+            data-tooltip="Compact view"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                  strokeLinecap="round" strokeLinejoin="round" width="15" height="15"
@@ -231,8 +231,8 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
         <button
           className="util-btn"
           onClick={toggleTheme}
-          title={`Theme: ${settings.theme} (T)`}
           aria-label={`Theme: ${settings.theme}`}
+          data-tooltip={`Theme: ${settings.theme} (T)`}
         >
           {settings.theme === 'dark' && (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -259,8 +259,8 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
         <button
           className="util-btn"
           onClick={openKbdModal}
-          title="Shortcuts (?)"
           aria-label="Keyboard shortcuts"
+          data-tooltip="Shortcuts (?)"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -272,8 +272,8 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
         <button
           className="util-btn"
           onClick={() => openSettings()}
-          title="Settings (S)"
           aria-label="Settings"
+          data-tooltip="Settings (S)"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -285,7 +285,7 @@ function Topbar({ googleAppsOpen, setGoogleAppsOpen, googleAppsMenuRef }: Topbar
         <button
           className="nav-add-btn"
           onClick={openAddBookmark}
-          title="Add Bookmark (N)"
+          data-tooltip="Add bookmark (N)"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
                strokeLinecap="round" strokeLinejoin="round" width="14" height="14"
