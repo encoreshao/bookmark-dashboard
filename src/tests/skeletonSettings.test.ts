@@ -8,7 +8,7 @@ describe('skeletonSettings', () => {
     expect(s.theme).toBe('light');
     expect(s.folderSidebarOpen).toBe(true);
     expect(s.folderSidebarMode).toBe('pinned');
-    expect(s.displayMode).toBe('list');
+    expect(s.displayMode).toBe('grid');
     expect(s.pinnedDisplay).toBe('top');
     expect(s.navDisplay).toBe('compact');
   });
@@ -36,7 +36,7 @@ describe('skeletonSettings', () => {
   it('leaves unwritten keys at their defaults', () => {
     writeSkeletonSettings({ theme: 'light' });
     const s = readSkeletonSettings();
-    expect(s.displayMode).toBe('list');
+    expect(s.displayMode).toBe('grid');
     expect(s.folderSidebarOpen).toBe(true);
   });
 
