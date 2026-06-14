@@ -7,7 +7,7 @@ const TRANSLATIONS: Translations = {
   en: {
     'good-night': 'Good night', 'good-morning': 'Good morning',
     'good-afternoon': 'Good afternoon', 'good-evening': 'Good evening',
-    'search-placeholder': 'Search bookmarks...',
+    'search-placeholder': 'Search bookmarks...', 'clear-search': 'Clear search',
     'nav-recent': 'Recent', 'nav-domains': 'Domains', 'nav-apps': 'Apps',
     'nav-theme': 'Theme', 'nav-view': 'View', 'nav-shortcuts': 'Shortcuts', 'nav-settings': 'Settings',
     'folders-header': 'Folders', 'search-folders': 'Search folders...',
@@ -56,7 +56,7 @@ const TRANSLATIONS: Translations = {
   },
   zh: {
     'good-night': '晚安', 'good-morning': '早上好', 'good-afternoon': '下午好', 'good-evening': '晚上好',
-    'search-placeholder': '搜索书签...', 'nav-recent': '最近', 'nav-domains': '域名',
+    'search-placeholder': '搜索书签...', 'clear-search': '清空搜索', 'nav-recent': '最近', 'nav-domains': '域名',
     'nav-apps': '应用', 'nav-theme': '主题', 'nav-view': '视图', 'nav-shortcuts': '快捷键', 'nav-settings': '设置',
     'folders-header': '文件夹', 'search-folders': '搜索文件夹...', 'pinned-header': '已固定',
     'settings-title': '设置', 'tab-general': '通用', 'tab-personalization': '个性化', 'tab-ai-apps': 'AI 与应用',
@@ -103,7 +103,7 @@ const TRANSLATIONS: Translations = {
   ja: {
     'good-night': 'おやすみなさい', 'good-morning': 'おはようございます',
     'good-afternoon': 'こんにちは', 'good-evening': 'こんばんは',
-    'search-placeholder': 'ブックマークを検索...', 'nav-recent': '最近',
+    'search-placeholder': 'ブックマークを検索...', 'clear-search': '検索をクリア', 'nav-recent': '最近',
     'nav-domains': 'ドメイン', 'nav-apps': 'アプリ', 'nav-theme': 'テーマ',
     'nav-view': '表示', 'nav-shortcuts': 'ショートカット', 'nav-settings': '設定',
     'folders-header': 'フォルダー', 'search-folders': 'フォルダーを検索...', 'pinned-header': 'ピン留め',

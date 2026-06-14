@@ -25,6 +25,7 @@ function SearchSection({ value, onChange }: Props) {
           className="search-icon"
           viewBox="0 0 24 24" fill="none" stroke="currentColor"
           strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          aria-hidden="true"
         >
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
         </svg>
@@ -50,12 +51,13 @@ function SearchSection({ value, onChange }: Props) {
             <button
               className="search-clear"
               onClick={handleClear}
-              aria-label="Clear search"
+              aria-label={t('clear-search')}
               tabIndex={-1}
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                    strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-                   width="10" height="10">
+                   width="10" height="10"
+                   aria-hidden="true">
                 <path d="M18 6 6 18M6 6l12 12"/>
               </svg>
             </button>
