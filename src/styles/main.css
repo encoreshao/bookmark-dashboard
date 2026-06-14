@@ -109,6 +109,14 @@
   --folder-text: #93C5FD;
   --scrollbar-thumb: #334155;
   --scrollbar-track: transparent;
+  --glass-bg: rgba(15, 26, 46, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-surface: rgba(255, 255, 255, 0.04);
+  --gradient-accent: linear-gradient(135deg, #3b82f6, #6366f1);
+  --nav-active-bg: rgba(59, 130, 246, 0.15);
+  --nav-active-border: rgba(59, 130, 246, 0.2);
+  --nav-active-text: #93c5fd;
+  --util-btn-size: 30px;
 }
 
 /* ---------- Reset & Base ---------- */
