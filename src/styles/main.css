@@ -633,7 +633,7 @@ body.has-bg-image .search-section {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.search-input:focus ~ .search-icon {
+.search-wrapper.is-focused .search-icon {
   color: var(--accent);
 }
 
