@@ -43,6 +43,22 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
+.theme-light .topbar-brand {
+  border-right-color: #E2E8F0;
+}
+
+.theme-light .topbar-utils {
+  border-left-color: #E2E8F0;
+}
+
+.theme-light .nav-add-btn {
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.theme-light .nav-add-btn:hover {
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
 .theme-light .nav-link:hover {
   background-color: #DBEAFE;
   color: #1D4ED8;
@@ -133,6 +149,24 @@
 .theme-light .search-clear:hover {
   background: #DBEAFE;
   color: #2563EB;
+}
+
+.theme-light .folder-sidebar-trigger {
+  background: rgba(0, 0, 0, 0.01);
+  border-right-color: #E2E8F0;
+}
+
+.theme-light .folder-sidebar-trigger:hover {
+  background: #F8FAFC;
+}
+
+.theme-light .folder-sidebar-pull-tab {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+}
+
+.theme-light .folder-sidebar-trigger:hover .folder-sidebar-pull-tab {
+  background: #F1F5F9;
 }
 
 .theme-dark {
