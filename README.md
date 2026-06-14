@@ -29,6 +29,7 @@ Bookmark Dashboard turns that wasted moment into a powerful productivity hub:
 - **AI that acts, not just advises** — one-click reorganization, duplicate removal, and dead link cleanup
 - **Tags, not just folders** — layer a flexible tag system on top of Chrome's folder structure
 - **Zero lock-in** — works directly with Chrome's bookmark API; uninstall and nothing changes
+- **Privacy first** — all data stays local; AI API keys are stored in your browser, never on a server
 
 ---
 
@@ -38,13 +39,14 @@ Bookmark Dashboard turns that wasted moment into a powerful productivity hub:
 
 | Feature | Description |
 |---|---|
-| **Full-text search** | Find any bookmark by title or URL instantly — `⌘K` / `Ctrl+K` jumps to the search bar |
+| **Full-text search** | Find any bookmark by title or URL instantly — `⌘K` / `Ctrl+K` jumps to the search bar; shows live result count and a clear button |
 | **Add new bookmark** | `N` opens a two-step dialog: enter URL + title + folder, then apply tags (with optional AI suggestions) |
 | **Drag & drop** | Move bookmarks between folders by dragging; visual feedback throughout |
 | **Batch operations** | Select multiple bookmarks to move or delete in one action |
 | **Edit & delete** | Rename bookmarks, delete with confirmation — all from the card |
 | **Pin favorites** | Pin any bookmark to an always-visible top section or dedicated right sidebar |
-| **Folder sidebar** | Collapsible folder tree — pin it open or hover to reveal as a floating overlay; the sidebar splits evenly between folders (top) and tags (bottom), each with independent scrolling |
+| **Folder sidebar** | A thin pull-tab strip on the left edge reveals a full folder tree on hover or click; pin it open or leave it as a floating overlay |
+| **Folder & tag browser** | The sidebar splits between folders (top, scrollable) and tags (bottom, scrollable) with independent sections |
 | **Folder search** | Filter the folder tree in real time to jump to any folder instantly |
 
 ### Tags
@@ -79,7 +81,7 @@ Connect your own API key — OpenAI, Google Gemini, or Anthropic Claude — and 
 - **Google Gemini** — Gemini 2.0 Flash, Gemini 2.5 Pro
 - **Anthropic Claude** — Claude Sonnet 4, Claude Haiku
 
-Custom instructions let you steer the AI's analysis (e.g. *"Group by project, not by technology"* or *"Focus on dev and design bookmarks"*).
+Custom instructions let you steer the AI's analysis — e.g. *"Group by project, not by technology"* or *"Focus on dev and design bookmarks"*.
 
 ### Domain View
 
@@ -100,20 +102,22 @@ A distraction-free reading space built into your new tab.
 | Feature | Description |
 |---|---|
 | **Quick-add** | Paste any URL or add directly from a bookmark; content is fetched and cached |
-| **Built-in reader** | Extracted, readable article view — no ads, no clutter |
+| **Built-in reader** | Extracted, readable article view — no ads, no clutter (powered by Mozilla Readability) |
 | **Status tracking** | Mark articles as read (archived) or unread; auto-selects first unread on open |
 | **Archive & restore** | Archive when done; unarchive to re-read; remove when finished |
 | **Persistent storage** | Reading list survives browser restarts and extension updates |
 
-### Customization
+### Interface & Customization
+
+The topbar is organized into three clear zones: **Brand** (logo + name + version) · **Nav** (views) · **Utils** (view toggle, theme, shortcuts, settings, add). Every icon button shows an instant tooltip on hover.
 
 | Option | Choices |
 |---|---|
 | **Theme** | Dark · Light · System (follows OS preference, switches automatically) |
 | **Background** | 5 preset photos (Mountains, Ocean, Forest, City, Night) · Custom image URL · None |
-| **Display mode** | Grid · List · Compact — toggle with `V` |
+| **Display mode** | Grid (default) · List · Compact — toggle with `V` |
 | **Navigation bar** | Full (icon + label) · Compact (icon only) |
-| **Folder sidebar** | Pinned (always visible) · Float (hover to reveal) |
+| **Folder sidebar** | Pinned (always visible) · Float (hover or click pull-tab to reveal) |
 | **Pinned bookmarks** | Top section · Dedicated right sidebar |
 | **Language** | English · 简体中文 · 日本語 |
 
@@ -123,7 +127,7 @@ Every new tab opens with a personal touch:
 
 - **Time-aware greeting** — Good morning / afternoon / evening / night with your display name
 - **Live clock** — Real-time clock and date always visible
-- **Unified search** — One search bar, all bookmarks
+- **Unified search** — One search bar, all bookmarks — with live result count and clear button
 
 ### Google Apps Launcher
 
@@ -189,10 +193,12 @@ Then load in Chrome:
 ### Development
 
 ```bash
-npm run dev
+npm run dev      # watch mode — Vite rebuilds dist/ on every change
+npm run build    # production build
+npm test         # run Vitest test suite
 ```
 
-Vite rebuilds `dist/` on every source change. Click **↺ Update** in `chrome://extensions` to reload.
+After any source change in watch mode, click **↺ Update** in `chrome://extensions` to reload the extension.
 
 ---
 
@@ -204,7 +210,7 @@ Press `S` or click the gear icon to open settings.
 |---|---|
 | **General** | Display name · Language · Display mode · Nav style · Folder sidebar mode · Pinned bookmarks position |
 | **Personalization** | Theme · Background image |
-| **AI & Apps** | AI provider · Model · API key (stored locally) · Custom instructions · Auto-tag on save · Google Apps visibility |
+| **AI & Apps** | AI provider · Model · API key (stored locally, never shared) · Custom instructions · Auto-tag on save · Google Apps visibility |
 | **Account** | Google Account integration (sync — coming soon) |
 
 ---
@@ -213,15 +219,17 @@ Press `S` or click the gear icon to open settings.
 
 | Layer | Technology |
 |---|---|
-| UI | React 18 · TypeScript 5 |
-| Build | Vite 5 |
-| Extension | Chrome Manifest V3 |
-| Storage | `chrome.storage.local` |
-| Bookmarks | `chrome.bookmarks` API |
-| AI | OpenAI · Google Gemini · Anthropic Claude |
-| Article parsing | Mozilla Readability |
-| Styling | CSS custom properties |
-| i18n | Custom lightweight translator (EN / ZH / JA) |
+| **UI** | React 18 · TypeScript 5 |
+| **Build** | Vite 5 |
+| **Extension** | Chrome Manifest V3 |
+| **Storage** | `chrome.storage.local` — local only, never synced |
+| **Bookmarks** | `chrome.bookmarks` API |
+| **AI** | OpenAI · Google Gemini · Anthropic Claude |
+| **Article parsing** | Mozilla Readability 0.6 |
+| **Sanitization** | DOMPurify 3 |
+| **Testing** | Vitest · jsdom |
+| **Styling** | CSS custom properties — no framework |
+| **i18n** | Custom lightweight translator (EN / ZH / JA) |
 
 ---
 
@@ -229,18 +237,29 @@ Press `S` or click the gear icon to open settings.
 
 ```
 src/
-├── components/     # React UI components (Topbar, BookmarkView, AIInsightsView, …)
-├── context/        # React Context providers (Settings, Bookmarks, UI, Tags)
+├── components/     # 24 React UI components
+│   ├── Topbar.tsx              # Three-zone header: brand | nav | utils
+│   ├── FolderSidebar.tsx       # Folder tree + tag browser with pull-tab trigger
+│   ├── SearchSection.tsx       # Search bar with clear button and result count
+│   ├── BookmarkView.tsx        # Main bookmark grid / list / compact view
+│   ├── AIInsightsView.tsx      # AI analysis hub
+│   ├── DomainView.tsx          # Domain treemap visualization
+│   ├── ReadingListView.tsx     # Reading list + built-in article reader
+│   ├── SettingsPanel.tsx       # Settings with 4 tabs
+│   ├── KeyboardShortcuts.tsx   # Shortcuts modal
+│   ├── Footer.tsx              # Footer with author and project links
+│   └── …
+├── context/        # React Context providers (Settings, Bookmarks, UI, Tags, ReadingList)
 ├── types/          # Shared TypeScript interfaces
 ├── utils/          # AI, bookmarks, i18n, tags, time, Google Apps helpers
-├── styles/         # CSS (main dashboard, tags, reading list, options page)
+├── styles/         # CSS (main dashboard, tags, reading list, save popup)
+├── popup/          # Save bookmark popup (clicks extension icon)
+├── options/        # Standalone extension options page
 ├── js/             # Service worker, options logic
-├── options/        # Extension options page (standalone HTML)
-├── popup/          # Save bookmark popup
 ├── icons/          # Extension icons (16 / 48 / 128 px)
 ├── index.html      # Vite entry — new tab page
 ├── main.tsx        # React entry point
-├── App.tsx         # Root component + keyboard shortcuts
+├── App.tsx         # Root component + global keyboard shortcuts
 └── manifest.json   # Chrome extension manifest (V3)
 ```
 
@@ -258,7 +277,7 @@ Update `"version"` in both `src/manifest.json` and `package.json`.
 ./scripts/release.sh
 ```
 
-This runs the build, zips `dist/` into `releases/bookmark-dashboard-v{version}.zip`, and optionally bundles your PEM key for a consistent extension ID.
+Runs the build, zips `dist/` into `releases/bookmark-dashboard-v{version}.zip`, and optionally bundles your PEM key for a consistent extension ID.
 
 ```bash
 ./scripts/release.sh 2.1.0      # override version
@@ -286,7 +305,7 @@ Contributions are welcome. Please open an issue first to discuss what you'd like
 
 ## Author
 
-**Encore Shao** — [GitHub](https://github.com/encoreshao)
+**Encore Shao** — [github.com/encoreshao](https://github.com/encoreshao) · [bookmark.linktr.cn](https://bookmark.linktr.cn)
 
 ## License
 
