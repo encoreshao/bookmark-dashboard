@@ -10,6 +10,7 @@
 .vscode/*
 .cursor/*
 .superpowers/*
+docs/screenshots/*
 
 node_modules/
 dist/
