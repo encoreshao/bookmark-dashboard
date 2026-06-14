@@ -1,3 +1,7 @@
+<p align="right">
+  <a href="README.md">English</a> | <a href="README.zh.md">简体中文</a>
+</p>
+
 <p align="center">
   <img src="src/icons/icon128.png" width="80" alt="Bookmark Dashboard" />
 </p>
@@ -171,7 +175,7 @@ Configure the AI-tag-current-page extension shortcut at `chrome://extensions/sho
 ### Install from Chrome Web Store
 
 <a href="https://chromewebstore.google.com/detail/bookmark-dashboard/imknfkidkilkomeomcidnnjojiilaofb">
-  <img src="https://raw.githubusercontent.com/encoreshao/bookmark-dashboard/master/src/icons/icon128.png" width="200" alt="Available on Chrome Web Store" />
+  <img src="https://raw.githubusercontent.com/encoreshao/bookmark-dashboard/master/src/icons/icon128.png" width="100" alt="Available on Chrome Web Store" />
 </a>
 
 ### Install from Source (Developer Mode)
