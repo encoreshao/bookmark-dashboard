@@ -916,6 +916,7 @@ body.has-bg-image .bookmark-remove {
 
 .view-list .bookmark-item-wrapper {
   position: relative;
+  margin-top: 4px;
 }
 
 .view-list .bookmark-item {
